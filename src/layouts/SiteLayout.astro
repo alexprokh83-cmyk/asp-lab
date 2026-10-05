@@ -1,0 +1,123 @@
+---
+/**
+ * SiteLayout — root layout for all pages.
+ *
+ * Responsibilities:
+ * - Sets HTML lang attribute (no silent fallback)
+ * - Self-hosted IBM Plex Sans + Mono (Latin + Cyrillic) via @fontsource
+ * - Injects skip link, header, main, footer
+ * - Renders localized metadata: title, description, canonical, hreflang
+ * - Favicon
+ */
+import type { Locale } from "../lib/i18n";
+import { LOCALE_LANG, allLocalePaths } from "../lib/i18n";
+import { t } from "../lib/translations/index";
+import { canonicalUrl, SITE_URL_READY, IS_PREVIEW } from "../config/site";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/global.css";
+import "../styles/components.css";
+import "../styles/home.css";
+
+interface Props {
+  locale: Locale;
+  /** Current slug without locale prefix, e.g. "/solutions" or "/" */
+  slug: string;
+  /** Page title — must be unique per page */
+  title?: string;
+  /** Page description */
+  description?: string;
+  /** Override: set to false to exclude from sitemaps (drafts, filter variants) */
+  indexable?: boolean;
+}
+
+const {
+  locale,
+  slug,
+  title: titleProp,
+  description: descProp,
+  indexable = true,
+} = Astro.props;
+
+const dict = t(locale);
+const lang = LOCALE_LANG[locale];
+
+const siteTitle = dict.site.name;
+const pageTitle = titleProp ? `${titleProp} — ${siteTitle}` : siteTitle;
+const description = descProp ?? dict.site.description;
+
+// Canonical and hreflang
+const localePaths = allLocalePaths(slug);
+const canonicalPath = localePaths[locale];
+const canonicalHref = canonicalUrl(canonicalPath);
+
+// Build hreflang list
+const hreflangs = [
+  { locale: "en" as Locale, path: localePaths.en, hreflang: "en" },
+  { locale: "uk" as Locale, path: localePaths.uk, hreflang: "uk" },
+  { locale: "ru" as Locale, path: localePaths.ru, hreflang: "ru" },
+];
+---
+
+<!doctype html>
+<html lang={lang} dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- IBM Plex Sans/Mono self-hosted via @fontsource (Latin + Cyrillic), see global.css -->
+
+    <!-- Metadata -->
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+
+    {/* Social metadata. og:url and og:image are absolute, so only emitted once a real domain is configured. */}
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ASP Lab" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content={lang === "uk" ? "uk_UA" : lang === "ru" ? "ru_RU" : "en_US"} />
+    {SITE_URL_READY && <meta property="og:url" content={canonicalHref} />}
+    {SITE_URL_READY && <meta property="og:image" content={canonicalUrl("/og-image.jpg")} />}
+    {SITE_URL_READY && <meta property="og:image:width" content="1200" />}
+    {SITE_URL_READY && <meta property="og:image:height" content="630" />}
+    <meta name="twitter:card" content={SITE_URL_READY ? "summary_large_image" : "summary"} />
+
+    {/* Canonical — self-referential per spec */}
+    {SITE_URL_READY && <link rel="canonical" href={canonicalHref} />}
+
+    {/* hreflang — reciprocal for all locales + x-default pointing to English */}
+    {SITE_URL_READY && hreflangs.map(({ hreflang, path }) => (
+      <link rel="alternate" hreflang={hreflang} href={canonicalUrl(path)} />
+    ))}
+    {SITE_URL_READY && (
+      <link rel="alternate" hreflang="x-default" href={canonicalUrl(localePaths.en)} />
+    )}
+
+    {/* Indexing control */}
+    {(!indexable || IS_PREVIEW || !SITE_URL_READY) && <meta name="robots" content="noindex, nofollow" />}
+
+    <!-- styles injected by Astro build pipeline -->
+  </head>
+
+  <body>
+    <!-- Skip link -->
+    <a href="#main-content" class="skip-link">{dict.nav.skipToMain}</a>
+
+    <!-- Header -->
+    <Header locale={locale} currentSlug={slug} localePaths={localePaths} />
+
+    <!-- Main content -->
+    <main id="main-content" tabindex="-1">
+      <slot />
+    </main>
+
+    <!-- Footer -->
+    <Footer locale={locale} />
+  </body>
+</html>

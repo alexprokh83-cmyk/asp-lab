@@ -1,0 +1,72 @@
+---
+import type { Locale } from "../../lib/i18n";
+import { approachCopy } from "../../content/pages/approach";
+import CtaBand from "./CtaBand.astro";
+import StagePath from "./StagePath.astro";
+import DemonstrateBlock from "./DemonstrateBlock.astro";
+import { strategyCopy } from "../../content/pages/strategy";
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const c = approachCopy[locale];
+const st = strategyCopy[locale];
+---
+<section class="section" aria-labelledby="ap-base">
+  <div class="container sec-about__grid">
+    <div><h2 id="ap-base">{c.baseline.heading}</h2><p class="section-heading__lead">{c.baseline.lead}</p></div>
+    <ol class="plain plain--num">{c.baseline.items.map((i) => <li>{i}</li>)}</ol>
+  </div>
+</section>
+
+<section class="section sec-process" aria-labelledby="ap-method">
+  <div class="container">
+    <div class="section-heading section-heading--inverse"><h2 id="ap-method" class="mono-heading">{c.method.heading}</h2><p class="section-heading__lead">{c.method.lead}</p></div>
+    <ol class="steps">
+      {c.method.steps.map((s, i) => <li class="step"><span class="step__num mono" aria-hidden="true">{i + 1}</span><h3>{s.title}</h3><p>{s.text}</p></li>)}
+    </ol>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="ap-test">
+  <div class="container">
+    <div class="section-heading"><h2 id="ap-test">{c.testing.heading}</h2><p class="section-heading__lead">{c.testing.lead}</p></div>
+    <div class="grid-3">{c.testing.items.map((i) => <article class="acard acard--plain"><h3>{i.title}</h3><p>{i.text}</p></article>)}</div>
+    <div class="callout callout--info"><h3 class="h2-sub">{c.human.heading}</h3><p>{c.human.text}</p></div>
+  </div>
+</section>
+
+<section class="section sec-formats" aria-labelledby="ap-report">
+  <div class="container sec-about__grid">
+    <div><h2 id="ap-report">{c.report.heading}</h2><p><span class="label label--preview">{c.report.label}</span></p></div>
+    <ol class="plain plain--num">{c.report.items.map((i) => <li>{i}</li>)}</ol>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="ap-decision">
+  <div class="container">
+    <div class="section-heading"><h2 id="ap-decision">{c.decision.heading}</h2><p class="section-heading__lead">{c.decision.lead}</p></div>
+    <div class="grid-3">{c.decision.items.map((i) => <article class="acard acard--plain"><h3>{i.title}</h3><p>{i.text}</p></article>)}</div>
+  </div>
+</section>
+
+<section class="section sec-layer2" aria-labelledby="ap-path">
+  <div class="container">
+    <div class="positioning"><h2 id="ap-path">{st.positioning.heading}</h2><p>{st.positioning.text}</p></div>
+    <h3 class="mono-heading path-h">{st.path.heading}</h3>
+    <p class="section-heading__lead">{st.path.lead}</p>
+    <StagePath locale={locale} />
+    <p class="note">{st.path.note}</p>
+    <div class="demo-wrap">
+      <h2 class="h2-sub">{st.demonstrate.heading}</h2>
+      <p class="section-heading__lead">{st.demonstrate.lead}</p>
+      <DemonstrateBlock locale={locale} diagram={false} />
+    </div>
+  </div>
+</section>
+
+<section class="section sec-future" aria-labelledby="ap-pilot">
+  <div class="container sec-about__grid">
+    <div><h2 id="ap-pilot">{c.pilot.heading}</h2><p class="section-heading__lead">{c.pilot.lead}</p></div>
+    <div><ul class="plain">{c.pilot.items.map((i) => <li>{i}</li>)}</ul><p class="note">{c.note}</p></div>
+  </div>
+</section>
+<CtaBand locale={locale} />

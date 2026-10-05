@@ -1,0 +1,78 @@
+---
+/**
+ * The one page for every route × locale, generated from the route registry (src/lib/routes.ts).
+ * Copy lives in src/lib/translations/* and src/content/pages/*; project data in src/content/projects.ts.
+ * Nothing is duplicated per language.
+ */
+import SiteLayout from "../layouts/SiteLayout.astro";
+import InnerPage from "../layouts/InnerPage.astro";
+import HomePage from "../components/home/HomePage.astro";
+import SolutionsPage from "../components/pages/SolutionsPage.astro";
+import LocalAiPage from "../components/pages/LocalAiPage.astro";
+import AudiencePage from "../components/pages/AudiencePage.astro";
+import LabPage from "../components/pages/LabPage.astro";
+import ProjectPage from "../components/pages/ProjectPage.astro";
+import ApproachPage from "../components/pages/ApproachPage.astro";
+import AboutPage from "../components/pages/AboutPage.astro";
+import ContactPage from "../components/pages/ContactPage.astro";
+import PrivacyPage from "../components/pages/PrivacyPage.astro";
+import { allStaticRoutes, SLUGS, namedRoute, type SlugKey } from "../lib/routes";
+import { t } from "../lib/translations/index";
+import { projectByRouteKey } from "../content/projects";
+import { projectsSectionCopy } from "../content/pages/projects-section";
+import { solutionsCopy } from "../content/pages/solutions";
+import { localAiCopy } from "../content/pages/local-ai";
+
+export function getStaticPaths() {
+  return allStaticRoutes().map(({ key, locale, param }) => ({ params: { slug: param }, props: { key, locale } }));
+}
+
+const { key, locale } = Astro.props as { key: SlugKey; locale: "en" | "uk" | "ru" };
+const dict = t(locale);
+const slug = SLUGS[key];
+const project = projectByRouteKey(key);
+const audience = key === "business" || key === "education" || key === "publicSector" ? key : null;
+const ps = projectsSectionCopy[locale];
+const labParent = { label: ps.heading, href: namedRoute("lab", locale) };
+---
+{key === "home" ? (
+  <SiteLayout locale={locale} slug="/" title={dict.home.hero.heading} description={dict.home.hero.lead}>
+    <HomePage locale={locale} />
+  </SiteLayout>
+) : project ? (
+  <InnerPage locale={locale} slug={slug} heading={project.text[locale].title} title={`${project.text[locale].title} — ${ps.categories[project.categories[0]!]}`} lead={project.text[locale].subtitle} parent={labParent} bare>
+    <ProjectPage locale={locale} project={project} />
+  </InnerPage>
+) : key === "solutions" ? (
+  <InnerPage locale={locale} slug={slug} heading={solutionsCopy[locale].heading} lead={solutionsCopy[locale].lead} bare>
+    <SolutionsPage locale={locale} />
+  </InnerPage>
+) : key === "localAi" ? (
+  <InnerPage locale={locale} slug={slug} heading={localAiCopy[locale].heading} lead={localAiCopy[locale].lead} bare>
+    <LocalAiPage locale={locale} />
+  </InnerPage>
+) : audience ? (
+  <InnerPage locale={locale} slug={slug} heading={dict.audiences[audience].heading} lead={dict.audiences[audience].lead} bare>
+    <AudiencePage locale={locale} id={audience} />
+  </InnerPage>
+) : key === "lab" ? (
+  <InnerPage locale={locale} slug={slug} heading={ps.heading} lead={ps.lead} bare>
+    <LabPage locale={locale} />
+  </InnerPage>
+) : key === "approach" ? (
+  <InnerPage locale={locale} slug={slug} heading={dict.approach.heading} lead={dict.approach.lead} bare>
+    <ApproachPage locale={locale} />
+  </InnerPage>
+) : key === "about" ? (
+  <InnerPage locale={locale} slug={slug} heading={dict.about.heading} lead={dict.about.lead} bare>
+    <AboutPage locale={locale} />
+  </InnerPage>
+) : key === "contact" ? (
+  <InnerPage locale={locale} slug={slug} heading={dict.home.finalCta.heading} title={dict.contact.heading} lead={dict.home.finalCta.lead} bare>
+    <ContactPage locale={locale} />
+  </InnerPage>
+) : key === "privacy" ? (
+  <InnerPage locale={locale} slug={slug} heading={dict.privacy.heading} lead={dict.privacy.lead} bare>
+    <PrivacyPage locale={locale} />
+  </InnerPage>
+) : null}

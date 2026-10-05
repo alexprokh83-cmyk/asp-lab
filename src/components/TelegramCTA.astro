@@ -1,0 +1,30 @@
+---
+/**
+ * Single source of Telegram contact behaviour.
+ * Configured → real external link. Unconfigured → honest unavailable state
+ * (never href="#", never an invented t.me address).
+ */
+import type { Locale } from "../lib/i18n";
+import { t } from "../lib/translations/index";
+import { TELEGRAM_URL, TELEGRAM_LABEL } from "../config/site";
+import { namedRoute } from "../lib/routes";
+
+interface Props { locale: Locale; label: string; tone?: "primary" | "inverse"; showContactLink?: boolean }
+const { locale, label, tone = "primary", showContactLink = true } = Astro.props;
+const dict = t(locale);
+---
+{TELEGRAM_URL ? (
+  <div class="tg">
+    <a class:list={["btn", tone === "inverse" ? "btn--inverse" : "btn--primary"]} href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer">
+      {label}<span class="sr-only"> ({dict.ui.telegram.external})</span>
+    </a>
+    <span class="tg__id mono">{TELEGRAM_LABEL}</span>
+  </div>
+) : (
+  <div class="tg tg--off">
+    <p class="tg__off-title"><span class="tg__dot" aria-hidden="true"></span>{dict.ui.telegram.unavailable}</p>
+    <p class="tg__off-note">{dict.ui.telegram.unavailableNote}</p>
+    {showContactLink && <a class="tg__contact" href={namedRoute("contact", locale)}>{dict.nav.cta}</a>}
+    <span class="tg__id mono">{TELEGRAM_LABEL}</span>
+  </div>
+)}

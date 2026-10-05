@@ -1,0 +1,136 @@
+/**
+ * Design tokens — ASP Lab. WHITE + BLUE + NAVY.
+ * No teal / turquoise / green in the brand palette.
+ *
+ * Contrast notes (WCAG): white text on #3B82F6 is only 3.68:1, so filled
+ * buttons and white-on-blue blocks use --color-blue-600 (5.17:1) / 700 (6.7:1).
+ * #3B82F6 (--color-brand) is used for accents, large elements and on navy.
+ */
+:root {
+  /* Blue ramp */
+  --color-blue-50:  #EAF3FF;  /* soft blue */
+  --color-blue-100: #D6E7FF;
+  --color-blue-200: #B3D2FF;
+  --color-blue-300: #9DC3FF;
+  --color-blue-400: #60A5FA;
+  --color-blue-500: #3B82F6;  /* brand blue */
+  --color-blue-600: #2563EB;  /* primary action (AA with white text) */
+  --color-blue-700: #1D4ED8;
+  --color-blue-800: #1E40AF;
+  --color-blue-900: #172554;
+
+  /* Navy */
+  --color-navy-950: #0B1220;
+  --color-navy-900: #111827;  /* deep navy */
+  --color-navy-800: #1A2438;
+  --color-navy-700: #26324A;
+
+  /* Cool neutrals */
+  --color-neutral-900: #17202A;
+  --color-neutral-600: #5B6875;
+  --color-neutral-500: #667381;
+  --color-neutral-400: #8B97A5;
+  --color-neutral-300: #C3CDD8;
+  --color-neutral-200: #DCE3EA;
+  --color-neutral-100: #EEF2F7;
+  --color-neutral-50:  #F7F9FC;
+  --color-neutral-0:   #FFFFFF;
+
+  --color-brand: var(--color-blue-500);
+
+  /* Semantic */
+  --color-background:        var(--color-neutral-50);
+  --color-background-subtle: var(--color-blue-50);
+  --color-surface:           var(--color-neutral-0);
+  --color-surface-raised:    var(--color-neutral-50);
+  --color-border:            var(--color-neutral-200);
+  --color-border-strong:     var(--color-neutral-300);
+
+  --color-text-primary:      var(--color-neutral-900);
+  --color-text-secondary:    var(--color-neutral-600);
+  --color-text-tertiary:     var(--color-neutral-500);
+  --color-text-inverse:      var(--color-neutral-0);
+
+  --color-action-primary:    var(--color-blue-600);
+  --color-action-hover:      var(--color-blue-700);
+  --color-action-pressed:    var(--color-blue-800);
+  --color-action-focus-ring: var(--color-blue-500);
+
+  /* Status — no green: confirmed uses blue, text labels always accompany colour */
+  --color-status-confirmed:  var(--color-blue-700);
+  --color-status-developing: #8A520D;
+  --color-status-planned:    #4A4A9A;
+  --color-status-draft:      var(--color-neutral-600);
+  --color-status-preview:    var(--color-blue-700);
+  --color-status-fail:       #B83C35;
+
+  /* Dark (navy) surfaces */
+  --color-dark-bg:      var(--color-navy-900);
+  --color-dark-surface: var(--color-navy-800);
+  --color-dark-border:  var(--color-navy-700);
+  --color-dark-text:    #F3F6FB;
+  --color-dark-muted:   #B6C2D1;
+  --color-dark-accent:  var(--color-blue-300);
+
+  /* Hero background sampled from the supplied artwork */
+  --color-hero-bg: #F1F5FD;
+
+  /* Typography */
+  --font-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "Courier New", monospace;
+
+  --text-h1-size:    clamp(34px, 5vw, 56px);
+  --text-h1-line:    clamp(40px, 5.6vw, 62px);
+  --text-h2-size:    clamp(28px, 3.5vw, 36px);
+  --text-h2-line:    clamp(34px, 4.5vw, 44px);
+  --text-h3-size:    clamp(20px, 2.2vw, 24px);
+  --text-h3-line:    clamp(28px, 3vw, 32px);
+  --text-lead-size:  clamp(18px, 2vw, 20px);
+  --text-lead-line:  clamp(28px, 3vw, 30px);
+  --text-body-size:  clamp(16px, 1.5vw, 18px);
+  --text-body-line:  clamp(26px, 2.5vw, 28px);
+  --text-label-size: 14px;
+  --text-label-line: 20px;
+  --text-metric-size: clamp(32px, 4vw, 40px);
+  --text-metric-line: clamp(38px, 5vw, 46px);
+
+  --font-weight-regular: 400;
+  --font-weight-medium:  500;
+  --font-weight-semibold: 600;
+  --font-weight-bold:    600; /* only 400/500/600 are self-hosted */
+
+  --font-feature-tabular: "tnum" 1;
+  --prose-max-width:       68ch;
+  --case-study-max-width:  760px;
+
+  /* Spacing */
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-6: 24px;
+  --space-8: 32px; --space-12: 48px; --space-16: 64px; --space-24: 96px; --space-32: 128px;
+  --section-gap-desktop: var(--space-24);
+  --section-gap-tablet:  var(--space-16);
+  --section-gap-mobile:  var(--space-12);
+
+  /* Layout */
+  --container-max: 1216px;
+  --gutter-mobile: 20px; --gutter-tablet: 32px; --gutter-desktop: 32px;
+
+  /* Components */
+  --card-radius: 12px;
+  --card-border: 1px solid var(--color-border);
+  --card-padding: var(--space-6);
+  --card-padding-mobile: 20px;
+  --btn-height: 48px;
+  --btn-radius: 8px;
+  --btn-padding-x: var(--space-6);
+  --label-radius: 4px;
+  --label-padding: 2px 8px;
+  --nav-height: 64px;
+  --focus-ring: 0 0 0 3px var(--color-action-focus-ring);
+  --shadow-card: 0 1px 2px rgba(17, 24, 39, .04), 0 8px 24px -12px rgba(37, 99, 235, .18);
+
+  --duration-hover: 150ms;
+  --duration-panel: 200ms;
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+}
+@media (min-width: 1200px) { :root { --nav-height: 72px; } }
+@media (prefers-reduced-motion: reduce) { :root { --duration-hover: 0ms; --duration-panel: 0ms; } }

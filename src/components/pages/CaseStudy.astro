@@ -1,0 +1,130 @@
+---
+import type { Locale } from "../../lib/i18n";
+import type { Project } from "../../content/types";
+import { t } from "../../lib/translations/index";
+import { namedRoute } from "../../lib/routes";
+import { metricById } from "../../content/metrics";
+import { evidenceById } from "../../content/evidence";
+import { projectById } from "../../content/projects";
+import { IS_PREVIEW } from "../../config/site";
+import MetricTable from "../MetricTable.astro";
+import ArchitectureDiagram from "../ArchitectureDiagram.astro";
+import MissingValue from "../MissingValue.astro";
+import ListOrMissing from "../ListOrMissing.astro";
+import CapabilityStatus from "../CapabilityStatus.astro";
+import ProjectCard from "../ProjectCard.astro";
+import CtaBand from "./CtaBand.astro";
+
+interface Props { locale: Locale; project: Project }
+const { locale, project } = Astro.props;
+const dict = t(locale);
+const s = dict.ui.caseStudy.sections;
+const c = project.copy[locale];
+const ms = project.metricIds.map((id) => metricById(id)!).filter(Boolean);
+const evs = project.evidenceIds.map((id) => evidenceById(id)!).filter(Boolean);
+const toc: [string, string][] = [
+  ["summary", s.summary], ["potential", s.potential], ["scope", s.scope], ["architecture", s.architecture], ["implementation", s.implementation],
+  ["verification", s.verification], ["results", s.results], ["limitations", s.limitations], ["evidence", s.evidence], ["pilot", s.pilot], ["related", s.related],
+];
+---
+<div class="container cs">
+  <aside class="toc toc--desktop" aria-label={s.contents}>
+    <p class="toc__title">{s.contents}</p>
+    <ol>{toc.map(([id, label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol>
+  </aside>
+  <details class="toc toc--mobile">
+    <summary>{s.contents}</summary>
+    <ol>{toc.map(([id, label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol>
+  </details>
+
+  <div class="cs__main">
+    {project.publicationStatus === "draft" && <p class="draft-notice">{dict.ui.caseStudy.draftNote}</p>}
+    <dl class="facts">
+      <dt>{dict.ui.caseStudy.originalName}</dt><dd class="mono">{project.originalName}</dd>
+      <dt>{dict.ui.caseStudy.categories}</dt><dd>{project.categories.map((k) => dict.lab.filters[k]).join(" / ")}</dd>
+      <dt>{dict.ui.caseStudy.type}</dt><dd>{dict.lab.projectTypes[project.projectType]}</dd>
+      <dt>{dict.ui.capabilityLabel}</dt><dd><CapabilityStatus locale={locale} maturity={project.capabilityMaturity} /></dd>
+      <dt>{dict.ui.caseStudy.status}</dt><dd>{dict.lab.publicationStatus[project.publicationStatus]}</dd>
+      <dt>{s.expDate}</dt><dd>{project.dates.experiment ?? <MissingValue />}</dd>
+      <dt>{s.updated}</dt><dd>{project.dates.contentUpdated ?? <MissingValue />}</dd>
+    </dl>
+
+    <section id="summary" class="cs-block" aria-labelledby="h-summary">
+      <h2 id="h-summary">{s.summary}</h2>
+      <h3>{s.problem}</h3><ListOrMissing text={c.context.problem} />
+      <h3>{s.built}</h3><p>{c.positioning}</p>
+      <h3>{s.supported}</h3>
+      {evs.length ? <ul>{evs.map((e) => <li>{e.supports[locale]}</li>)}</ul> : <MissingValue />}
+    </section>
+
+    <section id="potential" class="cs-block" aria-labelledby="h-potential">
+      <h2 id="h-potential">{s.potential}</h2>
+      <p class="epanel__limit">{s.potentialNote}</p>
+      <ListOrMissing text={c.potentialValue} />
+    </section>
+
+    <section id="scope" class="cs-block" aria-labelledby="h-scope">
+      <h2 id="h-scope">{s.scope}</h2>
+      <h3>{s.inputs}</h3><ListOrMissing items={c.context.inputs} />
+      <h3>{s.inScope}</h3><ListOrMissing items={c.context.scope} />
+      <h3>{s.exclusions}</h3><ListOrMissing items={c.context.exclusions} />
+    </section>
+
+    <section id="architecture" class="cs-block" aria-labelledby="h-arch">
+      <h2 id="h-arch">{s.architecture}</h2>
+      {project.architecture ? <ArchitectureDiagram locale={locale} architecture={project.architecture} /> : <MissingValue />}
+    </section>
+
+    <section id="implementation" class="cs-block" aria-labelledby="h-impl">
+      <h2 id="h-impl">{s.implementation}</h2>
+      <ListOrMissing text={c.implementation.summary} />
+      <h3>{s.technologies}</h3><ListOrMissing items={c.implementation.technologies} />
+      <h3>{s.decisions}</h3><ListOrMissing items={c.implementation.decisions} />
+    </section>
+
+    <section id="verification" class="cs-block" aria-labelledby="h-ver">
+      <h2 id="h-ver">{s.verification}</h2>
+      <ListOrMissing text={c.verification.summary} />
+      <h3>{s.scenarios}</h3><ListOrMissing items={c.verification.scenarios} />
+      <h3>{s.criteria}</h3><ListOrMissing items={c.verification.criteria} />
+      <h3>{s.conditions}</h3><ListOrMissing items={c.verification.conditions} />
+    </section>
+
+    <section id="results" class="cs-block" aria-labelledby="h-res">
+      <h2 id="h-res">{s.results}</h2>
+      {ms.length ? <MetricTable locale={locale} metrics={ms} /> : <p>{dict.ui.metricTable.noMetrics}</p>}
+      <ListOrMissing text={c.results.summary} />
+      <h3>{s.proves}</h3><ListOrMissing items={c.results.whatItProves} />
+      <h3>{s.notProve}</h3><ListOrMissing items={c.results.whatItDoesNotProve} />
+    </section>
+
+    <section id="limitations" class="cs-block cs-block--limits" aria-labelledby="h-lim">
+      <h2 id="h-lim">{s.limitations}</h2>
+      <ListOrMissing items={c.limitations} />
+    </section>
+
+    <section id="evidence" class="cs-block" aria-labelledby="h-ev">
+      <h2 id="h-ev">{s.evidence}</h2>
+      {evs.length ? (
+        <ul>{evs.map((e) => (
+          <li>
+            <strong>{e.title[locale]}</strong> — {e.verification === "source-reviewed" ? dict.ui.metricTable.sourceReviewed : dict.ui.metricTable.ownerReported}. {e.limits[locale]}
+            {e.source ? <> <a href={e.source} rel="noopener noreferrer">{dict.ui.metricTable.sourceMissing}</a></> : <> <MissingValue what={dict.ui.metricTable.sourceMissing} /></>}
+          </li>
+        ))}</ul>
+      ) : <MissingValue />}
+    </section>
+
+    <section id="pilot" class="cs-block" aria-labelledby="h-pilot">
+      <h2 id="h-pilot">{s.pilot}</h2>
+      <p class="epanel__limit">{s.pilotNote}</p>
+      <ListOrMissing items={c.pilotRequirements} />
+    </section>
+
+    <section id="related" class="cs-block" aria-labelledby="h-rel">
+      <h2 id="h-rel">{s.related}</h2>
+      <div class="grid-2">{project.relatedProjectIds.map((rid) => <ProjectCard locale={locale} project={projectById(rid)!} compact />)}</div>
+    </section>
+  </div>
+</div>
+<CtaBand locale={locale} />

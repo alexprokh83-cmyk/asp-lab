@@ -1,0 +1,43 @@
+---
+/** One table per run. Shows value, unit, definition, source status, date, conditions and the interpretation limit. */
+import type { Locale } from "../lib/i18n";
+import type { Metric } from "../content/types";
+import { t } from "../lib/translations/index";
+import { evidenceById } from "../content/evidence";
+import { IS_PREVIEW } from "../config/site";
+import MissingValue from "./MissingValue.astro";
+
+interface Props { locale: Locale; metrics: Metric[]; caption?: string }
+const { locale, metrics, caption } = Astro.props;
+const m = t(locale).ui.metricTable;
+const runs = [...new Set(metrics.map((x) => x.runKey))];
+const verification = (x: Metric) => {
+  const states = x.sourceIds.map((id) => evidenceById(id)?.verification);
+  return states.length && states.every((s) => s === "source-reviewed") ? m.sourceReviewed : m.ownerReported;
+};
+const fmt = (v: number) => v.toLocaleString(locale === "en" ? "en-US" : locale);
+---
+{runs.map((run) => (
+  <div class="mt-wrap" role="region" tabindex="0" aria-label={`${caption ?? m.caption}: ${run}`}>
+    <table class="mt">
+      <caption><span class="mono">{m.run}: {run}</span></caption>
+      <thead>
+        <tr><th scope="col">{m.metric}</th><th scope="col">{m.value}</th><th scope="col">{m.unit}</th><th scope="col">{m.definition}</th><th scope="col">{m.source}</th><th scope="col">{m.date}</th><th scope="col">{m.conditions}</th><th scope="col">{m.limit}</th></tr>
+      </thead>
+      <tbody>
+        {metrics.filter((x) => x.runKey === run).map((x) => (
+          <tr>
+            <th scope="row" class="mono">{x.name[locale]}</th>
+            <td class="mono mt__num">{x.value === null ? <MissingValue /> : fmt(x.value)}</td>
+            <td>{x.unit[locale]}</td>
+            <td>{x.definition[locale]}</td>
+            <td>{verification(x)}</td>
+            <td>{x.date ?? <MissingValue />}</td>
+            <td>{x.conditions ? x.conditions[locale].join("; ") : <MissingValue />}</td>
+            <td>{x.interpretationLimit[locale]}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+))}

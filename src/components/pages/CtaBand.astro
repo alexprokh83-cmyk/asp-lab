@@ -1,0 +1,21 @@
+---
+/** Contextual final CTA (reuses the homepage final-CTA copy so wording stays identical). */
+import type { Locale } from "../../lib/i18n";
+import { t } from "../../lib/translations/index";
+import { namedRoute } from "../../lib/routes";
+import TelegramCTA from "../TelegramCTA.astro";
+interface Props { locale: Locale; id?: string }
+const { locale, id = "cta-title" } = Astro.props;
+const f = t(locale).home.finalCta;
+---
+<section class="section sec-cta" aria-labelledby={id}>
+  <div class="container sec-cta__inner">
+    <h2 id={id}>{f.heading}</h2>
+    <p class="sec-cta__lead">{f.lead}</p>
+    <div class="sec-cta__actions">
+      <TelegramCTA locale={locale} label={f.cta} tone="inverse" />
+      <a class="sec-cta__secondary" href={namedRoute("contact", locale)}>{f.secondary}</a>
+    </div>
+    <p class="sec-cta__warning">{f.warning}</p>
+  </div>
+</section>

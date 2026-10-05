@@ -1,0 +1,96 @@
+---
+import type { Locale } from "../../lib/i18n";
+import { t } from "../../lib/translations/index";
+import { audiencesCopy, type AudienceId } from "../../content/pages/audiences";
+import { capabilities } from "../../content/capabilities";
+import { projectById } from "../../content/projects";
+import CapabilityStatus from "../CapabilityStatus.astro";
+import ProjectCard from "../ProjectCard.astro";
+import CtaBand from "./CtaBand.astro";
+import ScenarioGrid from "./ScenarioGrid.astro";
+import { strategyCopy } from "../../content/pages/strategy";
+import { namedRoute } from "../../lib/routes";
+
+interface Props { locale: Locale; id: AudienceId }
+const { locale, id } = Astro.props;
+const c = audiencesCopy[locale];
+const st = strategyCopy[locale];
+const a = c.pages[id];
+const current = a.capabilityIds.map((cid) => capabilities.find((x) => x.id === cid)!);
+const developing = capabilities.filter((x) => x.id === "rag");
+---
+<section class="section" aria-labelledby="aud-scen">
+  <div class="container">
+    <p class="callout callout--warn">{c.labels.disclosure}</p>
+    <div class="section-heading"><h2 id="aud-scen">{c.labels.scenarios}</h2></div>
+    <div class="grid-3">
+      {a.scenarios.map((s) => (
+        <article class="acard acard--plain">
+          <h3>{s.title}</h3>
+          <p>{s.text}</p>
+          <ul class="plain">{s.examples.map((e) => <li>{e}</li>)}</ul>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<section class="section sec-layer2" aria-labelledby="aud-scn">
+  <div class="container">
+    <div class="section-heading"><h2 id="aud-scn">{st.scenarios.heading}</h2><p class="section-heading__lead">{st.scenarios.lead}</p></div>
+    <p class="callout callout--warn">{st.scenarios.disclosure}</p>
+    <ScenarioGrid locale={locale} audience={id} compact />
+    <p><a href={`${namedRoute("solutions", locale)}#scenarios`}>{st.scenarios.linkAll}</a></p>
+  </div>
+</section>
+
+<section class="section sec-formats" aria-labelledby="aud-measure">
+  <div class="container">
+    <div class="section-heading"><h2 id="aud-measure">{c.labels.measure}</h2><p class="section-heading__lead">{c.labels.measureNote}</p></div>
+    <ul class="chips">{a.measures.map((m) => <li>{m}</li>)}</ul>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="aud-pilot">
+  <div class="container grid-2">
+    <div>
+      <h2 id="aud-pilot">{c.labels.pilot}</h2>
+      <ol class="plain plain--num">{a.pilot.map((p) => <li>{p}</li>)}</ol>
+    </div>
+    <div>
+      <h2 class="h2-sub">{c.labels.constraints}</h2>
+      <ul class="plain">{a.constraints.map((p) => <li>{p}</li>)}</ul>
+    </div>
+  </div>
+</section>
+
+<section class="section sec-future" aria-labelledby="aud-caps">
+  <div class="container grid-2">
+    <div class="epanel">
+      <h2 id="aud-caps" class="h2-sub">{c.labels.current}</h2>
+      <p class="epanel__limit">{c.labels.currentNote}</p>
+      <ul class="plain">{current.map((x) => <li>{x.label[locale]} <CapabilityStatus locale={locale} maturity={x.maturity} /></li>)}</ul>
+    </div>
+    <div class="epanel">
+      <h2 class="h2-sub">{c.labels.developing}</h2>
+      <p class="epanel__limit">{c.labels.developingNote}</p>
+      <ul class="plain">{developing.map((x) => <li>{x.label[locale]} <CapabilityStatus locale={locale} maturity={x.maturity} /></li>)}</ul>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="aud-proj">
+  <div class="container">
+    <div class="section-heading"><h2 id="aud-proj">{c.labels.projects}</h2></div>
+    <div class="grid-2">{a.projectIds.map((pid) => <ProjectCard locale={locale} project={projectById(pid)!} compact />)}</div>
+  </div>
+</section>
+
+<section class="section sec-deliv" aria-labelledby="aud-deliv">
+  <div class="container">
+    <div class="section-heading"><h2 id="aud-deliv">{c.labels.deliverables}</h2></div>
+    <ul class="chips">{c.deliverables.map((d) => <li>{d}</li>)}</ul>
+  </div>
+</section>
+
+<CtaBand locale={locale} />

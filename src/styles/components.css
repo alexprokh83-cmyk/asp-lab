@@ -1,0 +1,198 @@
+/**
+ * Shared component styles — buttons, cards, status labels.
+ * These are global because the same classes are used across Astro components.
+ */
+
+/* -------------------------------------------------------------------------
+ * Buttons
+ * ---------------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  height: var(--btn-height);
+  padding-inline: var(--btn-padding-x);
+  border-radius: var(--btn-radius);
+  font-family: var(--font-sans);
+  font-size: var(--text-body-size);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1;
+  text-decoration: none;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition:
+    background-color var(--duration-hover) var(--ease-standard),
+    color var(--duration-hover) var(--ease-standard),
+    border-color var(--duration-hover) var(--ease-standard),
+    box-shadow var(--duration-hover) var(--ease-standard);
+  white-space: nowrap;
+}
+
+.btn--primary {
+  background: var(--color-action-primary);
+  color: var(--color-text-inverse);
+  border-color: var(--color-action-primary);
+}
+.btn--primary:hover {
+  background: var(--color-action-hover);
+  border-color: var(--color-action-hover);
+  color: var(--color-text-inverse);
+}
+.btn--primary:active {
+  background: var(--color-action-pressed);
+  border-color: var(--color-action-pressed);
+}
+.btn--primary:disabled {
+  background: var(--color-neutral-200);
+  border-color: var(--color-neutral-200);
+  color: var(--color-text-tertiary);
+  cursor: not-allowed;
+}
+
+.btn--secondary {
+  background: transparent;
+  color: var(--color-text-primary);
+  border-color: var(--color-border-strong);
+}
+.btn--secondary:hover {
+  background: var(--color-background-subtle);
+  border-color: var(--color-neutral-400);
+  color: var(--color-text-primary);
+}
+.btn--secondary:active {
+  background: var(--color-neutral-100);
+}
+
+/* Small variant */
+.btn--sm {
+  height: 38px;
+  padding-inline: var(--space-4);
+  font-size: 14px;
+}
+
+/* -------------------------------------------------------------------------
+ * Cards
+ * ---------------------------------------------------------------------- */
+.card {
+  background: var(--color-surface);
+  border: var(--card-border);
+  border-radius: var(--card-radius);
+  padding: var(--card-padding);
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 767px) {
+  .card { padding: var(--card-padding-mobile); }
+}
+
+/* -------------------------------------------------------------------------
+ * Section headings
+ * ---------------------------------------------------------------------- */
+.section-heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-bottom: var(--space-8);
+}
+.section-heading h2 {
+  font-size: var(--text-h2-size);
+  line-height: var(--text-h2-line);
+}
+.section-heading__lead {
+  font-size: var(--text-lead-size);
+  line-height: var(--text-lead-line);
+  color: var(--color-text-secondary);
+  max-width: var(--prose-max-width);
+}
+
+/* -------------------------------------------------------------------------
+ * Missing-value placeholder (preview mode)
+ * ---------------------------------------------------------------------- */
+.missing-value {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 2px var(--space-2);
+  background: #fef3c7;
+  color: #92400e;
+  border-radius: 3px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: var(--font-weight-medium);
+  border: 1px solid #fde68a;
+}
+
+/* -------------------------------------------------------------------------
+ * Owner-supplied notice
+ * ---------------------------------------------------------------------- */
+.owner-supplied-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-blue-50);
+  border: 1px solid var(--color-blue-200);
+  border-radius: 6px;
+  font-size: 13px;
+  color: var(--color-blue-800);
+  margin-top: var(--space-4);
+}
+
+/* -------------------------------------------------------------------------
+ * Diagram (Local AI, Architecture)
+ * ---------------------------------------------------------------------- */
+.diagram {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-6);
+  border-radius: var(--card-radius);
+  border: 1px solid var(--color-dark-border);
+  background: var(--color-dark-surface);
+}
+
+.diagram__label {
+  font-size: var(--text-label-size);
+  color: var(--color-dark-muted);
+  font-style: italic;
+  text-align: center;
+}
+
+.diagram__flow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+.diagram__node {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-dark-text);
+  border: 1px solid var(--color-dark-border);
+  background: var(--color-dark-bg);
+}
+
+.diagram__node--local   { border-color: var(--color-brand); }
+.diagram__node--external{ border-color: var(--color-neutral-500); }
+.diagram__node--unknown { border-color: var(--color-neutral-600); opacity: 0.7; }
+
+.diagram__arrow {
+  color: var(--color-dark-muted);
+  font-size: 18px;
+  line-height: 1;
+}
+
+/* Vertical on small screens */
+@media (max-width: 767px) {
+  .diagram__flow { flex-direction: column; }
+  .diagram__arrow { transform: rotate(90deg); }
+}

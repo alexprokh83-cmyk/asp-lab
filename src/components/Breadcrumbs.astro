@@ -1,0 +1,101 @@
+---
+/**
+ * Breadcrumbs — structured navigation trail for internal pages.
+ * Uses schema.org BreadcrumbList for SEO.
+ */
+import type { Locale } from "../lib/i18n";
+import { t } from "../lib/translations/index";
+import { namedRoute } from "../lib/routes";
+
+interface BreadcrumbItem {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  locale: Locale;
+  items: BreadcrumbItem[];
+}
+
+const { locale, items } = Astro.props;
+const dict = t(locale);
+const homeHref = namedRoute("home", locale);
+
+const allItems: BreadcrumbItem[] = [
+  { label: dict.breadcrumbs.home, href: homeHref },
+  ...items,
+];
+---
+
+<nav aria-label={dict.breadcrumbs.ariaLabel} class="breadcrumbs">
+  <ol
+    class="breadcrumbs__list"
+    itemscope
+    itemtype="https://schema.org/BreadcrumbList"
+  >
+    {allItems.map((item, idx) => {
+      const isLast = idx === allItems.length - 1;
+      return (
+        <li
+          class="breadcrumbs__item"
+          itemprop="itemListElement"
+          itemscope
+          itemtype="https://schema.org/ListItem"
+        >
+          {item.href && !isLast ? (
+            <a href={item.href} itemprop="item" class="breadcrumbs__link">
+              <span itemprop="name">{item.label}</span>
+            </a>
+          ) : (
+            <span itemprop="name" aria-current={isLast ? "page" : undefined} class="breadcrumbs__current">
+              {item.label}
+            </span>
+          )}
+          <meta itemprop="position" content={String(idx + 1)} />
+          {!isLast && <span class="breadcrumbs__sep" aria-hidden="true">/</span>}
+        </li>
+      );
+    })}
+  </ol>
+</nav>
+
+<style>
+  .breadcrumbs {
+    font-size: var(--text-label-size);
+    line-height: var(--text-label-line);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-6);
+  }
+
+  .breadcrumbs__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-1);
+    list-style: none;
+  }
+
+  .breadcrumbs__item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+  }
+
+  .breadcrumbs__link {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+  }
+  .breadcrumbs__link:hover {
+    color: var(--color-action-primary);
+    text-decoration: underline;
+  }
+
+  .breadcrumbs__current {
+    color: var(--color-text-tertiary);
+  }
+
+  .breadcrumbs__sep {
+    color: var(--color-border-strong);
+    user-select: none;
+  }
+</style>

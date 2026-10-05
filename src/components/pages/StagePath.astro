@@ -1,0 +1,17 @@
+---
+/** Discover → Prototype → Demonstrate → Measure → Pilot → Deploy. Compact = names only (homepage). Not every project passes every stage. */
+import type { Locale } from "../../lib/i18n";
+import { strategyCopy } from "../../content/pages/strategy";
+interface Props { locale: Locale; compact?: boolean }
+const { locale, compact = false } = Astro.props;
+const c = strategyCopy[locale].path;
+---
+<ol class:list={["stages", compact && "stages--compact"]} aria-label={c.heading}>
+  {c.stages.map((s, i) => (
+    <li class="stage">
+      <span class="stage__n mono" aria-hidden="true">{i + 1}</span>
+      <h3 class="stage__name mono">{s.name}</h3>
+      {!compact && <p>{s.text}</p>}
+    </li>
+  ))}
+</ol>

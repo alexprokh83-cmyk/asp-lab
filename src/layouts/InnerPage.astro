@@ -1,0 +1,20 @@
+---
+/** Shared inner-page template: breadcrumbs, hero, body slot. Real page sections arrive in Phase 5. */
+import SiteLayout from "./SiteLayout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import type { Locale } from "../lib/i18n";
+
+interface Props { locale: Locale; slug: string; heading: string; lead?: string; title?: string; indexable?: boolean; bare?: boolean; parent?: { label: string; href: string } }
+const { locale, slug, heading, lead, title, indexable = true, bare = false, parent } = Astro.props;
+const crumbs = [...(parent ? [parent] : []), { label: heading }];
+---
+<SiteLayout locale={locale} slug={slug} title={title ?? heading} description={lead} indexable={indexable}>
+  <section class="page-hero">
+    <div class="container">
+      <Breadcrumbs locale={locale} items={crumbs} />
+      <h1>{heading}</h1>
+      {lead && <p class="page-hero__lead">{lead}</p>}
+    </div>
+  </section>
+  {bare ? <slot /> : <div class="container page-body"><slot /></div>}
+</SiteLayout>

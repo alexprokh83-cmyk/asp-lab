@@ -1,0 +1,8 @@
+---
+/** Consistent TODO presentation. Rendered only in preview; in production a missing value is omitted by the caller. */
+import { IS_PREVIEW } from "../config/site";
+import { TODO } from "../config/site";
+interface Props { what?: string }
+const { what } = Astro.props;
+---
+{IS_PREVIEW && <span class="missing-value mono">{what ? `${what}: ` : ""}{TODO}</span>}

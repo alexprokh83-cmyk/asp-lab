@@ -1,0 +1,18 @@
+---
+/** Strategic goals with an honest textual status each (confirmed / developing / planned / demonstration concept). */
+import type { Locale } from "../../lib/i18n";
+import { strategyCopy } from "../../content/pages/strategy";
+import CapabilityStatus from "../CapabilityStatus.astro";
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const g = strategyCopy[locale].goals;
+---
+<ol class="goals">
+  {g.items.map((it, i) => (
+    <li class="goal">
+      <span class="goal__n mono" aria-hidden="true">{i + 1}</span>
+      <div><h3>{it.title}</h3><p>{it.text}</p></div>
+      <CapabilityStatus locale={locale} maturity={it.status} />
+    </li>
+  ))}
+</ol>

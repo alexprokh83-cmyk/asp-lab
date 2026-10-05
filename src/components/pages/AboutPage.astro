@@ -1,0 +1,54 @@
+---
+import type { Locale } from "../../lib/i18n";
+import { t } from "../../lib/translations/index";
+import { aboutCopy } from "../../content/pages/about";
+import { capabilities } from "../../content/capabilities";
+import CapabilityStatus from "../CapabilityStatus.astro";
+import CtaBand from "./CtaBand.astro";
+import StrategicGoals from "./StrategicGoals.astro";
+import { strategyCopy } from "../../content/pages/strategy";
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const dict = t(locale);
+const c = aboutCopy[locale];
+const goals = strategyCopy[locale].goals;
+const groups = (["confirmed", "developing", "planned"] as const).map((m) => ({ m, items: capabilities.filter((x) => x.maturity === m) }));
+---
+<section class="section" aria-labelledby="ab-purpose">
+  <div class="container sec-about__grid">
+    <h2 id="ab-purpose">{c.purpose.heading}</h2>
+    <p class="sec-about__text">{c.purpose.text}</p>
+  </div>
+</section>
+
+<section class="section sec-goals" aria-labelledby="ab-goals">
+  <div class="container">
+    <div class="section-heading"><h2 id="ab-goals">{goals.heading}</h2><p class="section-heading__lead">{goals.lead}</p></div>
+    <StrategicGoals locale={locale} />
+  </div>
+</section>
+
+<section class="section sec-formats" aria-labelledby="ab-principles">
+  <div class="container sec-about__grid">
+    <h2 id="ab-principles">{c.principles.heading}</h2>
+    <ul class="plain">{c.principles.items.map((i) => <li>{i}</li>)}</ul>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="ab-found">
+  <div class="container sec-about__grid"><h2 id="ab-found">{c.foundations.heading}</h2><p class="sec-about__text">{c.foundations.text}</p></div>
+</section>
+
+<section class="section sec-future" aria-labelledby="ab-caps">
+  <div class="container">
+    <div class="section-heading"><h2 id="ab-caps">{c.capabilities.heading}</h2><p class="section-heading__lead">{c.capabilities.lead}</p></div>
+    <div class="grid-3">
+      {groups.map((g) => (
+        <div class="epanel"><h3><CapabilityStatus locale={locale} maturity={g.m} /></h3><ul class="plain">{g.items.map((x) => <li>{x.label[locale]}</li>)}</ul></div>
+      ))}
+    </div>
+  </div>
+</section>
+
+
+<CtaBand locale={locale} />

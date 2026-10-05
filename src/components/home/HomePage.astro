@@ -1,0 +1,261 @@
+---
+/**
+ * Homepage — one template for all locales. Section order is fixed by the spec:
+ * Hero · Solutions · Projects · Local AI · Audiences · Evidence · Process · About · FAQ · Final CTA
+ */
+import { Image } from "astro:assets";
+import heroArt from "../../assets/hero-automation.jpg";
+import type { Locale } from "../../lib/i18n";
+import { t } from "../../lib/translations/index";
+import { namedRoute } from "../../lib/routes";
+import { featuredProjects, projectsWithResult } from "../../content/projects";
+import { projectsSectionCopy } from "../../content/pages/projects-section";
+import TelegramCTA from "../TelegramCTA.astro";
+import ProjectCard from "../ProjectCard.astro";
+import Faq from "../Faq.astro";
+import StagePath from "../pages/StagePath.astro";
+import StrategicGoals from "../pages/StrategicGoals.astro";
+import { strategyCopy } from "../../content/pages/strategy";
+import { scenarios } from "../../content/scenarios";
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const dict = t(locale);
+const st = strategyCopy[locale];
+const h = dict.home;
+const ps = projectsSectionCopy[locale];
+const r = (k: Parameters<typeof namedRoute>[0]) => namedRoute(k, locale);
+
+const solutionKeys = ["processAutomation", "documentsAndSpeech", "localModels", "aiEvaluation"] as const;
+const anchors = ["automation", "documents", "model-selection", "evaluation"];
+const icons = [
+  // workflow nodes
+  "M5 6h5v5H5zM14 13h5v5h-5zM10 8.5h4a2 2 0 0 1 2 2V13",
+  // document
+  "M7 3h7l4 4v14H7zM14 3v4h4M10 12h5M10 16h5",
+  // chip
+  "M8 8h8v8H8zM10 3v3M14 3v3M10 18v3M14 18v3M3 10h3M3 14h3M18 10h3M18 14h3",
+  // check in shield
+  "M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6zM9 12l2 2 4-4",
+];
+
+const processSteps = Object.values(h.process.steps);
+---
+<!-- HERO -->
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero__art" aria-hidden="true">
+    <Image src={heroArt} alt="" width={1376} height={768} loading="eager" fetchpriority="high" format="webp" quality={82} sizes="(min-width: 1024px) 62vw, 100vw" />
+  </div>
+  <div class="container hero__inner">
+    <div class="hero__content">
+      <p class="hero__eyebrow">{h.hero.eyebrow}</p>
+      <h1 id="hero-title">{h.hero.heading}</h1>
+      <p class="hero__lead">{h.hero.lead}</p>
+      <p class="hero__audience">{h.hero.audience}</p>
+      <div class="hero__actions">
+        <a href={r("contact")} class="btn btn--primary">{h.hero.cta}</a>
+        <a href={r("lab")} class="btn btn--secondary">{h.hero.ctaSecondary}</a>
+      </div>
+      <div class="hero__tg"><TelegramCTA locale={locale} label={h.finalCta.cta} showContactLink={false} /></div>
+      <div class="hero__flow">
+        <p class="hero__flow-label">{h.hero.principle}</p>
+        <ol class="flow" aria-label={h.hero.principle}>
+          {h.hero.flow.map((step) => <li>{step}</li>)}
+        </ol>
+        <p class="hero__method mono">{h.process.heading}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTIONS -->
+<section class="section sec-solutions" aria-labelledby="solutions-title">
+  <div class="container">
+    <div class="section-heading">
+      <h2 id="solutions-title">{h.solutions.heading}</h2>
+      <p class="section-heading__lead">{h.solutions.lead}</p>
+      <p class="home-pos">{st.positioning.text}</p>
+    </div>
+    <div class="grid-2">
+      {solutionKeys.map((k, i) => {
+        const c = dict.solutions.cards[k];
+        return (
+          <article class="scard">
+            <div class="scard__top">
+              <span class="scard__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d={icons[i]} /></svg>
+              </span>
+              <span class="scard__num mono" aria-hidden="true">0{i + 1}</span>
+            </div>
+            <h3>{c.title}</h3>
+            <p class="scard__problem">{c.problem}</p>
+            <p>{c.value}</p>
+            <p class="scard__output"><strong>{h.solutions.outputLabel}:</strong> {h.solutions.outputs[i]}</p>
+            <a class="scard__link" href={`${r("solutions")}#${anchors[i]}`}>{h.solutions.link}</a>
+          </article>
+        );
+      })}
+    </div>
+    <div class="home-scn">
+      <h3>{st.scenarios.chipsLabel}</h3>
+      <ul class="home-scn__chips">
+        {scenarios.map((x) => <li><a href={`${r("solutions")}#scenario-${x.id}`}>{x.copy[locale].title}</a></li>)}
+      </ul>
+      <p class="epanel__limit">{st.scenarios.disclosure}</p>
+      <p><a href={`${r("solutions")}#scenarios`}>{st.scenarios.linkAll}</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="section sec-projects" aria-labelledby="projects-title">
+  <div class="container">
+    <div class="section-heading">
+      <h2 id="projects-title">{ps.home.heading}</h2>
+      <p class="section-heading__lead">{ps.home.lead}</p>
+    </div>
+    <div class="grid-3">
+      {featuredProjects.map((p) => <ProjectCard locale={locale} project={p} />)}
+    </div>
+    <p class="sec-projects__all"><a class="btn btn--secondary" href={r("lab")}>{ps.labels.allProjects}</a></p>
+  </div>
+</section>
+
+<!-- LOCAL / PRIVATE AI -->
+<section class="section sec-local dark-section" aria-labelledby="local-title">
+  <div class="container sec-local__grid">
+    <div>
+      <h2 id="local-title">{h.localAi.heading}</h2>
+      <p class="sec-local__lead">{h.localAi.lead}</p>
+      <p class="sec-local__caution">{h.localAi.caution}</p>
+      <p class="sec-local__links">
+        <a class="btn btn--inverse" href={r("localAi")}>{h.localAi.cta}</a>
+        <a href={r("labAutoLlmBenchmark")}>{h.localAi.linkBenchmark}</a>
+        <a href={r("labLocalTranscription")}>{h.localAi.linkTranscription}</a>
+      </p>
+    </div>
+    <div class="sec-local__panel">
+      <p class="panel-label">{h.localAi.diagramLabel}</p>
+      <ol class="flow flow--dark" aria-label={h.localAi.diagramLabel}>
+        {h.localAi.flow.map((step) => <li>{step}</li>)}
+      </ol>
+      <div class="sec-local__cols">
+        <div>
+          <h3>{h.localAi.supportedHeading}</h3>
+          <ul>{h.localAi.supported.map((s) => <li>{s}</li>)}</ul>
+        </div>
+        <div>
+          <h3>{h.localAi.developingHeading}</h3>
+          <ul>{h.localAi.developing.map((s) => <li>{s}</li>)}</ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AUDIENCES -->
+<section class="section sec-aud" aria-labelledby="aud-title">
+  <div class="container">
+    <div class="section-heading">
+      <h2 id="aud-title">{h.audiences.heading}</h2>
+      <p class="section-heading__lead">{h.audiences.lead}</p>
+    </div>
+    <div class="aud-grid">
+      <article class="acard acard--primary">
+        <h3>{h.audiences.business.title}</h3>
+        <p>{h.audiences.business.text}</p>
+        <a href={r("business")}>{h.audiences.link}<span class="sr-only">: {h.audiences.business.title}</span></a>
+      </article>
+      <article class="acard">
+        <h3>{h.audiences.education.title}</h3>
+        <p>{h.audiences.education.text}</p>
+        <a href={r("education")}>{h.audiences.link}<span class="sr-only">: {h.audiences.education.title}</span></a>
+      </article>
+      <article class="acard">
+        <h3>{h.audiences.publicSector.title}</h3>
+        <p>{h.audiences.publicSector.text}</p>
+        <a href={r("publicSector")}>{h.audiences.link}<span class="sr-only">: {h.audiences.publicSector.title}</span></a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section class="section sec-results" aria-labelledby="results-title">
+  <div class="container">
+    <div class="section-heading">
+      <h2 id="results-title">{ps.results.heading}</h2>
+      <p class="section-heading__lead">{ps.results.lead}</p>
+    </div>
+    <div class="results-grid">
+      {projectsWithResult.map((p) => (
+        <a class="result-card" href={namedRoute(p.routeKey, locale)}>
+          <span class="result-card__label">{ps.labels.result}</span>
+          <span class="result-card__text">{p.text[locale].result}</span>
+          <span class="result-card__proj">{p.text[locale].name ?? p.text[locale].title}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="section sec-process" aria-labelledby="process-title">
+  <div class="container">
+    <div class="section-heading section-heading--inverse">
+      <h2 id="process-title" class="mono-heading">{h.process.heading}</h2>
+      <p class="section-heading__lead">{h.process.lead}</p>
+    </div>
+    <p class="process__note">{h.process.before}</p>
+    <ol class="steps">
+      {processSteps.map((s, i) => (
+        <li class="step">
+          <span class="step__num mono" aria-hidden="true">{i + 1}</span>
+          <h3>{s.title}</h3>
+          <p>{s.description}</p>
+        </li>
+      ))}
+    </ol>
+    <p class="process__note">{h.process.after}</p>
+    <p><a class="btn btn--inverse" href={r("approach")}>{h.process.link}</a></p>
+    <div class="process__path">
+      <p class="mono">{st.path.heading}</p>
+      <StagePath locale={locale} compact />
+      <p><a href={`${r("solutions")}#path`}>{st.path.link}</a> — {st.path.note}</p>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section sec-about" aria-labelledby="about-title">
+  <div class="container sec-about__grid">
+    <h2 id="about-title">{h.about.heading}</h2>
+    <div>
+      <p class="sec-about__text">{h.about.text}</p>
+      <p><a href={r("about")}>{h.about.link}</a></p>
+      <h3 class="goals-heading">{st.goals.heading}</h3>
+      <StrategicGoals locale={locale} />
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section sec-faq" aria-labelledby="faq-title">
+  <div class="container sec-faq__grid">
+    <h2 id="faq-title">{h.faq.heading}</h2>
+    <Faq items={h.faq.items} />
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="section sec-cta" aria-labelledby="cta-title">
+  <div class="container sec-cta__inner">
+    <h2 id="cta-title">{h.finalCta.heading}</h2>
+    <p class="sec-cta__lead">{h.finalCta.lead}</p>
+    <div class="sec-cta__actions">
+      <TelegramCTA locale={locale} label={h.finalCta.cta} tone="inverse" />
+      <a class="sec-cta__secondary" href={r("contact")}>{h.finalCta.secondary}</a>
+    </div>
+    <p class="sec-cta__warning">{h.finalCta.warning}</p>
+  </div>
+</section>

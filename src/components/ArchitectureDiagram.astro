@@ -1,0 +1,19 @@
+---
+/** Data-driven, text-based diagram. Unknown location is never drawn as local; every node carries a text boundary + status label. */
+import type { Locale } from "../lib/i18n";
+import type { Architecture } from "../content/types";
+import { t } from "../lib/translations/index";
+interface Props { locale: Locale; architecture: Architecture }
+const { locale, architecture } = Astro.props;
+const ui = t(locale).ui;
+const boundary = { local: ui.boundaryLocal, external: ui.boundaryExternal, unknown: ui.boundaryUnknown } as const;
+const status = { documented: ui.diagramDocumented, conceptual: ui.diagramConceptual, proposed: ui.diagramProposed } as const;
+---
+<ol class="arch" aria-label={t(locale).ui.boundaryHeading}>
+  {architecture.nodes.map((n) => (
+    <li class={`arch__node arch__node--${n.boundary}`}>
+      <span class="arch__label">{n.label[locale]}</span>
+      <span class="arch__tags"><span class="label label--draft">{boundary[n.boundary]}</span> <span class="label label--preview">{status[n.status]}</span></span>
+    </li>
+  ))}
+</ol>

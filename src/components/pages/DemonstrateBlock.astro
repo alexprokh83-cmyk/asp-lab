@@ -1,0 +1,22 @@
+---
+import type { Locale } from "../../lib/i18n";
+import { strategyCopy } from "../../content/pages/strategy";
+import PathDiagram from "./PathDiagram.astro";
+interface Props { locale: Locale; diagram?: boolean }
+const { locale, diagram = true } = Astro.props;
+const d = strategyCopy[locale].demonstrate;
+---
+<div class="demo">
+  <div class="demo__cols">
+    <div>
+      <h3>{d.flowHeading}</h3>
+      <ol class="demo__flow">{d.flow.map((f) => <li>{f}</li>)}</ol>
+    </div>
+    <div>
+      <h3>{d.outcomesHeading}</h3>
+      <ul class="chips chips--sm">{d.outcomes.map((o) => <li>{o}</li>)}</ul>
+    </div>
+  </div>
+  <p class="note">{d.note}</p>
+  {diagram && <PathDiagram locale={locale} />}
+</div>

@@ -1,0 +1,85 @@
+---
+import type { Locale } from "../../lib/i18n";
+import type { Project } from "../../content/project-types";
+import { namedRoute } from "../../lib/routes";
+import { projects } from "../../content/projects";
+import { projectsSectionCopy } from "../../content/pages/projects-section";
+import ProcessFlow from "../ProcessFlow.astro";
+import ProjectCard from "../ProjectCard.astro";
+import CtaBand from "./CtaBand.astro";
+
+interface Props { locale: Locale; project: Project }
+const { locale, project } = Astro.props;
+const tx = project.text[locale];
+const ui = projectsSectionCopy[locale];
+const L = ui.labels;
+const tech = tx.tech.split(" · ");
+// more projects: same direction first, then the rest in catalogue order
+const others = projects.filter((p) => p.id !== project.id);
+const related = [...others.filter((p) => p.categories.some((c) => project.categories.includes(c))), ...others.filter((p) => !p.categories.some((c) => project.categories.includes(c)))].slice(0, 3);
+const feature = (f: string) => { const i = f.indexOf(" § "); return i === -1 ? { lead: "", text: f } : { lead: f.slice(0, i), text: f.slice(i + 3) }; };
+---
+<div class="pp">
+  <div class="container pp__top">
+    <p class="pp__cats">{project.categories.map((c) => ui.categories[c]).join(" · ")}</p>
+    {project.repo && <a class="btn btn--secondary btn--sm" href={project.repo} target="_blank" rel="noopener noreferrer">{L.repo}<span class="sr-only"> (GitHub)</span></a>}
+  </div>
+
+  {tx.result && (
+    <section class="container pp__result" aria-label={L.result}>
+      <div class="result-card">
+        <p class="result-card__label">{L.result}</p>
+        <p class="result-card__text">{tx.result}</p>
+      </div>
+    </section>
+  )}
+
+  <section class="section pp__about" aria-labelledby="pp-about">
+    <div class="container pp__grid">
+      <h2 id="pp-about">{L.about}</h2>
+      <div class="pp__prose">{tx.about.map((para) => <p>{para}</p>)}</div>
+    </div>
+  </section>
+
+  <section class="section pp__how" aria-labelledby="pp-how">
+    <div class="container">
+      <h2 id="pp-how">{L.how}</h2>
+      <ProcessFlow flow={tx.flow} />
+      {tx.flowExtra && <ProcessFlow flow={tx.flowExtra} label={L.additionally} variant="extra" />}
+    </div>
+  </section>
+
+  <section class="section pp__features" aria-labelledby="pp-features">
+    <div class="container">
+      <h2 id="pp-features">{L.features}</h2>
+      <ul class="features">
+        {tx.features.map((f) => { const x = feature(f); return (
+          <li class="feature"><span class="feature__tick" aria-hidden="true">✓</span><p>{x.lead && <strong>{x.lead}. </strong>}{x.text}</p></li>
+        ); })}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section pp__uses" aria-labelledby="pp-uses">
+    <div class="container">
+      <h2 id="pp-uses">{L.uses}</h2>
+      <ul class="uses">{tx.uses.map((u) => <li class="use">{u}</li>)}</ul>
+      {tx.note && <p class="pp__note">{tx.note.title && <strong>{tx.note.title}. </strong>}{tx.note.text}</p>}
+    </div>
+  </section>
+
+  <section class="section pp__tech" aria-labelledby="pp-tech">
+    <div class="container">
+      <h2 id="pp-tech">{L.tech}</h2>
+      <ul class="badges badges--lg">{tech.map((t) => <li class="badge">{t}</li>)}</ul>
+    </div>
+  </section>
+
+  <section class="section pp__more" aria-labelledby="pp-more">
+    <div class="container">
+      <div class="section-heading"><h2 id="pp-more">{L.more}</h2><p><a href={namedRoute("lab", locale)}>{L.allProjects}</a></p></div>
+      <div class="grid-3">{related.map((p) => <ProjectCard locale={locale} project={p} />)}</div>
+    </div>
+  </section>
+</div>
+<CtaBand locale={locale} />

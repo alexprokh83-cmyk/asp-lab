@@ -1,0 +1,7 @@
+---
+/** A list when data exists; otherwise the consistent TODO (preview only). */
+interface Props { items?: readonly string[]; text?: string | null }
+const { items, text } = Astro.props;
+import MissingValue from "./MissingValue.astro";
+---
+{items !== undefined ? (items.length ? <ul>{items.map((i) => <li>{i}</li>)}</ul> : <MissingValue />) : text ? <p>{text}</p> : <MissingValue />}

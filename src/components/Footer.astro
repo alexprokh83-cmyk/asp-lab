@@ -1,0 +1,154 @@
+---
+/**
+ * Site footer — four link groups as specified.
+ * Group 1: Brand, positioning, method
+ * Group 2: Solutions, Local AI
+ * Group 3: Audiences
+ * Group 4: Site links
+ * External links (GitHub) only rendered when real URLs are supplied.
+ */
+import type { Locale } from "../lib/i18n";
+import { t } from "../lib/translations/index";
+import { namedRoute } from "../lib/routes";
+import { GITHUB_URL } from "../config/site";
+import Logo from "./Logo.astro";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const dict = t(locale);
+const f = dict.footer;
+const l = f.links;
+const r = (key: Parameters<typeof namedRoute>[0]) => namedRoute(key, locale);
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__grid">
+
+      <!-- Group 1: Brand -->
+      <div class="site-footer__brand">
+        <a href={r("home")} class="site-footer__logo-link" aria-label={dict.nav.home}>
+          <Logo height={72} />
+        </a>
+        <p class="site-footer__fullname">ASP Lab — {f.fullName}</p>
+      <p class="site-footer__tagline">{f.tagline}</p>
+        <p class="site-footer__method">{f.method}</p>
+      </div>
+
+      <!-- Group 2: Solutions + Local AI -->
+      <div>
+        <h3 class="site-footer__group-heading">{f.groupSolutions}</h3>
+        <ul class="site-footer__list" role="list">
+          <li><a href={`${r("solutions")}#process-automation`} class="site-footer__link">{l.processAutomation}</a></li>
+          <li><a href={`${r("solutions")}#documents-speech`}   class="site-footer__link">{l.documentsAndSpeech}</a></li>
+          <li><a href={`${r("solutions")}#local-models`}       class="site-footer__link">{l.localModels}</a></li>
+          <li><a href={`${r("solutions")}#ai-evaluation`}      class="site-footer__link">{l.aiEvaluation}</a></li>
+        </ul>
+        <h3 class="site-footer__group-heading" style="margin-top: var(--space-6);">{f.groupLocalAi}</h3>
+        <ul class="site-footer__list" role="list">
+          <li><a href={r("localAi")} class="site-footer__link">{l.localAi}</a></li>
+        </ul>
+      </div>
+
+      <!-- Group 3: Audiences -->
+      <div>
+        <h3 class="site-footer__group-heading">{f.groupAudiences}</h3>
+        <ul class="site-footer__list" role="list">
+          <li><a href={r("business")}     class="site-footer__link">{l.business}</a></li>
+          <li><a href={r("education")}    class="site-footer__link">{l.education}</a></li>
+          <li><a href={r("publicSector")} class="site-footer__link">{l.publicSector}</a></li>
+        </ul>
+      </div>
+
+      <!-- Group 4: Site -->
+      <div>
+        <h3 class="site-footer__group-heading">{f.groupSite}</h3>
+        <ul class="site-footer__list" role="list">
+          <li><a href={r("lab")}      class="site-footer__link">{l.projects}</a></li>
+          <li><a href={r("approach")} class="site-footer__link">{l.approach}</a></li>
+          <li><a href={r("about")}    class="site-footer__link">{l.about}</a></li>
+          <li><a href={r("contact")}  class="site-footer__link">{l.contact}</a></li>
+          <li><a href={r("privacy")}  class="site-footer__link">{l.privacy}</a></li>
+          {GITHUB_URL && (
+            <li>
+              <a href={GITHUB_URL} class="site-footer__link" target="_blank" rel="noopener noreferrer">
+                {f.githubLabel}
+                <span class="sr-only">{dict.ui.externalLink}</span>
+              </a>
+            </li>
+          )}
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="site-footer__bottom">
+      <p class="site-footer__copyright">
+        &copy; {year} {f.copyright}
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--color-neutral-50);
+    border-top: 1px solid var(--color-border);
+    padding-block: var(--space-12) var(--space-8);
+  }
+
+  .site-footer__grid {
+    display: grid;
+    gap: var(--space-8);
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 640px) {
+    .site-footer__grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (min-width: 1024px) {
+    .site-footer__grid { grid-template-columns: 2fr 1.5fr 1fr 1fr; gap: var(--space-12); }
+  }
+
+  .site-footer__brand { display: flex; flex-direction: column; gap: var(--space-3); }
+  .site-footer__logo-link { text-decoration: none; display: inline-flex; }
+  .site-footer__tagline {
+    font-size: 14px; color: var(--color-text-secondary); line-height: 1.6;
+  }
+  .site-footer__method {
+    font-family: var(--font-mono); font-size: 13px;
+    color: var(--color-blue-700); font-weight: var(--font-weight-medium);
+  }
+
+  .site-footer__group-heading {
+    font-size: var(--text-label-size);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: var(--space-3);
+  }
+
+  .site-footer__list { list-style: none; display: flex; flex-direction: column; gap: var(--space-2); }
+
+  .site-footer__link {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: color var(--duration-hover) var(--ease-standard);
+  }
+  .site-footer__link:hover { color: var(--color-action-primary); }
+
+  .site-footer__bottom {
+    margin-top: var(--space-12);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .site-footer__copyright {
+    font-size: var(--text-label-size);
+    color: var(--color-text-tertiary);
+  }
+</style>

@@ -1,0 +1,129 @@
+---
+import type { Locale } from "../../lib/i18n";
+import { t } from "../../lib/translations/index";
+import { namedRoute } from "../../lib/routes";
+import { solutionsCopy } from "../../content/pages/solutions";
+import { projectById } from "../../content/projects";
+import ProjectCard from "../ProjectCard.astro";
+import Faq from "../Faq.astro";
+import CtaBand from "./CtaBand.astro";
+import ScenarioGrid from "./ScenarioGrid.astro";
+import StagePath from "./StagePath.astro";
+import DemonstrateBlock from "./DemonstrateBlock.astro";
+import { strategyCopy } from "../../content/pages/strategy";
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const dict = t(locale);
+const c = solutionsCopy[locale];
+const st = strategyCopy[locale];
+const cardKey = { automation: "processAutomation", documents: "documentsAndSpeech", "model-selection": "localModels", evaluation: "aiEvaluation" } as const;
+---
+<section class="section sec-dirs" aria-labelledby="dirs-title">
+  <div class="container">
+    <span class="layer-kicker">{st.layers.one}</span>
+    <h2 id="dirs-title" class="sr-only">{dict.nav.solutions}</h2>
+    <nav class="jump" aria-label={dict.nav.solutions}>
+      <ul>
+        {c.directions.map((d, i) => <li><a href={`#${d.id}`}><span class="mono">0{i + 1}</span> {dict.solutions.cards[cardKey[d.id]].title}</a></li>)}
+        <li><a href="#scenarios"><span class="mono">05</span> {st.scenarios.heading}</a></li>
+        <li><a href="#path"><span class="mono">06</span> {st.path.link}</a></li>
+      </ul>
+    </nav>
+    {c.directions.map((d, i) => {
+      const card = dict.solutions.cards[cardKey[d.id]];
+      const proj = projectById(d.projectId)!;
+      return (
+        <article class="dir" id={d.id} aria-labelledby={`${d.id}-title`}>
+          <div class="dir__head">
+            <p class="dir__num mono" aria-hidden="true">0{i + 1}</p>
+            <h2 id={`${d.id}-title`}>{card.title}</h2>
+            <p class="dir__when"><strong>{c.labels.whenUseful}.</strong> {d.whenUseful}</p>
+            <p class="dir__project"><strong>{c.labels.project}:</strong> <a href={namedRoute(proj.routeKey, locale)}>{(proj.text[locale].name ?? proj.text[locale].title)}</a></p>
+            <a class="btn btn--primary" href={namedRoute("contact", locale)}>{c.labels.cta}<span class="sr-only">: {card.title}</span></a>
+          </div>
+          <div class="dir__cols">
+            <section><h3>{c.labels.test}</h3><ul>{d.test.map((x) => <li>{x}</li>)}</ul></section>
+            <section><h3>{c.labels.deliver}</h3><ul>{d.deliver.map((x) => <li>{x}</li>)}</ul></section>
+            <section><h3>{c.labels.inputs}</h3><ul>{d.inputs.map((x) => <li>{x}</li>)}</ul></section>
+          </div>
+        </article>
+      );
+    })}
+  </div>
+</section>
+
+<section class="section" id="scenarios" aria-labelledby="scn-title">
+  <div class="container">
+    <div class="section-heading">
+      <h2 id="scn-title">{st.scenarios.heading}</h2>
+      <p class="section-heading__lead">{st.scenarios.lead}</p>
+    </div>
+    <p class="callout callout--warn">{st.scenarios.disclosure}</p>
+    <ScenarioGrid locale={locale} />
+    <div class="demo-cont">
+      <h3>{st.contentAutomation.heading}</h3>
+      <p>{st.contentAutomation.text}</p>
+      <ol class="scn__flow">{st.contentAutomation.flow.map((f) => <li>{f}</li>)}</ol>
+    </div>
+  </div>
+</section>
+
+<section class="section sec-formats" aria-labelledby="formats-title">
+  <div class="container">
+    <div class="section-heading"><h2 id="formats-title">{c.formats.heading}</h2><p class="section-heading__lead">{c.formats.lead}</p></div>
+    <ol class="formats">
+      {c.formats.items.map((f) => (
+        <li class="format"><span class="format__tag mono" aria-hidden="true">{f.tag}</span><h3>{f.title}</h3><p>{f.text}</p></li>
+      ))}
+    </ol>
+    <p class="note">{c.formats.note}</p>
+    <p><a href={namedRoute("approach", locale)}>{dict.home.process.link}</a></p>
+  </div>
+</section>
+
+<section class="section sec-layer2" id="path" aria-labelledby="path-title">
+  <div class="container">
+    <span class="layer-kicker">{st.layers.two}</span>
+    <div class="positioning">
+      <h2 id="path-title">{st.positioning.heading}</h2>
+      <p>{st.positioning.text}</p>
+    </div>
+    <h3 class="mono-heading path-h">{st.path.heading}</h3>
+    <p class="section-heading__lead">{st.path.lead}</p>
+    <StagePath locale={locale} />
+    <p class="note">{st.path.note}</p>
+    <div class="demo-wrap">
+      <h2 class="h2-sub">{st.demonstrate.heading}</h2>
+      <p class="section-heading__lead">{st.demonstrate.lead}</p>
+      <DemonstrateBlock locale={locale} />
+    </div>
+  </div>
+</section>
+
+<section class="section sec-deliv" aria-labelledby="deliv-title">
+  <div class="container">
+    <div class="section-heading"><h2 id="deliv-title">{c.deliverables.heading}</h2><p class="section-heading__lead">{c.deliverables.lead}</p></div>
+    <ul class="chips">{c.deliverables.items.map((x) => <li>{x}</li>)}</ul>
+  </div>
+</section>
+
+<section class="section sec-bounds dark-section" aria-labelledby="bounds-title">
+  <div class="container">
+    <div class="section-heading"><h2 id="bounds-title">{c.boundaries.heading}</h2><p class="section-heading__lead">{c.boundaries.lead}</p></div>
+    <ul class="bounds">{c.boundaries.items.map((x) => <li><span aria-hidden="true">—</span> {x}</li>)}</ul>
+  </div>
+</section>
+
+<section class="section sec-related" aria-labelledby="related-title">
+  <div class="container">
+    <div class="section-heading"><h2 id="related-title">{c.related.heading}</h2><p class="section-heading__lead">{c.related.lead}</p></div>
+    <div class="grid-3">{c.related.ids.map((id) => <ProjectCard locale={locale} project={projectById(id)!} compact />)}</div>
+  </div>
+</section>
+
+<section class="section sec-faq" aria-labelledby="sfaq-title">
+  <div class="container sec-faq__grid"><h2 id="sfaq-title">{c.faq.heading}</h2><Faq items={c.faq.items} /></div>
+</section>
+
+<CtaBand locale={locale} />

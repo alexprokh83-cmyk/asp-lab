@@ -1,0 +1,54 @@
+---
+/** /local-ai: demonstration AI infrastructure (concept) + possible deployment models. No hardware, capacity or uptime is stated. */
+import type { Locale } from "../../lib/i18n";
+import type { Architecture } from "../../content/types";
+import { strategyCopy } from "../../content/pages/strategy";
+import ArchitectureDiagram from "../ArchitectureDiagram.astro";
+import CapabilityStatus from "../CapabilityStatus.astro";
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const c = strategyCopy[locale];
+const i = c.infra;
+const arch: Architecture = {
+  nodes: i.diagram.map((label, k) => ({ id: `n${k}`, label: { en: label, uk: label, ru: label }, boundary: "unknown", status: "conceptual" })),
+  edges: [],
+};
+---
+<section class="section sec-infra" aria-labelledby="la-infra">
+  <div class="container">
+    <div class="section-heading">
+      <h2 id="la-infra">{i.heading}</h2>
+      <p class="section-heading__lead">{i.lead}</p>
+      <p><CapabilityStatus locale={locale} maturity="concept" /> <span class="note-inline">{i.label}</span></p>
+    </div>
+    <div class="grid-2">
+      <div class="epanel">
+        <h3>{i.rolesHeading}</h3>
+        <ul class="plain">{i.roles.map((r) => <li>{r}</li>)}</ul>
+      </div>
+      <div class="epanel">
+        <h3>{i.separationHeading}</h3>
+        <p>{i.separationText}</p>
+        <p class="epanel__limit">{i.diagramLabel}</p>
+        <ArchitectureDiagram locale={locale} architecture={arch} />
+      </div>
+    </div>
+    <div class="grid-2 infra__foot">
+      <div class="callout callout--warn">
+        <h3 class="h2-sub">{i.notClaimedHeading}</h3>
+        <ul class="plain">{i.notClaimed.map((x) => <li>{x}</li>)}</ul>
+      </div>
+      <p class="callout callout--info">{i.existsNote}</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="la-deploy">
+  <div class="container">
+    <div class="section-heading"><h2 id="la-deploy">{c.deployModels.heading}</h2><p class="section-heading__lead">{c.deployModels.lead}</p></div>
+    <div class="grid-3">
+      {c.deployModels.items.map((m) => <article class="acard acard--plain"><h3>{m.name}</h3><p>{m.text}</p></article>)}
+    </div>
+    <p class="note">{c.deployModels.note}</p>
+  </div>
+</section>

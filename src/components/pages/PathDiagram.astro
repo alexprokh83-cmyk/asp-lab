@@ -1,0 +1,22 @@
+---
+/** Conceptual implementation model: Organization → Process → Prototype → Laboratory AI infrastructure → Verification → Decision,
+ *  then two paths. Text-based, labelled as conceptual, never presented as an existing production service. */
+import type { Locale } from "../../lib/i18n";
+import { strategyCopy } from "../../content/pages/strategy";
+import CapabilityStatus from "../CapabilityStatus.astro";
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const m = strategyCopy[locale].model;
+---
+<figure class="pdiag">
+  <figcaption class="pdiag__label"><CapabilityStatus locale={locale} maturity="concept" /> <span>{m.label}</span></figcaption>
+  <ol class="flow" aria-label={m.heading}>
+    {m.nodes.map((n, i) => <li class:list={[i === 3 && "flow__lab"]}>{n}</li>)}
+  </ol>
+  <p class="pdiag__branch-label">{m.branchLabel}</p>
+  <div class="pdiag__branches">
+    <p class="pdiag__branch"><span aria-hidden="true">↺</span> {m.branchContinue}</p>
+    <p class="pdiag__branch pdiag__branch--pilot"><span aria-hidden="true">→</span> {m.branchPilot}</p>
+  </div>
+  <p class="pdiag__caption">{m.caption}</p>
+</figure>

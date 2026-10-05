@@ -1,0 +1,31 @@
+---
+/** Possible solution scenarios A–H. Every card is labelled "Demonstration concept" and carries its boundary. */
+import type { Locale } from "../../lib/i18n";
+import { strategyCopy } from "../../content/pages/strategy";
+import { scenarios } from "../../content/scenarios";
+import type { AudienceId } from "../../content/pages/audiences";
+import CapabilityStatus from "../CapabilityStatus.astro";
+interface Props { locale: Locale; audience?: AudienceId; compact?: boolean }
+const { locale, audience, compact = false } = Astro.props;
+const s = strategyCopy[locale].scenarios;
+const list = audience ? scenarios.filter((x) => x.audiences.includes(audience)) : scenarios;
+---
+<div class="scn-grid">
+  {list.map((x) => {
+    const c = x.copy[locale];
+    return (
+      <article class="scn" id={`scenario-${x.id}`}>
+        <header class="scn__head">
+          <span class="scn__letter mono" aria-hidden="true">{x.letter}</span>
+          <h3>{c.title}</h3>
+          <CapabilityStatus locale={locale} maturity={x.maturity} />
+        </header>
+        <p>{c.text}</p>
+        <p class="scn__label">{s.flowLabel}</p>
+        <ol class="scn__flow">{c.flow.map((f) => <li>{f}</li>)}</ol>
+        {!compact && <p class="scn__example"><strong>{s.exampleLabel}:</strong> {c.example}</p>}
+        <p class="scn__boundary"><strong>{s.boundaryLabel}:</strong> {c.boundary}</p>
+      </article>
+    );
+  })}
+</div>

@@ -1,0 +1,112 @@
+---
+/**
+ * Language switcher.
+ * Renders equivalent-route links for all three locales.
+ * Active locale is indicated visually AND with aria-current.
+ * No silent fallback — all three routes must be present.
+ */
+import type { Locale } from "../lib/i18n";
+import { LOCALE_LABEL, LOCALE_LANG } from "../lib/i18n";
+import { t } from "../lib/translations/index";
+
+interface Props {
+  currentLocale: Locale;
+  /** Equivalent path for each locale (slug without prefix, e.g. "/solutions") */
+  paths: Record<Locale, string>;
+}
+
+const { currentLocale, paths } = Astro.props;
+const dict = t(currentLocale);
+
+const locales: Locale[] = ["en", "uk", "ru"];
+---
+
+<nav class="lang-switcher" aria-label={dict.langSwitcher.label}>
+  <ul class="lang-switcher__list" role="list">
+    {locales.map((locale) => {
+      const isActive = locale === currentLocale;
+      return (
+        <li>
+          <a
+            href={paths[locale]}
+            hreflang={LOCALE_LANG[locale]}
+            lang={LOCALE_LANG[locale]}
+            class:list={["lang-switcher__link", isActive && "lang-switcher__link--active"]}
+            aria-current={isActive ? "true" : undefined}
+          >
+            <span class="sr-only">{LOCALE_LABEL[locale]}</span>
+            <span aria-hidden="true">{locale.toUpperCase()}</span>
+          </a>
+        </li>
+      );
+    })}
+  </ul>
+</nav>
+
+<style>
+  .lang-switcher__list {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    list-style: none;
+  }
+
+  .lang-switcher__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 32px;
+    padding-inline: var(--space-2);
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: var(--font-weight-medium);
+    letter-spacing: 0.04em;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    border: 1px solid transparent;
+    transition:
+      background-color var(--duration-hover) var(--ease-standard),
+      color var(--duration-hover) var(--ease-standard),
+      border-color var(--duration-hover) var(--ease-standard);
+  }
+
+  .lang-switcher__link:hover {
+    background-color: var(--color-background-subtle);
+    color: var(--color-text-primary);
+    border-color: var(--color-border);
+  }
+
+  .lang-switcher__link--active {
+    background-color: var(--color-blue-50);
+    color: var(--color-blue-700);
+    border-color: var(--color-blue-200);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .lang-switcher__link--active:hover {
+    background-color: var(--color-blue-100);
+    border-color: var(--color-blue-300);
+  }
+</style>
+
+<script>
+  // Equivalent-page links are real links. On the catalogue we additionally carry a VALID category, and any
+  // anchor that exists on this page. Nothing else from the query string is ever forwarded.
+  const CATS = ["documents", "requests", "voice", "assistants", "knowledge", "integrations", "qa", "evaluation"];
+  const update = () => {
+    const q = new URLSearchParams(location.search).get("category");
+    const cat = q && CATS.includes(q) ? q : null;
+    const hash = location.hash.length > 1 && document.getElementById(decodeURIComponent(location.hash.slice(1))) ? location.hash : "";
+    document.querySelectorAll<HTMLAnchorElement>(".lang-switcher a[href]").forEach((a) => {
+      if (!a.dataset.base) a.dataset.base = a.getAttribute("href")!;
+      const base = a.dataset.base;
+      const isLab = /\/lab$/.test(base);
+      a.setAttribute("href", base + (isLab && cat ? `?category=${cat}` : "") + hash);
+    });
+  };
+  update();
+  window.addEventListener("hashchange", update);
+  window.addEventListener("lab-filter", update);
+  window.addEventListener("pageshow", update);
+</script>

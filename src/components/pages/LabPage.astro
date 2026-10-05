@@ -1,0 +1,70 @@
+---
+import type { Locale } from "../../lib/i18n";
+import { namedRoute } from "../../lib/routes";
+import { projects, usedCategories } from "../../content/projects";
+import { projectsSectionCopy } from "../../content/pages/projects-section";
+import ProjectCard from "../ProjectCard.astro";
+import CtaBand from "./CtaBand.astro";
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const ui = projectsSectionCopy[locale];
+const base = namedRoute("lab", locale);
+const filters = ["all", ...usedCategories] as const;
+const label = (c: string) => (c === "all" ? ui.filterAll : ui.categories[c as keyof typeof ui.categories]);
+const count = (c: string) => (c === "all" ? projects.length : projects.filter((p) => (p.categories as string[]).includes(c)).length);
+---
+<section class="section" aria-labelledby="lab-title">
+  <div class="container">
+    <h2 id="lab-title" class="sr-only">{ui.heading}</h2>
+    <noscript><p class="note">{ui.noJs}</p></noscript>
+    <nav class="lab-filters" hidden aria-label={ui.filterNav} data-changed={ui.filterChanged}>
+      <ul>
+        {filters.map((c) => (
+          <li><a href={c === "all" ? base : `${base}?category=${c}`} data-filter={c} aria-current={c === "all" ? "true" : undefined}>{label(c)} ({count(c)})</a></li>
+        ))}
+      </ul>
+    </nav>
+    <p class="lab-count" id="lab-count" data-word={ui.projectsWord} data-shown={ui.shown}>{ui.shown} {projects.length} {ui.projectsWord}</p>
+    <p class="sr-only" role="status" aria-live="polite" id="lab-status"></p>
+    <div class="grid-3" id="lab-grid">
+      {projects.map((p) => <div class="lab-item" data-cats={p.categories.join(" ")}><ProjectCard locale={locale} project={p} /></div>)}
+    </div>
+    <p id="lab-empty" hidden>{ui.noResults}</p>
+  </div>
+</section>
+
+<CtaBand locale={locale} />
+
+<script>
+  // Progressive enhancement: without JS every project stays listed. One active filter, validated against the known directions.
+  const nav = document.querySelector<HTMLElement>(".lab-filters");
+  if (nav) {
+    const links = Array.from(nav.querySelectorAll<HTMLAnchorElement>("a[data-filter]"));
+    const allowed = links.map((a) => a.dataset.filter!);
+    const items = Array.from(document.querySelectorAll<HTMLElement>(".lab-item"));
+    const status = document.getElementById("lab-status")!;
+    const countEl = document.getElementById("lab-count")!;
+    const empty = document.getElementById("lab-empty")!;
+    const base = location.pathname;
+    const apply = (filter: string, announce: boolean) => {
+      const f = allowed.includes(filter) ? filter : "all";
+      let shown = 0;
+      items.forEach((el) => { const ok = f === "all" || (el.dataset.cats ?? "").split(" ").includes(f); el.hidden = !ok; if (ok) shown++; });
+      links.forEach((a) => { if (a.dataset.filter === f) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current"); });
+      countEl.textContent = `${countEl.dataset.shown} ${shown} ${countEl.dataset.word}`;
+      empty.hidden = shown !== 0;
+      if (announce) status.textContent = `${nav.dataset.changed} ${links.find((a) => a.dataset.filter === f)!.textContent} — ${shown}`;
+      return f;
+    };
+    nav.hidden = false;
+    apply(new URLSearchParams(location.search).get("category") ?? "all", false);
+    links.forEach((a) => a.addEventListener("click", (e) => {
+      e.preventDefault();
+      const f = apply(a.dataset.filter!, true);
+      history.replaceState(null, "", f === "all" ? base : `${base}?category=${f}`); // only the validated direction is ever written to the URL
+      window.dispatchEvent(new Event("lab-filter"));
+    }));
+    window.addEventListener("pageshow", () => apply(new URLSearchParams(location.search).get("category") ?? "all", false));
+  }
+</script>

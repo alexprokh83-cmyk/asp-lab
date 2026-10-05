@@ -1,0 +1,20 @@
+---
+/**
+ * ASP Lab logo — the supplied artwork (hexagon mark + "ASP"), transparent PNG processed from the owner's file
+ * (public/logo/asp-lab-logo.png, 4x upscaled from a 165x171 px source). Add a vector/larger original when available.
+ * `plate` puts it on a white tile for dark sections (the artwork has navy parts that vanish on navy).
+ */
+interface Props { height?: number; plate?: boolean; class?: string }
+const { height = 48, plate = false, class: className = "" } = Astro.props;
+const W = 532, H = 678; // intrinsic size of the PNG
+const width = Math.round((height * W) / H);
+---
+<span class:list={["logo", plate && "logo--plate", className]}>
+  <img src="/logo/asp-lab-logo.png" alt="ASP Lab" width={width} height={height} class="logo__img" decoding="async" style={`height:${height}px;width:auto;`} />
+</span>
+
+<style>
+  .logo { display: inline-flex; align-items: center; line-height: 0; }
+  .logo__img { display: block; max-width: none; }
+  .logo--plate { background: #fff; border-radius: 12px; padding: 10px 14px; }
+</style>

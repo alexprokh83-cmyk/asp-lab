@@ -1,0 +1,142 @@
+---
+import type { Locale } from "../../lib/i18n";
+import { t } from "../../lib/translations/index";
+import { namedRoute } from "../../lib/routes";
+import { localAiCopy } from "../../content/pages/local-ai";
+import { capabilities } from "../../content/capabilities";
+import { projectById } from "../../content/projects";
+import { IS_PREVIEW } from "../../config/site";
+import CapabilityStatus from "../CapabilityStatus.astro";
+import Faq from "../Faq.astro";
+import CtaBand from "./CtaBand.astro";
+import InfraSection from "./InfraSection.astro";
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const dict = t(locale);
+const c = localAiCopy[locale];
+const developing = capabilities.filter((x) => x.maturity === "developing");
+const planned = capabilities.filter((x) => x.maturity === "planned");
+---
+<section class="section" aria-labelledby="la-supported">
+  <div class="container">
+    <p class="callout callout--warn">{c.caution}</p>
+    <div class="section-heading"><h2 id="la-supported">{c.supported.heading}</h2><p class="section-heading__lead">{c.supported.lead}</p></div>
+    <div class="grid-2">
+      {c.supported.items.map((it) => {
+        const p = projectById(it.projectId)!;
+        return (
+          <article class="epanel">
+            <h3>{it.title}</h3>
+            <p>{it.text}</p>
+            <p><strong>{c.supported.supportsLabel}:</strong> {it.supports}</p>
+            <p class="epanel__limit"><strong>{c.supported.notShownLabel}:</strong> {it.notShown}</p>
+            <a class="epanel__link" href={namedRoute(p.routeKey, locale)}>{p.text[locale].name ?? p.text[locale].title}</a>
+          </article>
+        );
+      })}
+    </div>
+  </div>
+</section>
+
+<section class="section sec-when" aria-labelledby="la-when">
+  <div class="container sec-about__grid">
+    <div><h2 id="la-when">{c.when.heading}</h2><p class="section-heading__lead">{c.when.lead}</p></div>
+    <div>
+      <ul class="plain">{c.when.items.map((x) => <li>{x}</li>)}</ul>
+      <p class="note">{c.when.note}</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="la-compare">
+  <div class="container">
+    <div class="section-heading"><h2 id="la-compare">{c.compare.heading}</h2><p class="section-heading__lead">{c.compare.lead}</p></div>
+    <div class="mt-wrap" role="region" tabindex="0" aria-label={c.compare.heading}>
+      <table class="mt mt--narrow">
+        <thead><tr>{c.compare.columns.map((h) => <th scope="col">{h}</th>)}</tr></thead>
+        <tbody>{c.compare.rows.map((r) => <tr><th scope="row">{r[0]}</th>{r.slice(1).map((x) => <td>{x}</td>)}</tr>)}</tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section dark-section sec-defs" aria-labelledby="la-defs">
+  <div class="container">
+    <div class="section-heading"><h2 id="la-defs">{c.definitions.heading}</h2><p class="section-heading__lead">{c.definitions.lead}</p></div>
+    <dl class="defs">{c.definitions.items.map((d) => <div><dt>{d.term}</dt><dd>{d.text}</dd></div>)}</dl>
+    <h3 class="defs__sub">{c.definitions.distinctionsHeading}</h3>
+    <ul class="bounds">{c.definitions.distinctions.map((x) => <li><span aria-hidden="true">—</span> {x}</li>)}</ul>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="la-guide">
+  <div class="container">
+    <div class="section-heading"><h2 id="la-guide">{c.guide.heading}</h2><p class="section-heading__lead">{c.guide.lead}</p></div>
+    <div class="mt-wrap" role="region" tabindex="0" aria-label={c.guide.heading}>
+      <table class="mt mt--narrow">
+        <thead><tr>{c.guide.columns.map((h) => <th scope="col">{h}</th>)}</tr></thead>
+        <tbody>{c.guide.rows.map((r) => <tr><th scope="row">{r[0]}</th><td>{r[1]}</td></tr>)}</tbody>
+      </table>
+    </div>
+    <p class="note">{c.guide.note}</p>
+  </div>
+</section>
+
+<section class="section sec-chain" aria-labelledby="la-chain">
+  <div class="container">
+    <div class="section-heading"><h2 id="la-chain">{c.chain.heading}</h2><p class="section-heading__lead">{c.chain.lead}</p></div>
+    <ol class="chain">
+      {c.chain.stages.map((s, i) => (
+        <li class="chain__stage">
+          <span class="chain__n mono" aria-hidden="true">{i + 1}</span>
+          <div><h3>{s.name}</h3><p>{s.scope}</p></div>
+          <CapabilityStatus locale={locale} maturity={s.maturity} />
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<InfraSection locale={locale} />
+
+<section class="section" aria-labelledby="la-evidence">
+  <div class="container">
+    <div class="section-heading"><h2 id="la-evidence">{c.evidence.heading}</h2><p class="section-heading__lead">{c.evidence.lead}</p></div>
+    <h3>{c.evidence.benchTitle}</h3>
+    <p>{c.evidence.benchText}</p>
+    <h3 class="mt-6">{c.evidence.transcriptionTitle}</h3>
+    <p>{c.evidence.transcriptionText}</p>
+  </div>
+</section>
+
+<section class="section sec-future" aria-labelledby="la-future">
+  <div class="container">
+    <div class="section-heading"><h2 id="la-future">{c.future.heading}</h2><p class="section-heading__lead">{c.future.lead}</p></div>
+    <div class="grid-2">
+      <div class="epanel"><h3><CapabilityStatus locale={locale} maturity="developing" /></h3><ul class="plain">{developing.map((x) => <li>{x.label[locale]}</li>)}</ul></div>
+      <div class="epanel"><h3><CapabilityStatus locale={locale} maturity="planned" /></h3><ul class="plain">{planned.map((x) => <li>{x.label[locale]}</li>)}</ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="la-ft">
+  <div class="container sec-about__grid">
+    <div>
+      <h2 id="la-ft">{c.finetune.heading}</h2>
+      <p class="callout callout--warn">{c.finetune.status}</p>
+    </div>
+    <div>
+      <p>{c.finetune.intro}</p>
+      <h3 class="sr-only">{c.finetune.requirementsHeading}</h3>
+      <ol class="plain plain--num">{c.finetune.requirements.map((x) => <li>{x}</li>)}</ol>
+      <p class="note">{c.finetune.closing}</p>
+    </div>
+  </div>
+</section>
+
+<section class="section sec-faq" aria-labelledby="la-faq">
+  <div class="container sec-faq__grid"><h2 id="la-faq">{c.faq.heading}</h2><Faq items={c.faq.items} /></div>
+</section>
+
+<CtaBand locale={locale} />

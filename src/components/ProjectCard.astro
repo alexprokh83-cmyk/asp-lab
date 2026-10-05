@@ -1,0 +1,28 @@
+---
+import type { Locale } from "../lib/i18n";
+import type { Project } from "../content/project-types";
+import { namedRoute } from "../lib/routes";
+import { projectsSectionCopy } from "../content/pages/projects-section";
+
+interface Props { locale: Locale; project: Project; showTech?: boolean; compact?: boolean }
+const { locale, project, compact = false } = Astro.props;
+const showTech = !compact;
+const tx = project.text[locale];
+const ui = projectsSectionCopy[locale];
+const tech = tx.tech.split(" · ");
+const shown = tech.slice(0, 5);
+---
+<article class="pcard">
+  <p class="pcard__cats">{project.categories.map((c) => ui.categories[c]).join(" · ")}</p>
+  <h3 class="pcard__title"><a class="pcard__link" href={namedRoute(project.routeKey, locale)}>{tx.name ?? tx.title}</a></h3>
+  <p class="pcard__subtitle">{tx.subtitle}</p>
+  <p class="pcard__task">{tx.task}</p>
+  {tx.result && <p class="pcard__result"><span class="pcard__result-label">{ui.labels.result}</span> {tx.result}</p>}
+  {showTech && (
+    <ul class="badges" aria-label={ui.labels.tech}>
+      {shown.map((t) => <li class="badge">{t}</li>)}
+      {tech.length > shown.length && <li class="badge badge--more">+{tech.length - shown.length}</li>}
+    </ul>
+  )}
+  <p class="pcard__cta" aria-hidden="true">{ui.labels.open} →</p>
+</article>

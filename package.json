@@ -1,0 +1,30 @@
+{
+  "name": "ai-laboratory",
+  "version": "0.1.0",
+  "description": "ASP Lab - Automation of Systems & Processes",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check && tsc --noEmit && tsx scripts/validate-content.ts",
+    "test": "node scripts/verify-dist.mjs",
+    "check:release": "node scripts/check-release.js",
+    "validate:content": "tsx scripts/validate-content.ts",
+    "test:prod": "node scripts/test-prod.mjs",
+    "audit:browser": "python scripts/audit-browser.py",
+    "check:layout": "python scripts/check-layout.py"
+  },
+  "dependencies": {
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "@fontsource/ibm-plex-sans": "^5.3.0",
+    "astro": "^4.16.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.0",
+    "@types/node": "^26.6.4",
+    "axe-core": "^4.13.0",
+    "tsx": "^4.23.15",
+    "typescript": "^5.6.0"
+  }
+}

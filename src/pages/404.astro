@@ -1,0 +1,31 @@
+---
+/**
+ * One static 404 for the whole site. A static host serves the same 404.html for every missing path, so it
+ * cannot know the visitor's language: all three languages are shown, each block with its own lang attribute
+ * and links to that language's Home, Solutions and Projects. Hosting must return a genuine 404 status (docs/hosting.md).
+ */
+import SiteLayout from "../layouts/SiteLayout.astro";
+import { t } from "../lib/translations/index";
+import { LOCALES, LOCALE_LABEL, LOCALE_LANG } from "../lib/i18n";
+import { namedRoute } from "../lib/routes";
+const en = t("en");
+---
+<SiteLayout locale="en" slug="/404" title={en.notFound.heading} indexable={false}>
+  <div class="container page-body nf">
+    <h1>{en.notFound.heading}</h1>
+    {LOCALES.map((l) => {
+      const d = t(l);
+      return (
+        <section class="nf__block" lang={LOCALE_LANG[l]} aria-label={LOCALE_LABEL[l]}>
+          {l === "en" ? <p><strong>{d.notFound.heading}</strong></p> : <h2>{d.notFound.heading}</h2>}
+          <p>{d.notFound.lead}</p>
+          <ul>
+            <li><a href={namedRoute("home", l)}>{d.notFound.homeLink}</a></li>
+            <li><a href={namedRoute("solutions", l)}>{d.notFound.solutionsLink}</a></li>
+            <li><a href={namedRoute("lab", l)}>{d.notFound.projectsLink}</a></li>
+          </ul>
+        </section>
+      );
+    })}
+  </div>
+</SiteLayout>

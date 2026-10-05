@@ -1,0 +1,15 @@
+---
+/** Absolute passed + failed together. Distinguishable without colour (text labels + symbols). */
+import type { Locale } from "../lib/i18n";
+import { t } from "../lib/translations/index";
+interface Props { locale: Locale; passed: number; failed: number; total: number }
+const { locale, passed, failed, total } = Astro.props;
+const m = t(locale).ui.metricTable;
+---
+<div class="pfs">
+  <dl class="pf">
+    <div class="pf__pass"><dt><span aria-hidden="true">✓ </span>{m.passed}</dt><dd class="mono">{passed}</dd></div>
+    <div class="pf__fail"><dt><span aria-hidden="true">✕ </span>{m.failed}</dt><dd class="mono">{failed}</dd></div>
+  </dl>
+  <p class="epanel__sub mono">{passed} + {failed} = {total}</p>
+</div>

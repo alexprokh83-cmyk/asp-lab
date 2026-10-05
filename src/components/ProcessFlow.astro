@@ -1,0 +1,12 @@
+---
+/** Visual "step → step → step" sequence from an arrow-separated string. Numbered steps; vertical on phones. */
+interface Props { flow: string; label?: string; variant?: "main" | "extra" }
+const { flow, label, variant = "main" } = Astro.props;
+const steps = flow.split("→").map((s) => s.trim()).filter(Boolean).map((s) => s.charAt(0).toUpperCase() + s.slice(1));
+---
+<div class:list={["pflow", variant === "extra" && "pflow--extra"]}>
+  {label && <p class="pflow__label">{label}</p>}
+  <ol class="pflow__steps">
+    {steps.map((s, i) => <li class="pflow__step"><span class="pflow__n mono" aria-hidden="true">{i + 1}</span><span>{s}</span></li>)}
+  </ol>
+</div>

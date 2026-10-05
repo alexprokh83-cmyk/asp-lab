@@ -1,0 +1,11 @@
+---
+/** Visible textual maturity label (never colour alone). */
+import type { Locale } from "../lib/i18n";
+import type { Maturity } from "../content/types";
+import { t } from "../lib/translations/index";
+interface Props { locale: Locale; maturity: Maturity }
+const { locale, maturity } = Astro.props;
+const dict = t(locale);
+const symbol = { confirmed: "●", developing: "◐", planned: "○", concept: "◇" }[maturity];
+---
+<span class={`label label--${maturity}`}><span aria-hidden="true">{symbol}</span> {dict.ui.maturity[maturity]}</span>
