@@ -460,3 +460,30 @@ Project result blocks and localized project outcomes (2026-10-10) — IMPLEMENTE
 Next step
 
 - Install/enable the project's Playwright browser-check dependency and visually review result-card wrapping at desktop and mobile widths. The homepage intentionally shows six featured projects; all 13 are present in the three-language `/lab` catalogue and have localized detail pages.
+
+Responsive logo variants (2026-10-10) — IMPLEMENTED LOCALLY
+
+- Kept the owner-provided wide ASP Lab lockup in the desktop header (existing file hash matches `ASP Lab logo Main.jpg`). Added the supplied cube-only lockup as a `<picture>` source for header widths ≤1199px and as the logo in the mobile menu drawer.
+- Added the supplied cube-plus-ASP artwork to the footer at all widths. Removed the repeated “ASP Lab” label directly below the logo while retaining the “Automation of Systems & Processes” descriptor and the existing footer tagline/method.
+- Copied and SHA-256 verified the supplied compact/footer JPEGs into `public/logo/asp-lab-logo-compact.jpg` and `public/logo/asp-lab-logo-footer.jpg`.
+- Updated `Logo.astro`, its Header/Footer call sites, and `scripts/verify-dist.mjs`; the verifier now checks all three emitted logo files, responsive header source and footer logo markup.
+- `npm run build` — passed (76 pages); `npm test` — passed (75 static routes); verifier checks all three logo assets and markup in every route.
+- `npm run check` still fails with the same 31 existing type diagnostics in metrics/case-study files; no diagnostics reference the edited logo/header/footer components.
+- `npm run check:layout` could not run because Python Playwright is not installed. The local preview started, but the browser DevTools profile was already occupied and the in-app browser timed out connecting; desktop/tablet/mobile visual verification remains outstanding. No deployment was performed.
+
+Next step
+
+- Once a browser profile/Playwright is available, inspect the three logo presentations at desktop (≥1200px), tablet/mobile (≤1199px), the mobile menu drawer, and the footer at both widths.
+
+Header wordmark retained on compact screens (2026-10-10) — IMPLEMENTED LOCALLY
+
+- At the owner's request, the full ASP Lab wordmark now remains in the top header on desktop, tablet and phone. Its display height is 48px at ≥1200px, 40px at 768–1199px, and 32px below 768px; this keeps the wordmark legible while making room for language controls and the mobile-menu button.
+- The mobile navigation drawer also uses the full wordmark at 40px. The footer remains on its separate cube + ASP logo at every viewport. The compact cube-only asset is retained in `public/logo/asp-lab-logo-compact.jpg` for possible future use.
+- Updated `src/components/Logo.astro`, `src/components/Header.astro`; the footer remains as implemented in the previous stage. No route or navigation behavior changed.
+- `npm run build` — passed (76 pages); `npm test` — passed (75 static routes).
+- `npm run check` still reports the same 31 pre-existing diagnostics in unrelated metrics/case-study files; no diagnostics reference Logo, Header or Footer.
+- Visual viewport review remains unavailable: project Playwright dependency is absent, and the browser DevTools profile is occupied. No deployment was performed.
+
+Next step
+
+- Review the full wordmark at 320px, tablet width and desktop once the current preview can be opened in the browser; confirm it does not crowd language controls or the menu button.
