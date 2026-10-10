@@ -495,3 +495,15 @@ Transparent SVG wordmark in header (2026-10-10) — IMPLEMENTED LOCALLY
 - Updated `scripts/verify-dist.mjs` to expect the SVG in headers and emitted assets.
 - `npm run build` was attempted twice and is blocked before compiling routes by Windows `EPERM` on `src/pages/404.astro` (`realpath`); the source file exists and is readable via PowerShell. No successful build/test claim.
 - No deployment performed.
+
+Header SVG wordmark size adjustment (2026-10-10) — IMPLEMENTED LOCALLY
+
+- Based on the supplied header screenshot, enlarged the full SVG wordmark by 12.5% at desktop (48→54px), tablet (40→45px), phone (32→36px), and the mobile drawer (40→45px); aspect ratio is preserved.
+- `npm run build` was retried after this edit and still stops before route compilation on the same Windows `EPERM` realpath error for `src/pages/404.astro`. No successful build or browser verification claim. No deployment.
+
+Header logo override + alignment follow-up (2026-10-10) — FIXED AND BROWSER-VERIFIED
+
+- Root cause of the ineffective size change: `src/styles/home.css` applied `height: 56px !important` on desktop and `44px !important` below 1200px, overriding `Logo.astro` on the homepage. Updated both the component and override to 63px desktop and 49.5px at smaller widths (+12.5% from the effective previous sizes).
+- The supplied SVG had a 20-unit left inset before the mark. Shifted its viewBox origin to x=20 so the visible mark's left edge aligns with the header/content container.
+- Live Astro dev preview compiled and was reviewed in Chromium at desktop (1440×900) and mobile (390×844). Measured desktop logo height 63px and its x-coordinate exactly matches the Projects heading; mobile logo height 49.5px and x-coordinate matches the hero content. Header has no horizontal overflow at either viewport.
+- `npm run build` remains unverified after this final edit: its previous attempts failed on a Windows `EPERM` realpath error for `src/pages/404.astro`. The dev server successfully compiled the homepage. No deployment.
