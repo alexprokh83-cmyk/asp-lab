@@ -399,3 +399,64 @@ Checks
 Next step
 
 - Open `/openai-api` at desktop and mobile widths in the local/deployed browser to visually confirm spacing and warning density. Then, if desired, use the user's own key for a live API smoke test.
+
+ASP Lab homepage visual QA fixes (2026-10-10) — IMPLEMENTED LOCALLY
+
+- Fixed UI-001 by changing root horizontal overflow from `hidden` to `clip`, allowing the site header's `position: sticky` to work while preventing horizontal overflow.
+- Fixed UI-002 by using the shared 1216px container width for the desktop hero and equal grid columns; hero content now shares the section container edge.
+- Fixed UI-003 with a 16px gap before the process CTA.
+- Fixed UI-004 with paragraph `text-wrap: pretty` to reduce orphaned last-line words.
+- Fixed UI-005 by equalizing the desktop audience-card columns and reserving consistent heading height for the audience and direction cards.
+- Fixed UI-006 by showing an explicitly localized “Result — Not stated” panel on homepage project cards where the source has no result; no project outcome was invented. Existing detail-page cards are unchanged.
+- Fixed UI-007 by placing all three hero CTAs in one desktop grid, matching their height/type treatment, and keeping them within the hero column.
+- Fixed UI-008 by removing the duplicate six-stage graphic from the homepage process section and restoring its heading to the shared sans-serif style. The full implementation path remains on its dedicated pages.
+- Fixed UI-009 by using the higher-contrast blue-700 for the OpenAI API link in desktop and mobile navigation.
+- Fixed UI-010 by normalizing “Public institutions”, aligning footer columns, and using the wide owner-supplied JPEG logo on a white footer without a separate plate.
+- The supplied logo file is already present at `public/logo/asp-lab-logo-wide.jpg` and its SHA-256 matches `C:\Users\MASTER\Desktop\ASP\ASP Lab logo.jpg`; the shared logo component now uses its true 1459×501 aspect ratio in the header, mobile menu and footer.
+
+Checks
+
+- `npm run build` — passed, 76 static pages. The first sandbox attempt hit Windows filesystem `realpath` EPERM; the same build passed with approved workspace access.
+- No browser visual re-audit, automated tests, commit or deployment was performed.
+
+Next step
+
+- Recheck the live homepage at 1440×900 after deployment to confirm sticky behavior, spacing and text wrapping against the original report.
+
+Homepage flow arrows (2026-10-10) — IMPLEMENTED LOCALLY
+
+- Fixed the flow arrows overlapping card borders: standardized each arrow to an 18px box centered in a 22px gap, with 2px clearance on each side. Applied the same spacing rule to vertical arrows on narrow screens. Removed the hero-only 12px gap override that caused the desktop overlap.
+- `npm run build` — passed (76 static pages).
+
+Hero width regression correction (2026-10-10)
+
+- Restored the desktop hero to its original fixed 592px / 592px columns inside a 1272px container after the equal-column change caused the interactive Finder panel to shrink. The Finder frame is explicitly 592px wide again; arrow-gap changes remain in place.
+- `npm run build` — passed (76 static pages).
+
+/approach: публичная инженерная страница (2026-10-10) — ОБНОВЛЕНА ЛОКАЛЬНО
+
+- Переработана страница `/approach` на EN/UK/RU: убран ярлык «Template — not a completed report», устранены повторяющиеся схемы процесса и неуверенная заключительная оговорка.
+- Вместо повторов показан один общий шестиступенчатый путь `Discover → Build → Demonstrate → Measure → Pilot → Deploy`; сохранено уточнение, что не каждый проект проходит все этапы.
+- Сохранены и профессионально структурированы описание исходной задачи и базового уровня, виды проверки, человеческий контроль, документация результатов, критерии продолжения/пересмотра/остановки и требования к ограниченному пилоту.
+- Добавлен раздел подтверждённых результатов со ссылками на страницы миграции Jira → GitHub и локальной транскрибации. Значения берутся из локализованных исходных данных проектов; новые показатели не придумывались.
+- Изменены `src/components/pages/ApproachPage.astro`, `src/content/pages/approach.ts`, `src/styles/home.css` и этот файл.
+- `npm run build` — успешно, собрано 76 статических страниц, включая `/approach`, `/uk/approach` и `/ru/approach`. Первый запуск в sandbox ограничен Windows EPERM при `realpath`; повторная сборка с разрешённым доступом к workspace прошла.
+- В браузере после локального изменения не проверялось. Публикация, commit и deployment не выполнялись.
+
+Следующий шаг
+
+- После обычного deployment открыть `/approach` на desktop и mobile, проверить сетку карточек проектов и пройти по обеим ссылкам на локализованные страницы проекта.
+
+Project result blocks and localized project outcomes (2026-10-10) — IMPLEMENTED LOCALLY
+
+- `result` remains the single source of truth in `src/content/project-data/*`; it is rendered conditionally by shared `ProjectCard.astro` and `ProjectPage.astro`. Cards and detail pages use the same localized value.
+- Preserved local transcription result. Expanded Jira → GitHub migration result to include comments, attachments and key metadata alongside the approximate volume and duration. Added owner-provided results for Voice bug report (60 seconds), Calendar AI & Chronos (10–15 seconds), and AI bug summary from Jira to Google Sheets (manual transfer eliminated). All are present in EN/UK/RU.
+- Removed homepage's forced empty result slot, “Not stated / Не зазначено / Не указано” copy, and empty-slot styling. Projects without `result` now render no result label or block in cards and on detail pages.
+- Updated the static distribution verifier's logo assertion to check the current shared asset `asp-lab-logo-wide.jpg` rather than the retired `asp1-logo.jpg`; this restored the existing `npm test` check after the supplied logo replacement.
+- Verification: `npm run validate:content` passed (13 projects, 236 translation keys × 3 locales); `npm run build` passed (76 pages); `npm test` passed (75 output pages). A generated-HTML audit checked all 39 catalogue cards, all 39 project detail pages, and 18 featured homepage cards; localized result presence/text matched the data and no empty-result placeholders were present.
+- `npm run check` remains blocked by 31 existing diagnostics in unrelated metrics/case-study legacy files; no diagnostics remained in the edited `ApproachPage.astro` after fixing its project type guard.
+- Responsive browser audit was not completed: `npm run check:layout` cannot import Python Playwright (`ModuleNotFoundError`), and the in-app browser could not connect to the local static server. Desktop/mobile visual appearance therefore remains unverified. No deployment was performed.
+
+Next step
+
+- Install/enable the project's Playwright browser-check dependency and visually review result-card wrapping at desktop and mobile widths. The homepage intentionally shows six featured projects; all 13 are present in the three-language `/lab` catalogue and have localized detail pages.

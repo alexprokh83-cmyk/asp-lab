@@ -34,7 +34,7 @@ const ps = projectsSectionCopy[locale];
       <!-- Group 1: Brand -->
       <div class="site-footer__brand">
         <a href={r("home")} class="site-footer__logo-link" aria-label={dict.nav.home}>
-          <Logo height={72} variant="stacked" plate />
+          <Logo height={48} />
         </a>
         <p class="site-footer__fullname"><strong>ASP Lab</strong> — {f.fullName}</p>
         <p class="site-footer__tagline">{f.tagline}</p>
@@ -95,7 +95,7 @@ const ps = projectsSectionCopy[locale];
 
 <style>
   .site-footer {
-    background: var(--color-neutral-50);
+    background: #fff;
     border-top: 1px solid var(--color-border);
     padding-block: var(--space-12) var(--space-8);
   }
@@ -104,12 +104,13 @@ const ps = projectsSectionCopy[locale];
     display: grid;
     gap: var(--space-8);
     grid-template-columns: 1fr;
+    align-items: start;
   }
   @media (min-width: 640px) {
     .site-footer__grid { grid-template-columns: 1fr 1fr; }
   }
   @media (min-width: 1024px) {
-    .site-footer__grid { grid-template-columns: 2fr 1.5fr 1fr 1fr; gap: var(--space-12); }
+    .site-footer__grid { grid-template-columns: minmax(0, 1.4fr) repeat(3, minmax(0, 1fr)); gap: var(--space-6); }
   }
 
   .site-footer__brand { display: flex; flex-direction: column; gap: var(--space-3); }

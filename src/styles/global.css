@@ -25,11 +25,11 @@ html {
   background-color: var(--color-background);
   background-image: none;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  overflow-x: clip;
   scroll-behavior: smooth;
 }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
-body { min-height: 100vh; overflow-x: hidden; }
+body { min-height: 100vh; overflow-x: clip; }
 
 /* Typography */
 h1,h2,h3,h4,h5,h6 { font-family: var(--font-sans); font-weight: var(--font-weight-semibold); color: var(--color-text-primary); text-wrap: balance; }
@@ -37,6 +37,7 @@ h1 { font-size: var(--text-h1-size); line-height: var(--text-h1-line); }
 h2 { font-size: var(--text-h2-size); line-height: var(--text-h2-line); }
 h3 { font-size: var(--text-h3-size); line-height: var(--text-h3-line); }
 p  { font-size: var(--text-body-size); line-height: var(--text-body-line); }
+p { text-wrap: pretty; }
 
 a {
   color: var(--color-action-primary);

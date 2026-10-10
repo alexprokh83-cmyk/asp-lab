@@ -46,7 +46,7 @@ export const enSource = {
       localAi: "Local / Private AI",
       business: "Business",
       education: "Education",
-      publicSector: "Public Institutions",
+      publicSector: "Public institutions",
       projects: "Projects",
       approach: "Approach",
       about: "About",

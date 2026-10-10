@@ -2,74 +2,44 @@ import type { Localized } from "../types";
 
 export interface ApproachCopy {
   baseline: { heading: string; lead: string; items: string[] };
-  method: { heading: string; lead: string; steps: { title: string; text: string }[] };
+  method: { heading: string; lead: string };
   testing: { heading: string; lead: string; items: { title: string; text: string }[] };
   human: { heading: string; text: string };
-  report: { heading: string; label: string; items: string[] };
+  record: { heading: string; lead: string; items: string[] };
+  evidence: { heading: string; lead: string; link: string };
   decision: { heading: string; lead: string; items: { title: string; text: string }[] };
   pilot: { heading: string; lead: string; items: string[] };
-  note: string;
 }
 
 export const approachCopy: Localized<ApproachCopy> = {
   en: {
-    baseline: { heading: "Task definition and baseline", lead: "Before anything is built, the task is described well enough to be measured.", items: ["What is done today, and by whom", "Which data and documents are involved", "What result is wanted", "How long it takes and how accurate it is today (the baseline)", "What would count as success"] },
-    method: { heading: "Build → Test → Measure → Automate", lead: "Four steps for one task.", steps: [
-      { title: "Build", text: "Build a working solution for one task." },
-      { title: "Test", text: "Check normal cases, failures and edge conditions." },
-      { title: "Measure", text: "Compare agreed measures against the starting process." },
-      { title: "Automate", text: "Integrate a verified scenario within agreed boundaries." } ] },
-    testing: { heading: "Ordinary, error and edge-case testing", lead: "A solution that only works on the easy examples has not been tested.", items: [
-      { title: "Ordinary cases", text: "Typical inputs, the way the task usually arrives." },
-      { title: "Error cases", text: "Missing, malformed or contradictory inputs, and what the solution does with them." },
-      { title: "Edge cases", text: "Unusually long, short, noisy or rare inputs." } ] },
-    human: { heading: "Human review where relevant", text: "Where a mistake would matter, a person reviews the output before it is used. Which steps need review is decided per task and written down." },
-    report: { heading: "Suggested report contents", label: "Template — not a completed report", items: ["Task and scope", "Data used and its limits", "Configuration", "Test cases and results, with absolute counts", "Errors and edge cases found", "Known limitations", "Recommendation: continue, revise or stop"] },
-    decision: { heading: "Continue, revise or stop", lead: "The first stage ends with a decision, not automatically with a rollout.", items: [
-      { title: "Continue", text: "The agreed measures are met on the tested cases and the limitations are acceptable." },
-      { title: "Revise", text: "The idea is sound but results or limitations call for changes, then another round of testing." },
-      { title: "Stop", text: "Results do not justify more work, or ordinary automation turns out to be enough." } ] },
-    pilot: { heading: "A pilot has separate requirements", lead: "Moving to a pilot is a separate decision based on the results.", items: ["Its own scope and success measures", "Agreed access and data rules", "Where processing happens", "Error handling and logging", "Named responsibility for the results"] },
-    note: "This describes how work is intended to proceed. It does not claim that every earlier project followed every practice listed.",
+    baseline: { heading: "Define the task and baseline", lead: "We start with the current process, the data it uses and the outcome the organization needs. Together, we agree how to measure the starting point and what success means.", items: ["The task and the people involved", "The data and documents available for the work", "The outcome the organization needs", "The current time, quality or error rate", "Measures that will show whether the solution helps"] },
+    method: { heading: "A staged delivery process", lead: "Each stage has a clear purpose and an explicit next-step decision. A pilot and a deployment are planned separately, based on measured results and operating requirements." },
+    testing: { heading: "How we verify a solution", lead: "We check the solution against agreed tasks and realistic examples, then report both what works and where it falls short.", items: [{ title: "Task coverage", text: "Check representative cases, including common variations and edge cases." }, { title: "Quality and errors", text: "Compare outputs with expected results and record incorrect, incomplete or uncertain answers." }, { title: "Operational fit", text: "Review handling time, review effort, data boundaries and the conditions needed to use the solution." }] },
+    human: { heading: "Human review stays in the process", text: "Where a decision affects people, money, safety or official records, define who reviews the result and who is accountable before a pilot begins." },
+    record: { heading: "A clear record of the work", lead: "The project record makes the scope, evidence and recommendation understandable to the people who must decide what happens next.", items: ["Agreed task scope and success measures", "Data used and processing boundaries", "Test cases and measured results", "Errors, edge cases and known limitations", "Recommendation: continue, revise or stop"] },
+    evidence: { heading: "Selected results from our projects", lead: "These project pages document outcomes from specific completed runs and the context behind them.", link: "View project" },
+    decision: { heading: "A decision based on evidence", lead: "The next step follows the agreed measures and observed limitations. Moving forward is never automatic.", items: [{ title: "Continue", text: "The result meets the agreed measures and a defined next stage is justified." }, { title: "Revise", text: "The evidence points to a change in scope, workflow, data or technical approach before another review." }, { title: "Stop", text: "The measured benefit, quality or operating fit does not justify further work." }] },
+    pilot: { heading: "What a pilot requires", lead: "A pilot is a separate, bounded engagement. Before it starts, the organization and the laboratory agree on:", items: ["The users, tasks and duration in scope", "Approved data, access and retention rules", "Review, escalation and error-handling responsibilities", "Success measures and the decision date", "What happens to data and access when the pilot ends"] },
   },
   uk: {
-    baseline: { heading: "Визначення задачі та базова лінія", lead: "Перш ніж щось будувати, задачу описують достатньо добре, щоб її можна було виміряти.", items: ["Що робиться сьогодні і ким", "Які дані та документи задіяно", "Який результат потрібен", "Скільки це триває і наскільки точно виконується сьогодні (базова лінія)", "Що вважатиметься успіхом"] },
-    method: { heading: "Build → Test → Measure → Automate", lead: "Чотири кроки для однієї задачі.", steps: [
-      { title: "Build", text: "Створити робоче рішення для однієї задачі." },
-      { title: "Test", text: "Перевірити звичайні випадки, збої та крайні умови." },
-      { title: "Measure", text: "Порівняти узгоджені показники з початковим процесом." },
-      { title: "Automate", text: "Інтегрувати перевірений сценарій у межах домовленостей." } ] },
-    testing: { heading: "Тестування звичайних, помилкових і крайніх випадків", lead: "Рішення, що працює лише на простих прикладах, не протестоване.", items: [
-      { title: "Звичайні випадки", text: "Типові вхідні дані, у такому вигляді, як задача зазвичай надходить." },
-      { title: "Помилкові випадки", text: "Відсутні, пошкоджені чи суперечливі вхідні дані та те, що з ними робить рішення." },
-      { title: "Крайні випадки", text: "Незвично довгі, короткі, зашумлені чи рідкісні вхідні дані." } ] },
-    human: { heading: "Перевірка людиною, де це доречно", text: "Там, де помилка має значення, результат перед використанням перевіряє людина. Які кроки потребують перевірки, визначається для кожної задачі та фіксується письмово." },
-    report: { heading: "Запропонований зміст звіту", label: "Шаблон — не завершений звіт", items: ["Задача та межі", "Використані дані та їхні обмеження", "Конфігурація", "Тестові випадки та результати з абсолютними числами", "Знайдені помилки та крайні випадки", "Відомі обмеження", "Рекомендація: продовжити, переглянути чи зупинитися"] },
-    decision: { heading: "Продовжити, переглянути чи зупинитися", lead: "Перший етап завершується рішенням, а не автоматично впровадженням.", items: [
-      { title: "Продовжити", text: "Узгоджені показники досягнуто на перевірених випадках, а обмеження прийнятні." },
-      { title: "Переглянути", text: "Ідея слушна, але результати чи обмеження вимагають змін, після чого ще один раунд тестування." },
-      { title: "Зупинитися", text: "Результати не виправдовують подальшої роботи, або виявляється, що достатньо звичайної автоматизації." } ] },
-    pilot: { heading: "Пілот має окремі вимоги", lead: "Перехід до пілоту — окреме рішення на основі результатів.", items: ["Власний обсяг і показники успіху", "Узгоджений доступ і правила щодо даних", "Де відбувається обробка", "Обробка помилок і журналювання", "Визначена відповідальність за результати"] },
-    note: "Тут описано, як передбачається вести роботу. Це не твердження, що кожен попередній проєкт дотримувався кожної з наведених практик.",
+    baseline: { heading: "Визначаємо задачу та початковий рівень", lead: "Починаємо з поточного процесу, даних, які він використовує, та результату, потрібного організації. Разом узгоджуємо, як виміряти початковий стан і що вважати успіхом.", items: ["Задачу та залучених до неї людей", "Доступні дані й документи", "Результат, потрібний організації", "Поточний час, якість або рівень помилок", "Показники, за якими буде видно користь рішення"] },
+    method: { heading: "Поетапний процес роботи", lead: "Кожен етап має чітку мету й окреме рішення щодо наступного кроку. Пілот і впровадження плануються окремо, з огляду на виміряні результати та операційні вимоги." },
+    testing: { heading: "Як ми перевіряємо рішення", lead: "Перевіряємо рішення на узгоджених задачах і реалістичних прикладах, а потім звітуємо і про те, що працює, і про обмеження.", items: [{ title: "Покриття задач", text: "Перевіряємо типові випадки, поширені варіації та граничні сценарії." }, { title: "Якість і помилки", text: "Порівнюємо результати з очікуваними та фіксуємо неправильні, неповні й непевні відповіді." }, { title: "Операційна придатність", text: "Оцінюємо час обробки, зусилля на перевірку, межі роботи з даними й умови використання." }] },
+    human: { heading: "Перевірка людиною залишається в процесі", text: "Якщо рішення впливає на людей, кошти, безпеку чи офіційні записи, до початку пілоту визначаємо, хто перевіряє результат і хто за нього відповідає." },
+    record: { heading: "Зрозуміла документація роботи", lead: "Матеріали проєкту пояснюють обсяг, докази та рекомендацію людям, які вирішуватимуть, що робити далі.", items: ["Узгоджена задача та критерії успіху", "Використані дані й межі їх обробки", "Тестові випадки та виміряні результати", "Помилки, граничні випадки й відомі обмеження", "Рекомендація: продовжити, переглянути підхід або зупинитися"] },
+    evidence: { heading: "Вибрані результати наших проєктів", lead: "На цих сторінках описано результати конкретних виконаних запусків і наведено їхній контекст.", link: "Переглянути проєкт" },
+    decision: { heading: "Рішення на основі доказів", lead: "Наступний крок визначають узгоджені показники та виявлені обмеження. Перехід до нього не відбувається автоматично.", items: [{ title: "Продовжити", text: "Результат відповідає узгодженим показникам і виправдовує чітко визначений наступний етап." }, { title: "Переглянути підхід", text: "Перш ніж повторити перевірку, змінити обсяг, процес, дані або технічний підхід." }, { title: "Зупинитися", text: "Виміряна користь, якість або операційна придатність не виправдовують продовження." }] },
+    pilot: { heading: "Що потрібно для пілоту", lead: "Пілот — це окрема робота з чіткими межами. До початку організація та лабораторія узгоджують:", items: ["Користувачів, задачі й тривалість у межах пілоту", "Дозволені дані, доступ і правила зберігання", "Відповідальних за перевірку, ескалацію та помилки", "Показники успіху й дату ухвалення рішення", "Дії з даними та доступами після завершення пілоту"] },
   },
   ru: {
-    baseline: { heading: "Определение задачи и базовая линия", lead: "Прежде чем что-либо строить, задачу описывают достаточно хорошо, чтобы её можно было измерить.", items: ["Что делается сегодня и кем", "Какие данные и документы задействованы", "Какой результат нужен", "Сколько это длится и насколько точно выполняется сегодня (базовая линия)", "Что будет считаться успехом"] },
-    method: { heading: "Build → Test → Measure → Automate", lead: "Четыре шага для одной задачи.", steps: [
-      { title: "Build", text: "Создать рабочее решение для одной задачи." },
-      { title: "Test", text: "Проверить обычные случаи, сбои и граничные условия." },
-      { title: "Measure", text: "Сравнить согласованные показатели с исходным процессом." },
-      { title: "Automate", text: "Интегрировать проверенный сценарий в согласованных границах." } ] },
-    testing: { heading: "Тестирование обычных, ошибочных и граничных случаев", lead: "Решение, работающее только на простых примерах, не протестировано.", items: [
-      { title: "Обычные случаи", text: "Типичные входные данные в том виде, в каком задача обычно поступает." },
-      { title: "Ошибочные случаи", text: "Отсутствующие, повреждённые или противоречивые входные данные и то, что с ними делает решение." },
-      { title: "Граничные случаи", text: "Необычно длинные, короткие, зашумлённые или редкие входные данные." } ] },
-    human: { heading: "Проверка человеком, где это уместно", text: "Там, где ошибка имеет значение, результат перед использованием проверяет человек. Какие шаги требуют проверки, определяется для каждой задачи и фиксируется письменно." },
-    report: { heading: "Предлагаемое содержание отчёта", label: "Шаблон — не завершённый отчёт", items: ["Задача и границы", "Использованные данные и их ограничения", "Конфигурация", "Тестовые случаи и результаты с абсолютными числами", "Найденные ошибки и граничные случаи", "Известные ограничения", "Рекомендация: продолжить, пересмотреть или остановиться"] },
-    decision: { heading: "Продолжить, пересмотреть или остановиться", lead: "Первый этап завершается решением, а не автоматически внедрением.", items: [
-      { title: "Продолжить", text: "Согласованные показатели достигнуты на проверенных случаях, а ограничения приемлемы." },
-      { title: "Пересмотреть", text: "Идея разумна, но результаты или ограничения требуют изменений, после чего ещё один раунд тестирования." },
-      { title: "Остановиться", text: "Результаты не оправдывают дальнейшей работы, либо оказывается, что достаточно обычной автоматизации." } ] },
-    pilot: { heading: "У пилота отдельные требования", lead: "Переход к пилоту — отдельное решение на основе результатов.", items: ["Собственный объём и показатели успеха", "Согласованный доступ и правила по данным", "Где происходит обработка", "Обработка ошибок и журналирование", "Назначенная ответственность за результаты"] },
-    note: "Здесь описано, как предполагается вести работу. Это не утверждение, что каждый прежний проект следовал каждой из перечисленных практик.",
+    baseline: { heading: "Определяем задачу и исходный уровень", lead: "Начинаем с текущего процесса, используемых в нём данных и результата, который нужен организации. Вместе согласуем, как измерить исходное состояние и что считать успехом.", items: ["Задачу и участвующих в ней людей", "Доступные данные и документы", "Результат, нужный организации", "Текущие сроки, качество или уровень ошибок", "Показатели, по которым будет видна польза решения"] },
+    method: { heading: "Поэтапный процесс работы", lead: "У каждого этапа есть ясная цель и отдельное решение о следующем шаге. Пилот и внедрение планируются отдельно, на основе измеренных результатов и операционных требований." },
+    testing: { heading: "Как мы проверяем решение", lead: "Проверяем решение на согласованных задачах и реалистичных примерах, затем описываем и то, что работает, и ограничения.", items: [{ title: "Охват задач", text: "Проверяем типовые случаи, распространённые варианты и пограничные сценарии." }, { title: "Качество и ошибки", text: "Сравниваем результаты с ожидаемыми и фиксируем неверные, неполные и неуверенные ответы." }, { title: "Операционная пригодность", text: "Оцениваем время обработки, усилия на проверку, границы работы с данными и условия использования." }] },
+    human: { heading: "Проверка человеком остаётся частью процесса", text: "Если решение влияет на людей, деньги, безопасность или официальные записи, до начала пилота определяем, кто проверяет результат и кто за него отвечает." },
+    record: { heading: "Понятная документация работы", lead: "Материалы проекта объясняют объём, доказательства и рекомендацию тем, кто будет решать, что делать дальше.", items: ["Согласованная задача и критерии успеха", "Использованные данные и границы их обработки", "Тестовые случаи и измеренные результаты", "Ошибки, пограничные случаи и известные ограничения", "Рекомендация: продолжить, пересмотреть подход или остановиться"] },
+    evidence: { heading: "Избранные результаты наших проектов", lead: "На этих страницах описаны результаты конкретных выполненных запусков и приведён их контекст.", link: "Посмотреть проект" },
+    decision: { heading: "Решение на основе фактов", lead: "Следующий шаг определяется согласованными показателями и выявленными ограничениями. Переход к нему не происходит автоматически.", items: [{ title: "Продолжить", text: "Результат соответствует согласованным показателям и оправдывает чётко определённый следующий этап." }, { title: "Пересмотреть подход", text: "До новой проверки изменить объём, процесс, данные или технический подход." }, { title: "Остановиться", text: "Измеренная польза, качество или операционная пригодность не оправдывают продолжение." }] },
+    pilot: { heading: "Что нужно для пилота", lead: "Пилот — отдельная работа с чёткими границами. До начала организация и лаборатория согласуют:", items: ["Пользователей, задачи и длительность пилота", "Разрешённые данные, доступ и правила хранения", "Ответственных за проверку, эскалацию и ошибки", "Показатели успеха и дату принятия решения", "Действия с данными и доступами после завершения пилота"] },
   },
 };

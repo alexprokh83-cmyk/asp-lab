@@ -60,7 +60,7 @@ for (const f of files) {
   if (withCta(f) && !/href="https:\/\/t\.me\/ASP_Lab_Bot"|href="https:\/\/t\.me\/[A-Za-z0-9_]+"/.test(h)) fails.push(`${f}: no Telegram CTA`);
   if (/>undefined<|undefined —|— undefined|\[object Object\]/.test(text)) fails.push(`${f}: unresolved value rendered`);
   if (!/<title>[^<]*ASP Lab/.test(h) && !is404(f)) fails.push(`${f}: title lacks "ASP Lab"`);
-  if (!/<header[\s\S]*?<img src="\/logo\/asp1-logo\.jpg" alt="ASP Lab" width="\d+" height="\d+"/.test(h) && !is404(f)) fails.push(`${f}: header logo image missing or without alt/dimensions`);
+  if (!/<header[\s\S]*?<img src="\/logo\/asp-lab-logo-wide\.jpg" alt="ASP Lab" width="\d+" height="\d+"/.test(h) && !is404(f)) fails.push(`${f}: header logo image missing or without alt/dimensions`);
   if (/favicon\.svg/.test(h)) fails.push(`${f}: still references the old SVG favicon`);
   if (tg) {
     const links = [...h.matchAll(/href="(https:\/\/t\.me\/[^"]*)"/g)].map((m) => m[1]);

@@ -14,7 +14,6 @@ import TelegramCTA from "../TelegramCTA.astro";
 import ProjectCard from "../ProjectCard.astro";
 import Faq from "../Faq.astro";
 import AspFind from "../asp-find/AspFind.astro";
-import StagePath from "../pages/StagePath.astro";
 import StrategicGoals from "../pages/StrategicGoals.astro";
 import { strategyCopy } from "../../content/pages/strategy";
 import { scenarios } from "../../content/scenarios";
@@ -60,8 +59,8 @@ const processSteps = Object.values(h.process.steps);
       <div class="hero__actions">
         <a href={r("contact")} class="btn btn--primary">{h.hero.cta}</a>
         <a href={r("lab")} class="btn btn--secondary">{h.hero.ctaSecondary}</a>
+        <div class="hero__tg"><TelegramCTA locale={locale} label="Telegram AI Bot" tone="outline" showIcon showContactLink={false} /></div>
       </div>
-      <div class="hero__tg"><TelegramCTA locale={locale} label="Telegram AI Bot" tone="outline" showIcon showContactLink={false} /></div>
       <div class="hero__flow">
         <p class="hero__flow-label">{h.hero.principle}</p>
         <ol class="flow" aria-label={h.hero.principle}>
@@ -187,7 +186,7 @@ const processSteps = Object.values(h.process.steps);
 <section class="section sec-process" aria-labelledby="process-title">
   <div class="container">
     <div class="section-heading section-heading--inverse">
-      <h2 id="process-title" class="mono-heading">{h.process.heading}</h2>
+      <h2 id="process-title">{h.process.heading}</h2>
       <p class="section-heading__lead">{h.process.lead}</p>
     </div>
     <p class="process__note">{h.process.before}</p>
@@ -201,12 +200,7 @@ const processSteps = Object.values(h.process.steps);
       ))}
     </ol>
     <p class="process__note">{h.process.after}</p>
-    <p><a class="btn btn--inverse" href={r("approach")}>{h.process.link}</a></p>
-    <div class="process__path">
-      <p class="mono">{st.path.heading}</p>
-      <StagePath locale={locale} compact />
-      <p><a href={`${r("solutions")}#path`}>{st.path.link}</a> — {st.path.note}</p>
-    </div>
+    <p class="process__action"><a class="btn btn--inverse" href={r("approach")}>{h.process.link}</a></p>
   </div>
 </section>
 

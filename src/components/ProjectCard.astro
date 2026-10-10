@@ -17,7 +17,11 @@ const shown = tech.slice(0, 5);
   <h3 class="pcard__title"><a class="pcard__link" href={namedRoute(project.routeKey, locale)}>{tx.name ?? tx.title}</a></h3>
   <p class="pcard__subtitle">{tx.subtitle}</p>
   <p class="pcard__task">{tx.task}</p>
-  {tx.result && <p class="pcard__result"><span class="pcard__result-label">{ui.labels.result}</span> {tx.result}</p>}
+  {tx.result && (
+    <p class="pcard__result">
+      <span class="pcard__result-label">{ui.labels.result}</span> {tx.result}
+    </p>
+  )}
   {showTech && (
     <ul class="badges" aria-label={ui.labels.tech}>
       {shown.map((t) => <li class="badge">{t}</li>)}

@@ -1,14 +1,20 @@
 ---
 import type { Locale } from "../../lib/i18n";
 import { approachCopy } from "../../content/pages/approach";
+import { projectById } from "../../content/projects";
+import type { Project } from "../../content/project-types";
+import { namedRoute } from "../../lib/routes";
 import CtaBand from "./CtaBand.astro";
 import StagePath from "./StagePath.astro";
-import DemonstrateBlock from "./DemonstrateBlock.astro";
 import { strategyCopy } from "../../content/pages/strategy";
 interface Props { locale: Locale }
 const { locale } = Astro.props;
 const c = approachCopy[locale];
 const st = strategyCopy[locale];
+const examples = [
+  projectById("jira-to-github-migration"),
+  projectById("local-transcription"),
+].filter((project): project is Project => project !== null && Boolean(project.text[locale].result));
 ---
 <section class="section" aria-labelledby="ap-base">
   <div class="container sec-about__grid">
@@ -17,12 +23,11 @@ const st = strategyCopy[locale];
   </div>
 </section>
 
-<section class="section sec-process" aria-labelledby="ap-method">
+<section class="section sec-layer2" aria-labelledby="ap-method">
   <div class="container">
-    <div class="section-heading section-heading--inverse"><h2 id="ap-method" class="mono-heading">{c.method.heading}</h2><p class="section-heading__lead">{c.method.lead}</p></div>
-    <ol class="steps">
-      {c.method.steps.map((s, i) => <li class="step"><span class="step__num mono" aria-hidden="true">{i + 1}</span><h3>{s.title}</h3><p>{s.text}</p></li>)}
-    </ol>
+    <div class="section-heading"><h2 id="ap-method">{c.method.heading}</h2><p class="section-heading__lead">{c.method.lead}</p></div>
+    <StagePath locale={locale} />
+    <p class="note">{st.path.note}</p>
   </div>
 </section>
 
@@ -34,10 +39,27 @@ const st = strategyCopy[locale];
   </div>
 </section>
 
-<section class="section sec-formats" aria-labelledby="ap-report">
+<section class="section sec-formats" aria-labelledby="ap-record">
   <div class="container sec-about__grid">
-    <div><h2 id="ap-report">{c.report.heading}</h2><p><span class="label label--preview">{c.report.label}</span></p></div>
-    <ol class="plain plain--num">{c.report.items.map((i) => <li>{i}</li>)}</ol>
+    <div><h2 id="ap-record">{c.record.heading}</h2><p class="section-heading__lead">{c.record.lead}</p></div>
+    <ol class="plain plain--num">{c.record.items.map((i) => <li>{i}</li>)}</ol>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="ap-evidence">
+  <div class="container">
+    <div class="section-heading"><h2 id="ap-evidence">{c.evidence.heading}</h2><p class="section-heading__lead">{c.evidence.lead}</p></div>
+    <div class="grid-2">
+      {examples.map((project) => {
+        const tx = project.text[locale];
+        return <article class="acard acard--plain approach__example">
+          <h3>{tx.name ?? tx.title}</h3>
+          <p>{tx.subtitle}</p>
+          {tx.result && <p class="approach__result">{tx.result}</p>}
+          <a href={namedRoute(project.routeKey, locale)}>{c.evidence.link}</a>
+        </article>;
+      })}
+    </div>
   </div>
 </section>
 
@@ -48,25 +70,10 @@ const st = strategyCopy[locale];
   </div>
 </section>
 
-<section class="section sec-layer2" aria-labelledby="ap-path">
-  <div class="container">
-    <div class="positioning"><h2 id="ap-path">{st.positioning.heading}</h2><p>{st.positioning.text}</p></div>
-    <h3 class="mono-heading path-h">{st.path.heading}</h3>
-    <p class="section-heading__lead">{st.path.lead}</p>
-    <StagePath locale={locale} />
-    <p class="note">{st.path.note}</p>
-    <div class="demo-wrap">
-      <h2 class="h2-sub">{st.demonstrate.heading}</h2>
-      <p class="section-heading__lead">{st.demonstrate.lead}</p>
-      <DemonstrateBlock locale={locale} diagram={false} />
-    </div>
-  </div>
-</section>
-
 <section class="section sec-future" aria-labelledby="ap-pilot">
   <div class="container sec-about__grid">
     <div><h2 id="ap-pilot">{c.pilot.heading}</h2><p class="section-heading__lead">{c.pilot.lead}</p></div>
-    <div><ul class="plain">{c.pilot.items.map((i) => <li>{i}</li>)}</ul><p class="note">{c.note}</p></div>
+    <ul class="plain">{c.pilot.items.map((i) => <li>{i}</li>)}</ul>
   </div>
 </section>
 <CtaBand locale={locale} />

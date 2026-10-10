@@ -1,18 +1,16 @@
 ---
 /** Owner-provided ASP logo, used in navigation and the footer. */
-interface Props { height?: number; plate?: boolean; variant?: "wide" | "stacked"; class?: string }
-const { height = 48, plate = false, variant = "wide", class: className = "" } = Astro.props;
-const asset = variant === "wide"
-  ? { src: "/logo/asp1-logo.jpg", width: 1134, height: 1100 }
-  : { src: "/logo/asp1-logo.jpg", width: 1134, height: 1100 };
+interface Props { height?: number; class?: string }
+const { height = 48, class: className = "" } = Astro.props;
+// The wide lockup matches the owner-supplied logo used in the site header.
+const asset = { src: "/logo/asp-lab-logo-wide.jpg", width: 1459, height: 501 };
 const width = Math.round((height * asset.width) / asset.height);
 ---
-<span class:list={["logo", plate && "logo--plate", className]}>
+<span class:list={["logo", className]}>
   <img src={asset.src} alt="ASP Lab" width={width} height={height} class="logo__img" decoding="async" style={`height:${height}px;width:auto;`} />
 </span>
 
 <style>
   .logo { display: inline-flex; align-items: center; line-height: 0; }
   .logo__img { display: block; max-width: 100%; object-fit: contain; }
-  .logo--plate { background: #fff; border-radius: 12px; padding: 10px 14px; }
 </style>
