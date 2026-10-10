@@ -3,7 +3,7 @@
 type LogoVariant = "main" | "compact" | "footer";
 interface Props { height?: number; class?: string; variant?: LogoVariant; alt?: string }
 const { height = 48, class: className = "", variant = "main", alt = "ASP Lab" } = Astro.props;
-const main = { src: "/logo/asp-lab-logo-wide.jpg", width: 1459, height: 501 };
+const main = { src: "/logo/asp-lab-logo-wide.svg", width: 520, height: 180 };
 const compact = { src: "/logo/asp-lab-logo-compact.jpg", width: 682, height: 629 };
 const footer = { src: "/logo/asp-lab-logo-footer.jpg", width: 686, height: 858 };
 const asset = variant === "footer" ? footer : variant === "compact" ? compact : main;

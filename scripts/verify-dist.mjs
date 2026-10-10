@@ -60,7 +60,7 @@ for (const f of files) {
   if (withCta(f) && !/href="https:\/\/t\.me\/ASP_Lab_Bot"|href="https:\/\/t\.me\/[A-Za-z0-9_]+"/.test(h)) fails.push(`${f}: no Telegram CTA`);
   if (/>undefined<|undefined —|— undefined|\[object Object\]/.test(text)) fails.push(`${f}: unresolved value rendered`);
   if (!/<title>[^<]*ASP Lab/.test(h) && !is404(f)) fails.push(`${f}: title lacks "ASP Lab"`);
-  if (!/<header[\s\S]*?<img src="\/logo\/asp-lab-logo-wide\.jpg" alt="ASP Lab" width="\d+" height="\d+"/.test(h) && !is404(f)) fails.push(`${f}: header logo image missing or without alt/dimensions`);
+  if (!/<header[\s\S]*?<img src="\/logo\/asp-lab-logo-wide\.svg" alt="ASP Lab" width="\d+" height="\d+"/.test(h) && !is404(f)) fails.push(`${f}: header logo image missing or without alt/dimensions`);
   if (!/<footer[\s\S]*?<img src="\/logo\/asp-lab-logo-footer\.jpg" alt="ASP" width="\d+" height="\d+"/.test(h) && !is404(f)) fails.push(`${f}: footer logo missing or without alt/dimensions`);
   if (/favicon\.svg/.test(h)) fails.push(`${f}: still references the old SVG favicon`);
   if (tg) {
@@ -70,7 +70,7 @@ for (const f of files) {
     if (ctaPage && !links.length) fails.push(`${f}: no Telegram CTA`);
   }
 }
-for (const a of ["logo/asp-lab-logo-wide.jpg", "logo/asp-lab-logo-compact.jpg", "logo/asp-lab-logo-footer.jpg", "favicon.ico", "favicon-32.png", "icon-192.png", "apple-touch-icon.png", "og-image.jpg"]) if (!existsSync(join("dist", a))) fails.push(`dist/${a} missing`);
+for (const a of ["logo/asp-lab-logo-wide.svg", "logo/asp-lab-logo-compact.jpg", "logo/asp-lab-logo-footer.jpg", "favicon.ico", "favicon-32.png", "icon-192.png", "apple-touch-icon.png", "og-image.jpg"]) if (!existsSync(join("dist", a))) fails.push(`dist/${a} missing`);
 const html = Object.fromEntries(files.map((f) => ["/" + rel(f).replace(/index\.html$/, "").replace(/\/$/, ""), readFileSync(f, "utf8")]));
 for (const f of files) {
   const self = "/" + rel(f).replace(/index\.html$/, "").replace(/\/$/, "");

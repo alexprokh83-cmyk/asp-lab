@@ -487,3 +487,11 @@ Header wordmark retained on compact screens (2026-10-10) — IMPLEMENTED LOCALLY
 Next step
 
 - Review the full wordmark at 320px, tablet width and desktop once the current preview can be opened in the browser; confirm it does not crowd language controls or the menu button.
+
+Transparent SVG wordmark in header (2026-10-10) — IMPLEMENTED LOCALLY
+
+- Replaced the header's wide JPEG wordmark with the provided `ASP Lab.svg`, which contains no background rectangle and therefore renders transparently. Kept the full wordmark across desktop, tablet, phone, and the mobile drawer; the footer logo remains unchanged.
+- Stored it as `public/logo/asp-lab-logo-wide.svg` with explicit 520×180 intrinsic dimensions so the existing responsive height sizing preserves the aspect ratio.
+- Updated `scripts/verify-dist.mjs` to expect the SVG in headers and emitted assets.
+- `npm run build` was attempted twice and is blocked before compiling routes by Windows `EPERM` on `src/pages/404.astro` (`realpath`); the source file exists and is readable via PowerShell. No successful build/test claim.
+- No deployment performed.
