@@ -1,5 +1,36 @@
 CHECKPOINT
 
+ASP Finder: same-origin Vercel proxy (2026-10-10) — IMPLEMENTED LOCALLY; DEPLOYMENT NOT VERIFIED
+
+Проверка исходников и архитектуры
+
+- Основной проект собирается как статический Astro (`astro.config.mjs`, `output: "static"`) и использует `"type": "module"`. Корневая `api/asp-contact.js` уже существует; `docs/hosting.md` описывает её как Vercel Node Function, что подтверждает ожидаемую схему root `/api` для проекта.
+- Фактическую привязку текущего production deployment к Vercel независимо проверить не удалось: в рабочей копии отсутствуют `.vercel/project.json`, `vercel.json` и Git metadata/настройки проекта. Утверждение о Vercel основано на проектной документации и сообщённых владельцем переменных Vercel, а не на доступе к панели деплоя.
+- Сравнены `C:\ASP_FIND_FORM\ASP-Lab-Automation-Finder\api\asp-automation-finder.js` и `server.js`: serverless handler содержит proxy-логику, а `server.js` дополнительно раздаёт standalone HTML/CSS/JS и ограничивает входное тело 128 KiB. Для Astro переносится только API handler; standalone static server не нужен. ESM `export default` соответствует `package.json` с `"type": "module"`. Такой же лимит 128 KiB добавлен в Vercel handler.
+- Сохранены POST-only, allowlist точных Finder test/prod URL, проверки формы payload (`answers` object, `free_text` string), обязательный серверный ключ, upstream `X-ASP-Finder-Key`, 30-секундный timeout, безопасные 502/504 ошибки, upstream status/body passthrough и редактирование ключа из upstream response. Запросы/ошибки не логируются. Контактный API и workflow не менялись.
+
+Реализовано
+
+- Добавлен `api/asp-automation-finder.js` — same-origin Vercel Function для `/api/asp-automation-finder`; браузерный запрос не содержит n8n URL или секрет.
+- Добавлен `scripts/asp-find-proxy.test.mjs` и команда `npm run test:asp-find-proxy`.
+- `.env.example` содержит только безопасные имена/пример URL: `PUBLIC_ASP_FIND_PROXY_URL=/api/asp-automation-finder` (публичная build-time настройка), `ASP_FINDER_N8N_WEBHOOK_URL` (server runtime; Preview — test, Production — production Finder URL), `ASP_FINDER_N8N_HEADER_KEY` (server-only secret). `ASP_CONTACT_N8N_WEBHOOK_URL` осталась отдельной настройкой Contact.
+- Обновлены `docs/asp-find-integration.md`, `docs/hosting.md`, `README.md`.
+
+Проверки
+
+- `npm run test:asp-find-proxy` — успешно, 5/5 (method, конфигурация/валидация payload, размер тела, forwarding/редакция ключа, network/timeout).
+- Contact regression: `npm run test:contact` — 6/6; `npm run test:contact-api` — 4/4.
+- `node --check api/asp-automation-finder.js` и `node --check src/components/asp-find/app.js` — успешно.
+- `npm run build` с `PUBLIC_ASP_FIND_PROXY_URL=/api/asp-automation-finder` — успешно, Astro собрал 73 страницы. В sandbox Astro получил EPERM на `fs.realpath`; повтор с разрешённым доступом к workspace прошёл.
+- `npm test` — успешно, 72 страницы; `npm run validate:content` — успешно (13 проектов, 15 capabilities, 221 translation keys × 3 locales).
+- В `dist/index.html` проверено наличие `data-proxy-url="/api/asp-automation-finder"`; ключ и upstream n8n URL в собранном homepage отсутствуют.
+- Реальный POST в Vercel/n8n и запуск функции после deployment не проверялись. Настройки Vercel не менялись; commit/deployment не выполнялись.
+
+Следующий шаг после отдельного подтверждения deployment
+
+- Проверить, что Vercel Preview/Production подхватывают root `api/asp-automation-finder.js`; настроить `PUBLIC_ASP_FIND_PROXY_URL` на build-time и `ASP_FINDER_N8N_WEBHOOK_URL` + `ASP_FINDER_N8N_HEADER_KEY` только для server runtime (Preview test URL, Production production URL), затем redeploy.
+- В Preview проверить в DevTools POST на `/api/asp-automation-finder`, пройти тестовую отправку и подтвердить в n8n доставку Finder payload и корректный ответ. Production запрос делать только после успешной Preview проверки. Contact API/webhook остаётся без изменений.
+
 Contact webhook moved behind a Vercel Function (2026-10-10) — CODE READY; N8N AUTH CONTRACT UNVERIFIED
 
 - Removed the Contact test/production webhook URLs and `WEBHOOK_MODE` from browser code. `src/components/pages/contact-form.js` now POSTs only to same-origin `/api/asp-contact`.

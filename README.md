@@ -40,6 +40,8 @@ Lab vitals are localhost measurements, not field data.
 
 **Contact form (n8n).** `/contact` uses a localized form that posts to the same-origin Vercel Function `/api/asp-contact`; the function reads `ASP_CONTACT_N8N_WEBHOOK_URL` and the server-only `ASP_FINDER_N8N_HEADER_KEY` at runtime, then forwards only the validated contact fields. Set the test URL in Vercel Preview and the production URL in Vercel Production. The n8n Contact workflow must validate the `X-ASP-Finder-Key` header before this can be considered protected; see `docs/future-contact.md`. The live webhook and its auth contract have not been verified from this checkout.
 
+**ASP Finder (n8n).** The homepage Finder posts to same-origin `/api/asp-automation-finder`. Set `PUBLIC_ASP_FIND_PROXY_URL=/api/asp-automation-finder` at build time, `ASP_FINDER_N8N_WEBHOOK_URL` to the Finder webhook per Vercel environment, and `ASP_FINDER_N8N_HEADER_KEY` as a server-only secret. It is a separate API contract from Contact; details and response schema are in `docs/asp-find-integration.md` and `C:\ASP_FIND_FORM\ASP-Lab-Automation-Finder\docs\contract.md`.
+
 ## Modes
 Preview is the default: `noindex`, `Disallow: /`, empty sitemap, visible TODO markers for unknown values, no production canonical. Production (`SITE_MODE=production` plus a real `PUBLIC_SITE_URL`) emits canonical, reciprocal hreflang with an English x-default, og tags, the sitemap and an indexable robots.txt.
 
