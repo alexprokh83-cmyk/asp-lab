@@ -111,7 +111,7 @@
     checkfile:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 15l2 2 5-5"/>',copy:'<rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h2"/>'
   };
   const optionIcon = id => `<svg class="asp-finder-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${iconPaths[optionIconNames[id] || id] || iconPaths.help}</svg>`;
-  const state = { locale: ['en','uk','ru'].includes(mount.dataset.locale) ? mount.dataset.locale : 'en', screen:'welcome', index:0, answers:{ pain:'', data:[], systems:[], api:'', volume:'', privacy:'', maturity:'', description:'' }, error:'', requestError:'', result:null, modalOpen:false };
+  const state = { locale: ['en','uk','ru'].includes(mount.dataset.locale) ? mount.dataset.locale : 'en', screen:'welcome', index:0, answers:{ pain:'pain_routine', data:[], systems:[], api:'', volume:'', privacy:'', maturity:'', description:'' }, error:'', requestError:'', result:null, modalOpen:false };
   const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   function sanitizeRichText(value) {
     const allowedTags = new Set(['p','strong','b','em','i','br','ul','ol','li']);
@@ -133,11 +133,11 @@
     return Array.from(parsed.body.childNodes, serialize).join('');
   }
   const t = key => copy[state.locale][key] || copy.en[key] || key;
-  function steps() { const list=['pain','data','systems']; if(state.answers.systems.includes('sys_custom')) list.push('api'); list.push('volume','privacy','maturity'); if(state.answers.privacy!=='priv_strict') list.push('description'); return list; }
+  function steps() { const list=['data','systems']; if(state.answers.systems.includes('sys_custom')) list.push('api'); list.push('volume','privacy','maturity','description'); return list; }
   function shell(content, shellClass='') { return `<div class="asp-finder-shell ${shellClass}">${content}</div>`; }
   function welcome() {
     const choices=[['pain_routine','home_process','home_process_desc'],['pain_docs','home_documents','home_documents_desc'],['pain_systems','home_integration','home_integration_desc'],['pain_requests','home_assistants','home_assistants_desc']];
-    const selected=state.answers.pain || 'pain_docs';
+    const selected=state.answers.pain;
     const tiles=choices.map(([id,title,description])=>`<label class="asp-finder-home-tile${selected===id?' is-selected':''}"><input type="radio" name="pain" value="${id}" ${selected===id?'checked':''}><span class="asp-finder-home-icon">${optionIcon(id)}</span><span class="asp-finder-home-copy"><strong>${escapeHtml(t(title))}</strong><small>${escapeHtml(t(description))}</small></span><span class="asp-finder-home-check" aria-hidden="true">${selected===id?'✓':''}</span></label>`).join('');
     return shell(`<section class="asp-finder-home-content"><h2>${escapeHtml(t('homeTitle'))}</h2><p class="asp-finder-home-subtitle">${escapeHtml(t('homeSubtitle'))}</p><div class="asp-finder-home-grid" role="radiogroup" aria-label="${escapeHtml(t('homeTitle'))}">${tiles}</div><button type="button" class="asp-finder-home-hint${selected==='pain_unknown'?' is-selected':''}" data-action="choose-unknown">${escapeHtml(t('homeHint'))}${selected==='pain_unknown'?'<span aria-hidden="true">✓</span>':''}</button><p class="asp-finder-error asp-finder-home-error" role="alert" ${state.error?'':'hidden'}>${escapeHtml(state.error)}</p><button type="button" class="asp-finder-home-continue" data-action="home-continue">${escapeHtml(t('next'))}<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg></button></section>`, 'asp-finder-home-shell');
   }
@@ -235,14 +235,14 @@
   function validate() { const key=steps()[state.index]; if(key==='description') return true; if(key==='data'||key==='systems') return state.answers[key].length>0; return Boolean(state.answers[key]); }
   function action(name) {
     if(name==='start'){state.screen='question';state.index=0;state.error='';}
-    if(name==='home-continue') { const selected=mount.querySelector('input[name="pain"]:checked'); if(selected) state.answers.pain=selected.value; if(!state.answers.pain) { state.error=t('homeError');render();return; } state.screen='question';state.index=1;state.error=''; }
+    if(name==='home-continue') { const selected=mount.querySelector('input[name="pain"]:checked'); if(selected) state.answers.pain=selected.value; if(!state.answers.pain) { state.error=t('homeError');render();return; } state.screen='question';state.index=0;state.error=''; }
     if(name==='choose-unknown') { state.answers.pain='pain_unknown';state.error=''; }
-    if(name==='back'){state.error='';if(state.index===0) state.screen='welcome'; else if(state.index===1) { state.screen='welcome';state.index=0; } else { state.index--; if(steps()[state.index]==='api'&&!state.answers.systems.includes('sys_custom')) state.index--; }}
+    if(name==='back'){state.error='';if(state.index===0) state.screen='welcome'; else { state.index--; if(steps()[state.index]==='api'&&!state.answers.systems.includes('sys_custom')) state.index--; }}
     if(name==='continue') { const key=steps()[state.index]; if(key!=='description'){const input=mount.querySelector(`input[name="${key}"]:checked`);if(input&&key!=='data'&&key!=='systems') state.answers[key]=input.value;} if(!validate()){state.error=steps()[state.index]==='data'||steps()[state.index]==='systems'?t('chooseMany'):t('choose');render();return;} state.error=''; if(state.index<steps().length-1) state.index++; else {submit();return;} }
     if(name==='retry') { submit();return; }
     if(name==='show-result'){state.modalOpen=true;}
     if(name==='close-result'){state.modalOpen=false;}
-    if(name==='restart'){state.answers={pain:'',data:[],systems:[],api:'',volume:'',privacy:'',maturity:'',description:''};state.index=0;state.result=null;state.modalOpen=false;state.error='';state.requestError='';state.screen='welcome';}
+    if(name==='restart'){state.answers={pain:'pain_routine',data:[],systems:[],api:'',volume:'',privacy:'',maturity:'',description:''};state.index=0;state.result=null;state.modalOpen=false;state.error='';state.requestError='';state.screen='welcome';}
     render();
   }
   // Keep the clicked native control in the DOM while the browser completes its

@@ -30,7 +30,7 @@
 .hero__eyebrow { display: inline-block; padding: 4px 12px; border-radius: 999px; background: var(--color-blue-50); font-size: 15px; line-height: 22px; font-weight: 500; color: var(--color-blue-600); margin-bottom: var(--space-3); }
 .hero h1 { color: var(--color-neutral-900); margin-bottom: var(--space-6); letter-spacing: -0.015em; }
 .hero__heading-line { display: block; }
-.hero__heading-first { color: var(--color-neutral-900); }
+.hero__heading-first { color: var(--color-action-primary); }
 .hero__heading-ai { color: inherit; }
 .hero__heading-second { color: var(--color-navy-900); }
 .hero__lead { font-size: var(--text-lead-size); line-height: var(--text-lead-line); color: var(--color-neutral-900); max-width: 34em; }

@@ -1,9 +1,9 @@
 ---
-/** Owner-provided ASP Lab lockups. Use the wide artwork in navigation and the compact mark in the footer. */
+/** Owner-provided ASP logo, used in navigation and the footer. */
 interface Props { height?: number; plate?: boolean; variant?: "wide" | "stacked"; class?: string }
 const { height = 48, plate = false, variant = "wide", class: className = "" } = Astro.props;
 const asset = variant === "wide"
-  ? { src: "/logo/asp-lab-logo-wide.jpg", width: 1459, height: 501 }
+  ? { src: "/logo/asp1-logo.jpg", width: 1134, height: 1100 }
   : { src: "/logo/asp1-logo.jpg", width: 1134, height: 1100 };
 const width = Math.round((height * asset.width) / asset.height);
 ---
