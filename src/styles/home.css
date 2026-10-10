@@ -512,6 +512,7 @@ html .site-header .logo__img { height: 49.5px !important; width: auto !important
 .pp__more { background: var(--color-background); }
 .sec-projects__all { margin-top: var(--space-8); }
 .lab-item { display: flex; }
+.lab-item[hidden] { display: none; }
 .lab-item > .pcard { flex: 1; width: 100%; }
 .grid-3 > .pcard { height: 100%; }
 
