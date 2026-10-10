@@ -16,6 +16,7 @@ import ApproachPage from "../components/pages/ApproachPage.astro";
 import AboutPage from "../components/pages/AboutPage.astro";
 import ContactPage from "../components/pages/ContactPage.astro";
 import PrivacyPage from "../components/pages/PrivacyPage.astro";
+import OpenAiApiDeskPage from "../components/pages/OpenAiApiDeskPage.astro";
 import { allStaticRoutes, SLUGS, namedRoute, type SlugKey } from "../lib/routes";
 import { t } from "../lib/translations/index";
 import { projectByRouteKey } from "../content/projects";
@@ -71,6 +72,12 @@ const labParent = { label: ps.heading, href: namedRoute("lab", locale) };
   <InnerPage locale={locale} slug={slug} heading={dict.home.finalCta.heading} title={dict.contact.heading} lead={dict.home.finalCta.lead} bare>
     <ContactPage locale={locale} />
   </InnerPage>
+) : key === "openaiApi" ? (
+  <SiteLayout locale={locale} slug={slug} title={dict.openaiApi.pageTitle} description={dict.openaiApi.lead}>
+    <div class="container openai-api-shell">
+      <OpenAiApiDeskPage locale={locale} />
+    </div>
+  </SiteLayout>
 ) : key === "privacy" ? (
   <InnerPage locale={locale} slug={slug} heading={dict.privacy.heading} lead={dict.privacy.lead} bare>
     <PrivacyPage locale={locale} />

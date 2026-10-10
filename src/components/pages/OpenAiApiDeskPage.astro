@@ -1,0 +1,35 @@
+---
+import type { Locale } from "../../lib/i18n";
+import { t } from "../../lib/translations/index";
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const copy = t(locale).openaiApi;
+const deskParams = new URLSearchParams({
+  platform: copy.platformLabel,
+  apiKeys: copy.apiKeysLabel,
+  safetyLabel: copy.keySafetyLabel,
+  safety: copy.keyTooltip,
+  tokenWarning: copy.tokenWarning,
+});
+---
+<section class="openai-desk" aria-label={copy.heading}>
+  <header class="openai-desk__intro">
+    <h1>{copy.workspaceTitle}</h1>
+    <p class="openai-desk__subtitle">{copy.workspaceSubtitle}</p>
+    <p class="openai-desk__description">{copy.workspaceDescription}</p>
+  </header>
+  <iframe class="openai-desk__frame" src={`/openai-api-desk/index.html?${deskParams.toString()}`} title={copy.frameTitle} referrerpolicy="no-referrer"></iframe>
+</section>
+<style>
+  .openai-desk { width: 100%; padding-top: var(--space-6); }
+  .openai-desk__intro { margin: 0 0 1rem; }
+  .openai-desk__intro h1 { margin: 0; color: var(--color-text-primary); font-size: clamp(1.4rem, 2vw, 1.75rem); line-height: 1.2; }
+  .openai-desk__subtitle { margin: 0.2rem 0 0; color: var(--color-action-primary); font-size: 0.875rem; font-weight: 600; line-height: 1.4; }
+  .openai-desk__description { margin: 0.3rem 0 0; color: var(--color-text-secondary); font-size: 0.875rem; line-height: 1.45; }
+  .openai-desk__frame { display: block; width: 100%; height: clamp(680px, 82vh, 1000px); border: 1px solid var(--color-border); border-radius: var(--card-radius); background: var(--color-hero-bg); }
+  @media (max-width: 640px) {
+    .openai-desk { padding-top: var(--space-4); }
+    .openai-desk__intro { margin-bottom: 0.75rem; }
+    .openai-desk__frame { height: max(680px, 80vh); border-radius: 10px; }
+  }
+</style>

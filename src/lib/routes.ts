@@ -26,6 +26,7 @@ export const SLUGS = {
   approach: "/approach",
   about: "/about",
   contact: "/contact",
+  openaiApi: "/openai-api",
   privacy: "/privacy",
 
   // Project pages (one per project in src/content/project-data)

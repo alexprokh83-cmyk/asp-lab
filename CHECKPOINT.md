@@ -306,3 +306,96 @@ Checks
 Next step
 
 - After deployment, verify the actual `custom_summary` from a controlled n8n response in the deployed Finder. No commit, push, deployment, or live workflow request was made.
+
+OpenAI API Desk integration (2026-10-10) — IMPLEMENTED LOCALLY
+
+- Added a localized `/openai-api` Astro page and an OpenAI API item after About in the existing desktop/mobile navigation.
+- Copied the existing browser-only AI API Desk to `public/openai-api-desk/`: `index.html`, `app.js`, `styles.css`, 13 IBM Plex subset CSS files, and 13 WOFF2 font files. The ASP Lab page uses one shared header; the app is isolated in an iframe and does not add a second site navigation.
+- Added EN/UK/RU translations for the page shell, menu label, warning, API-key usage note, links, iframe title, and localized browser title. The inherited Desk controls remain English-only.
+- Security review: the key is held in `state.key` in page memory, not local/session storage; chat state is also memory-only. The API helper sends `Authorization: Bearer …` directly to `https://api.openai.com/v1`. CSP permits network connections only to `api.openai.com`, and allows self-hosted fonts. No ASP Lab server route, analytics, or key-bearing URL was added. OpenAI may store Responses by default, as noted in the source README.
+- Added `noindex` to the standalone iframe document. Updated `scripts/verify-dist.mjs` for 25 localized site routes and to exclude that internal tool document from site-page SEO checks. Added a narrow-screen composer wrap to avoid horizontal overflow.
+
+Files added/changed
+
+- `src/lib/routes.ts`, `src/pages/[...slug].astro`, `src/components/Header.astro`
+- `src/components/pages/OpenAiApiDeskPage.astro`
+- `src/lib/translations/en.ts`, `uk.ts`, `ru.ts`
+- `public/openai-api-desk/index.html`, `app.js`, `styles.css`, and 26 local font assets
+- `scripts/verify-dist.mjs`, `README.md`, `CHECKPOINT.md`
+
+Checks / limits
+
+- `npm run build` — passed, 76 emitted documents (75 localized ASP Lab routes plus the standalone embedded Desk HTML).
+- `npm test` — passed; post-build validator checked 75 localized site pages.
+- `npm run validate:content` — passed (230 translation keys × 3 locales); `node --check public/openai-api-desk/app.js` — passed.
+- Browser preview verified `/openai-api`, `/uk/openai-api`, `/ru/openai-api`, matching language/title/warning, OpenAI Platform/API-key links, and the menu item after About.
+- Responsive browser check at 1440px and 390px passed with no horizontal overflow; at 390px, the iframe app and composer controls fit its viewport.
+- Model initialization/selection smoke test used a locally intercepted `/v1/models` response and dummy key; the app loaded/selects a model, and no request reached the external network. Browser localStorage/sessionStorage remained empty.
+- No live OpenAI key or real API request was used. A live model list and response remain to be verified by the user with their own key.
+- `npm run check` / `astro check` remains failing on 31 project-wide diagnostics in unrelated legacy CaseStudy/content modules (`CaseStudy.astro`, `content/types.ts`, `evidence.ts`, `metrics.ts`, `projects.base.ts`, and `scripts/validate-content.ts`). `npm run check:layout` and `npm run audit:browser` could not run because Python Playwright is not installed; a live browser responsive check was performed instead.
+- The target checkout has no `node_modules`; checks temporarily reused `C:\Projects\AI_LAB\node_modules` through a junction, then removed it. No commit, push, or deployment was performed.
+
+Next step
+
+- After deployment, connect with the user's own OpenAI API key to verify a live model list and response. The API key is sent directly to OpenAI and is not sent to or stored by ASP Lab.
+
+OpenAI API Desk compact workspace (2026-10-10) — IMPLEMENTED LOCALLY
+
+- Replaced the visible `InnerPage` hero/lead on `/openai-api` with the shared `SiteLayout` and a compact iframe workspace. Kept the H1 visually hidden for page semantics; removed the duplicate Desk brand from the embedded settings panel and shortened its empty-chat message.
+- Moved OpenAI Platform and API key links into the Connection panel, beside the API key field. They open the official pages in a new tab with `noopener noreferrer`.
+- Replaced the large outer warning box with a small keyboard-accessible info disclosure next to the key label. The tooltip and link labels are passed from the existing EN/UK/RU dictionaries through non-sensitive iframe query parameters; no key is placed in a URL.
+- Tightened panel, section, chat, inspector, and composer spacing while preserving the existing controls and blue accent. The key remains in `state.key` in page memory; code review found no browser storage or key logging. API requests use `Authorization` only to `https://api.openai.com/v1`; they do not go to ASP Lab. OpenAI's own handling/retention policy still applies.
+- Updated the app's mock state to keep the empty chat prompt compact. API request/model/chat logic was otherwise left unchanged.
+
+Files changed
+
+- `src/pages/[...slug].astro`
+- `src/components/pages/OpenAiApiDeskPage.astro`
+- `src/lib/translations/en.ts`, `uk.ts`, `ru.ts`
+- `public/openai-api-desk/index.html`, `app.js`, `styles.css`
+- `CHECKPOINT.md`
+
+Checks
+
+- `npm run build` — passed (76 static pages).
+- `npm test` — passed (75 localized routes checked).
+- `npm run validate:content` — passed (232 translation keys × 3 locales); `node --check public/openai-api-desk/app.js` — passed.
+- Browser checks confirmed the compact panel, icon tooltip, correct external link URLs/targets, localized UK/RU labels, and no horizontal overflow at a 390px viewport.
+- Mocked browser flow confirmed key entry, loading/selecting a model, and sending a prompt through the existing `/v1/responses` client path; all fetches were intercepted locally, no OpenAI request or real key was used. `localStorage`/`sessionStorage` were empty.
+- Live OpenAI request remains unverified; the existing Astro project-wide `check` diagnostics are documented in the prior checkpoint entry. No deployment was performed.
+
+Next step
+
+- Verify with the user's own API key in a local or deployed session if desired. The key should remain tab-memory-only and be sent directly to OpenAI, never to ASP Lab.
+
+OpenAI API Desk final UI polish (2026-10-10) — IMPLEMENTED LOCALLY
+
+- Added a compact localized page heading (“OpenAI API”), developer-mode subtitle, and short description above the embedded workspace. Added a moderate top gap using the site spacing tokens; mobile uses the smaller existing spacing token. Reused the page H1 and removed the previous visually-hidden duplicate H1.
+- Added a compact red inline warning below the API key links in the settings panel. The warning is localized EN/UK/RU and explains that the token is sent to OpenAI and should not be used in an untrusted browser app. Existing OpenAI Platform and API key links remain in their original left-panel position.
+- Security behavior confirmed from source: the key is held in page memory only until reload, not in localStorage/sessionStorage; requests send it directly to `api.openai.com` using the Authorization header. The key is not sent to ASP Lab. No API/chat/model logic was changed; only localized display copy is passed into the embedded page.
+
+Files changed
+
+- `src/components/pages/OpenAiApiDeskPage.astro`
+- `src/pages/[...slug].astro`
+- `src/lib/translations/en.ts`
+- `src/lib/translations/uk.ts`
+- `src/lib/translations/ru.ts`
+- `public/openai-api-desk/index.html`
+- `public/openai-api-desk/app.js`
+- `public/openai-api-desk/styles.css`
+- `CHECKPOINT.md`
+
+Checks
+
+- `npm run build` — passed (76 static pages). First sandbox attempt failed on filesystem `realpath` EPERM; retry with approved workspace access passed.
+- `npm test` — passed (75 site pages).
+- `npm run validate:content` — passed (236 translation keys × 3 locales).
+- `node --check public/openai-api-desk/app.js` — passed.
+- Built HTML spot-check confirmed the intro and localized iframe copy are emitted for EN/UK/RU; confirmed the warning element exists in the embedded Desk document.
+- Browser visual check was attempted via local preview, but the browser tool could not connect to `localhost:4323` (connection timeout). So exact rendered desktop/mobile appearance still needs a visual check in a reachable browser. Preview process was stopped afterward.
+- No live OpenAI API request was sent. No commit or deployment was made.
+
+Next step
+
+- Open `/openai-api` at desktop and mobile widths in the local/deployed browser to visually confirm spacing and warning density. Then, if desired, use the user's own key for a live API smoke test.

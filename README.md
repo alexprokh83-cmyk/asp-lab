@@ -42,6 +42,8 @@ Lab vitals are localhost measurements, not field data.
 
 **ASP Finder (n8n).** The homepage Finder posts to same-origin `/api/asp-automation-finder`. Set `PUBLIC_ASP_FIND_PROXY_URL=/api/asp-automation-finder` at build time, `ASP_FINDER_N8N_WEBHOOK_URL` to the Finder webhook per Vercel environment, and `ASP_FINDER_N8N_HEADER_KEY` as a server-only secret. It is a separate API contract from Contact; details and response schema are in `docs/asp-find-integration.md` and `C:\ASP_FIND_FORM\ASP-Lab-Automation-Finder\docs\contract.md`.
 
+OpenAI API Desk: /openai-api embeds the existing browser-only Desk from public/openai-api-desk/. It keeps the entered API key and chat state only in page memory; requests go directly to api.openai.com, never through ASP Lab. The browser does not persist the key. OpenAI may store Responses by default; users should review OpenAI Platform data controls.
+
 ## Modes
 Preview is the default: `noindex`, `Disallow: /`, empty sitemap, visible TODO markers for unknown values, no production canonical. Production (`SITE_MODE=production` plus a real `PUBLIC_SITE_URL`) emits canonical, reciprocal hreflang with an English x-default, og tags, the sitemap and an indexable robots.txt.
 

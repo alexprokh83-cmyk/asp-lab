@@ -5,14 +5,15 @@ import { join, relative, sep } from "node:path";
 
 const walk = (d) => readdirSync(d).flatMap((n) => { const p = join(d, n); return statSync(p).isDirectory() ? walk(p) : [p]; });
 const rel = (f) => relative("dist", f).split(sep).join("/");
-const files = walk("dist").filter((f) => f.endsWith("index.html") && !rel(f).startsWith("_astro/"));
+// The embedded OpenAI API Desk is an isolated static tool, not a localized site route.
+const files = walk("dist").filter((f) => f.endsWith("index.html") && !rel(f).startsWith("_astro/") && rel(f) !== "openai-api-desk/index.html");
 const fails = [];
 const titles = new Map();
 const langOf = (f) => (rel(f).startsWith("uk/") ? "uk" : rel(f).startsWith("ru/") ? "ru" : "en");
 const is404 = (f) => rel(f) === "404.html";
 const isPrivacy = (f) => /^(?:uk\/|ru\/)?privacy\//.test(rel(f));
 
-if (files.length !== 72) fails.push(`expected 72 pages (24 routes × 3 locales), found ${files.length}`);
+if (files.length !== 75) fails.push(`expected 75 pages (25 routes × 3 locales), found ${files.length}`);
 if (walk("dist").some((f) => rel(f).startsWith("en/"))) fails.push("dist/en/ must not exist");
 
 for (const f of files) {

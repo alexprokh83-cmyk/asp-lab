@@ -20,6 +20,7 @@ interface Props {
 
 const { locale, currentSlug, localePaths } = Astro.props;
 const dict = t(locale);
+const openaiApiHref = namedRoute("openaiApi", locale);
 
 const navBefore = [
   { label: dict.nav.solutions, href: namedRoute("solutions", locale) },
@@ -28,6 +29,7 @@ const navBefore = [
 const navAfter = [
   { label: dict.nav.projects,  href: namedRoute("lab",      locale) },
   { label: dict.nav.about,     href: namedRoute("about",    locale) },
+  { label: dict.nav.openaiApi, href: openaiApiHref },
 ];
 const navLinks = [...navBefore, ...navAfter];
 
@@ -87,7 +89,7 @@ function isActive(href: string): boolean {
         {navAfter.map(link => (
           <li>
             <a href={link.href}
-               class:list={["site-header__nav-link", isActive(link.href) && "site-header__nav-link--active"]}
+               class:list={["site-header__nav-link", link.href === openaiApiHref && "site-header__nav-link--accent", isActive(link.href) && "site-header__nav-link--active"]}
                aria-current={isActive(link.href) ? "page" : undefined}>
               {link.label}
             </a>
@@ -137,7 +139,7 @@ function isActive(href: string): boolean {
         {navLinks.map(link => (
           <li>
             <a href={link.href}
-               class:list={["mobile-nav__link", isActive(link.href) && "mobile-nav__link--active"]}
+               class:list={["mobile-nav__link", link.href === openaiApiHref && "mobile-nav__link--accent", isActive(link.href) && "mobile-nav__link--active"]}
                aria-current={isActive(link.href) ? "page" : undefined}>
               {link.label}
             </a>
@@ -188,6 +190,7 @@ function isActive(href: string): boolean {
   }
   .site-header__nav-link:hover { color: var(--color-text-primary); background: var(--color-background-subtle); }
   .site-header__nav-link--active { color: var(--color-text-primary); font-weight: var(--font-weight-semibold); }
+  .site-header__nav-link--accent, .site-header__nav-link--accent.site-header__nav-link--active { color: var(--color-blue-500); }
   .site-header__nav-link--active::after {
     content: ""; position: absolute; bottom: -1px; left: var(--space-3); right: var(--space-3);
     height: 2px; background: var(--color-action-primary); border-radius: 1px;
@@ -259,6 +262,7 @@ function isActive(href: string): boolean {
   }
   .mobile-nav__link:hover { background: var(--color-background-subtle); color: var(--color-text-primary); }
   .mobile-nav__link--active { color: var(--color-action-primary); font-weight: var(--font-weight-semibold); }
+  .mobile-nav__link--accent { color: var(--color-blue-500); }
   .mobile-nav__link--sub { padding-left: var(--space-8); font-size: 14px; }
   .mobile-nav__group-label {
     padding: var(--space-3) var(--space-3) var(--space-1);
