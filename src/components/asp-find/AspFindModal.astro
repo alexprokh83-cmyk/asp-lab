@@ -1,0 +1,33 @@
+---
+import type { Locale } from "../../lib/i18n";
+import { t } from "../../lib/translations/index";
+import AspFind from "./AspFind.astro";
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const hero = t(locale).home.hero;
+---
+
+<dialog class="finder-modal" id="finder-modal" aria-labelledby="finder-modal-title">
+  <div class="finder-modal__header">
+    <h2 id="finder-modal-title">{hero.finderModalTitle}</h2>
+    <button class="finder-modal__close" type="button" aria-label={hero.closeModal} data-finder-close>
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
+    </button>
+  </div>
+  <div class="finder-modal__body">
+    <AspFind locale={locale} />
+  </div>
+</dialog>
+
+<script>
+  const finderModal = document.getElementById("finder-modal") as HTMLDialogElement | null;
+  const finderOpen = document.querySelector<HTMLButtonElement>("[data-finder-open]");
+  const finderClose = document.querySelector<HTMLButtonElement>("[data-finder-close]");
+
+  finderOpen?.addEventListener("click", () => finderModal?.showModal());
+  finderClose?.addEventListener("click", () => finderModal?.close());
+  finderModal?.addEventListener("click", (event) => {
+    if (event.target === finderModal) finderModal.close();
+  });
+</script>

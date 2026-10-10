@@ -1,5 +1,5 @@
 /**
- * Design tokens — ASP Lab. WHITE + BLUE + NAVY.
+ * Design tokens — ASP Lab. Slate + blue, with deep slate surfaces.
  * No teal / turquoise / green in the brand palette.
  *
  * Contrast notes (WCAG): white text on #3B82F6 is only 3.68:1, so filled
@@ -20,27 +20,27 @@
   --color-blue-900: #172554;
 
   /* Navy */
-  --color-navy-950: #0B1220;
-  --color-navy-900: #111827;  /* deep navy */
-  --color-navy-800: #1A2438;
-  --color-navy-700: #26324A;
+  --color-navy-950: #020617;
+  --color-navy-900: #0F172A;  /* slate 900 */
+  --color-navy-800: #1E293B;
+  --color-navy-700: #334155;
 
   /* Cool neutrals */
-  --color-neutral-900: #17202A;
-  --color-neutral-600: #5B6875;
-  --color-neutral-500: #667381;
-  --color-neutral-400: #8B97A5;
-  --color-neutral-300: #C3CDD8;
-  --color-neutral-200: #DCE3EA;
-  --color-neutral-100: #EEF2F7;
-  --color-neutral-50:  #F7F9FC;
+  --color-neutral-900: #0F172A;
+  --color-neutral-600: #334155;
+  --color-neutral-500: #64748B;
+  --color-neutral-400: #94A3B8;
+  --color-neutral-300: #CBD5E1;
+  --color-neutral-200: #E2E8F0;
+  --color-neutral-100: #F1F5F9;
+  --color-neutral-50:  #F8FAFC;
   --color-neutral-0:   #FFFFFF;
 
   --color-brand: var(--color-blue-500);
 
   /* Semantic */
   --color-background:        var(--color-neutral-50);
-  --color-background-subtle: var(--color-blue-50);
+  --color-background-subtle: #F8FAFC;
   --color-surface:           var(--color-neutral-0);
   --color-surface-raised:    var(--color-neutral-50);
   --color-border:            var(--color-neutral-200);
@@ -65,15 +65,15 @@
   --color-status-fail:       #B83C35;
 
   /* Dark (navy) surfaces */
-  --color-dark-bg:      var(--color-navy-900);
+  --color-dark-bg:      #0F172A;
   --color-dark-surface: var(--color-navy-800);
   --color-dark-border:  var(--color-navy-700);
-  --color-dark-text:    #F3F6FB;
-  --color-dark-muted:   #B6C2D1;
+  --color-dark-text:    #F8FAFC;
+  --color-dark-muted:   #CBD5E1;
   --color-dark-accent:  var(--color-blue-300);
 
-  /* Hero background sampled from the supplied artwork */
-  --color-hero-bg: #F1F5FD;
+  /* Hero background uses a clean slate-to-white gradient in home.css. */
+  --color-hero-bg: #F8FAFC;
 
   /* Typography */
   --font-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;

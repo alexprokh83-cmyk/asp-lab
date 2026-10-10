@@ -10,7 +10,6 @@ import { t } from "../lib/translations/index";
 import { namedRoute } from "../lib/routes";
 import Logo from "./Logo.astro";
 import LanguageSwitcher from "./LanguageSwitcher.astro";
-import TelegramCTA from "./TelegramCTA.astro";
 
 interface Props {
   locale: Locale;
@@ -39,7 +38,6 @@ const audienceLinks = [
   { label: dict.nav.publicSector, href: namedRoute("publicSector",locale) },
 ];
 
-const contactHref = namedRoute("contact", locale);
 const homeHref    = namedRoute("home",    locale);
 
 function isActive(href: string): boolean {
@@ -100,7 +98,7 @@ function isActive(href: string): boolean {
 
     <div class="site-header__actions">
       <LanguageSwitcher currentLocale={locale} paths={localePaths} />
-      <a href={contactHref} class="btn btn--primary btn--sm">{dict.nav.cta}</a>
+      <a class="btn btn--outline btn--sm site-header__cta" href={namedRoute("contact", locale)}>{dict.nav.cta}</a>
     </div>
 
     <div class="site-header__lang-mobile"><LanguageSwitcher currentLocale={locale} paths={localePaths} /></div>
@@ -116,7 +114,6 @@ function isActive(href: string): boolean {
     <ul>
       {navLinks.map(link => <li><a href={link.href}>{link.label}</a></li>)}
       {audienceLinks.map(link => <li><a href={link.href}>{link.label}</a></li>)}
-      <li><a href={contactHref}>{dict.nav.cta}</a></li>
     </ul>
   </nav>
 </noscript>
@@ -159,10 +156,7 @@ function isActive(href: string): boolean {
         ))}
       </ul>
     </nav>
-    <div class="mobile-nav__footer">
-      <TelegramCTA locale={locale} label={dict.home.finalCta.cta} showContactLink={false} />
-      <a href={contactHref} class="btn btn--primary" style="width:100%;justify-content:center;">{dict.nav.cta}</a>
-    </div>
+    <a class="btn btn--outline mobile-nav__cta" href={namedRoute("contact", locale)}>{dict.nav.cta}</a>
   </div>
 </div>
 
@@ -215,6 +209,7 @@ function isActive(href: string): boolean {
   .site-header__dropdown-link--active { color: var(--color-text-primary); font-weight: var(--font-weight-semibold); }
   .site-header__actions { display: none; align-items: center; gap: var(--space-3); margin-left: auto; }
   @media (min-width: 1200px) { .site-header__actions { display: flex; } }
+  .site-header__cta { min-height: 44px; height: 44px; border-radius: 8px; }
   .site-header__mobile-btn {
     display: flex; align-items: center; justify-content: center;
     width: 44px; height: 44px; border: none; background: none; cursor: pointer;
@@ -255,6 +250,7 @@ function isActive(href: string): boolean {
   }
   .mobile-nav__close:hover { background: var(--color-background-subtle); }
   .mobile-nav__list { flex: 1; list-style: none; display: flex; flex-direction: column; gap: 2px; }
+  .mobile-nav__cta { width: 100%; min-height: 48px; margin-top: auto; }
   .mobile-nav__link {
     display: block; padding: var(--space-3); border-radius: 6px;
     font-size: var(--text-body-size); font-weight: var(--font-weight-medium);
@@ -268,10 +264,6 @@ function isActive(href: string): boolean {
     padding: var(--space-3) var(--space-3) var(--space-1);
     font-size: var(--text-label-size); font-weight: var(--font-weight-semibold);
     color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: 0.06em;
-  }
-  .mobile-nav__footer {
-    display: flex; flex-direction: column; gap: var(--space-4);
-    padding-top: var(--space-4); border-top: 1px solid var(--color-border);
   }
 </style>
 

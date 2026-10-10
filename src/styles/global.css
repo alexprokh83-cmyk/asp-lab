@@ -21,7 +21,7 @@ html {
   font-family: var(--font-sans);
   font-size: 16px;
   line-height: 1.5;
-  color: var(--color-text-primary);
+  color: var(--color-text-secondary);
   background-color: var(--color-background);
   background-image: none;
   -webkit-font-smoothing: antialiased;
@@ -32,7 +32,7 @@ html {
 body { min-height: 100vh; overflow-x: clip; }
 
 /* Typography */
-h1,h2,h3,h4,h5,h6 { font-family: var(--font-sans); font-weight: var(--font-weight-semibold); color: var(--color-text-primary); text-wrap: balance; }
+h1,h2,h3,h4,h5,h6 { font-family: var(--font-sans); font-weight: var(--font-weight-semibold); color: #0F172A; text-wrap: balance; }
 h1 { font-size: var(--text-h1-size); line-height: var(--text-h1-line); }
 h2 { font-size: var(--text-h2-size); line-height: var(--text-h2-line); }
 h3 { font-size: var(--text-h3-size); line-height: var(--text-h3-line); }

@@ -3,8 +3,6 @@
  * Homepage — one template for all locales. Section order is fixed by the spec:
  * Hero · Solutions · Projects · Local AI · Audiences · Evidence · Process · About · FAQ · Final CTA
  */
-import { Image } from "astro:assets";
-import heroArt from "../../assets/hero-automation.jpg";
 import type { Locale } from "../../lib/i18n";
 import { t } from "../../lib/translations/index";
 import { namedRoute } from "../../lib/routes";
@@ -13,7 +11,7 @@ import { projectsSectionCopy } from "../../content/pages/projects-section";
 import TelegramCTA from "../TelegramCTA.astro";
 import ProjectCard from "../ProjectCard.astro";
 import Faq from "../Faq.astro";
-import AspFind from "../asp-find/AspFind.astro";
+import HomeHero from "./HomeHero.astro";
 import StrategicGoals from "../pages/StrategicGoals.astro";
 import { strategyCopy } from "../../content/pages/strategy";
 import { scenarios } from "../../content/scenarios";
@@ -42,37 +40,7 @@ const icons: Record<string, string> = {
 
 const processSteps = Object.values(h.process.steps);
 ---
-<!-- HERO -->
-<section class="hero" aria-labelledby="hero-title">
-  <div class="hero__art" aria-hidden="true">
-    <Image src={heroArt} alt="" width={1376} height={768} loading="eager" fetchpriority="high" format="webp" quality={82} sizes="(min-width: 1024px) 62vw, 100vw" />
-  </div>
-  <div class="container hero__inner">
-    <div class="hero__content">
-      <p class="hero__eyebrow">{h.hero.eyebrow}</p>
-      <h1 id="hero-title">
-        <span class="hero__heading-line hero__heading-first"><span class="hero__heading-ai">{h.hero.headingPrefix}</span>{h.hero.headingFirstRest}</span>
-        <span class="hero__heading-line hero__heading-second">{h.hero.headingSecond}</span>
-      </h1>
-      <p class="hero__lead">{h.hero.lead}</p>
-      <p class="hero__audience">{h.hero.audience}</p>
-      <div class="hero__actions">
-        <a href={r("contact")} class="btn btn--primary">{h.hero.cta}</a>
-        <a href={r("lab")} class="btn btn--secondary">{h.hero.ctaSecondary}</a>
-        <div class="hero__tg"><TelegramCTA locale={locale} label="Telegram AI Bot" tone="outline" showIcon showContactLink={false} /></div>
-      </div>
-      <div class="hero__flow">
-        <p class="hero__flow-label">{h.hero.principle}</p>
-        <ol class="flow" aria-label={h.hero.principle}>
-          {h.hero.flow.map((step) => <li>{step}</li>)}
-        </ol>
-      </div>
-    </div>
-    <div class="hero__finder-frame">
-      <AspFind locale={locale} />
-    </div>
-  </div>
-</section>
+<HomeHero locale={locale} />
 
 <!-- SOLUTIONS -->
 <section class="section sec-solutions" aria-labelledby="solutions-title">
@@ -83,13 +51,12 @@ const processSteps = Object.values(h.process.steps);
       <p class="home-pos">{st.positioning.text}</p>
     </div>
     <div class="grid-4">
-      {dc.items.map((d, i) => (
+      {dc.items.map((d) => (
         <article class="scard">
           <div class="scard__top">
             <span class="scard__icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d={icons[d.id]} /></svg>
             </span>
-            <span class="scard__num mono" aria-hidden="true">0{i + 1}</span>
           </div>
           <h3>{ps.categories[d.id]}</h3>
           <p class="scard__problem">{d.problem}</p>

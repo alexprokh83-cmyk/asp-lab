@@ -47,7 +47,7 @@ const locales: Locale[] = ["en", "uk", "ru"];
   .lang-switcher__list {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 12px;
     list-style: none;
   }
 
@@ -55,38 +55,25 @@ const locales: Locale[] = ["en", "uk", "ru"];
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 36px;
-    height: 32px;
-    padding-inline: var(--space-2);
-    border-radius: 4px;
+    min-height: 40px;
+    padding: 4px 0;
     font-size: 13px;
     font-weight: var(--font-weight-medium);
     letter-spacing: 0.04em;
     color: var(--color-text-secondary);
     text-decoration: none;
-    border: 1px solid transparent;
+    border: 0;
     transition:
       background-color var(--duration-hover) var(--ease-standard),
       color var(--duration-hover) var(--ease-standard),
       border-color var(--duration-hover) var(--ease-standard);
   }
 
-  .lang-switcher__link:hover {
-    background-color: var(--color-background-subtle);
-    color: var(--color-text-primary);
-    border-color: var(--color-border);
-  }
+  .lang-switcher__link:hover { color: var(--color-text-primary); }
 
   .lang-switcher__link--active {
-    background-color: var(--color-blue-50);
     color: var(--color-blue-700);
-    border-color: var(--color-blue-200);
     font-weight: var(--font-weight-semibold);
-  }
-
-  .lang-switcher__link--active:hover {
-    background-color: var(--color-blue-100);
-    border-color: var(--color-blue-300);
   }
 </style>
 
