@@ -9,6 +9,8 @@
     "preview": "astro preview",
     "check": "astro check && tsc --noEmit && tsx scripts/validate-content.ts",
     "test": "node scripts/verify-dist.mjs",
+    "test:contact": "node --test scripts/contact-form.test.mjs",
+    "test:contact-api": "node --test scripts/asp-contact-api.test.mjs",
     "check:release": "node scripts/check-release.js",
     "validate:content": "tsx scripts/validate-content.ts",
     "test:prod": "node scripts/test-prod.mjs",

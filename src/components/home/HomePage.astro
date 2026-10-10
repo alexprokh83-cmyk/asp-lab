@@ -8,15 +8,18 @@ import heroArt from "../../assets/hero-automation.jpg";
 import type { Locale } from "../../lib/i18n";
 import { t } from "../../lib/translations/index";
 import { namedRoute } from "../../lib/routes";
-import { featuredProjects, projectsWithResult } from "../../content/projects";
+import { featuredProjects } from "../../content/projects";
 import { projectsSectionCopy } from "../../content/pages/projects-section";
 import TelegramCTA from "../TelegramCTA.astro";
 import ProjectCard from "../ProjectCard.astro";
 import Faq from "../Faq.astro";
+import AspFind from "../asp-find/AspFind.astro";
 import StagePath from "../pages/StagePath.astro";
 import StrategicGoals from "../pages/StrategicGoals.astro";
 import { strategyCopy } from "../../content/pages/strategy";
 import { scenarios } from "../../content/scenarios";
+import { directionsCopy } from "../../content/pages/directions";
+import { projectById } from "../../content/projects";
 
 interface Props { locale: Locale }
 const { locale } = Astro.props;
@@ -24,20 +27,19 @@ const dict = t(locale);
 const st = strategyCopy[locale];
 const h = dict.home;
 const ps = projectsSectionCopy[locale];
+const dc = directionsCopy[locale];
 const r = (k: Parameters<typeof namedRoute>[0]) => namedRoute(k, locale);
 
-const solutionKeys = ["processAutomation", "documentsAndSpeech", "localModels", "aiEvaluation"] as const;
-const anchors = ["automation", "documents", "model-selection", "evaluation"];
-const icons = [
-  // workflow nodes
-  "M5 6h5v5H5zM14 13h5v5h-5zM10 8.5h4a2 2 0 0 1 2 2V13",
-  // document
-  "M7 3h7l4 4v14H7zM14 3v4h4M10 12h5M10 16h5",
-  // chip
-  "M8 8h8v8H8zM10 3v3M14 3v3M10 18v3M14 18v3M3 10h3M3 14h3M18 10h3M18 14h3",
-  // check in shield
-  "M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6zM9 12l2 2 4-4",
-];
+const icons: Record<string, string> = {
+  documents: "M7 3h7l4 4v14H7zM14 3v4h4M10 12h5M10 16h5",
+  requests: "M4 6h16v12H4zM4 7l8 6 8-6",
+  voice: "M12 3a3 3 0 0 1 3 3v5a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4",
+  assistants: "M4 5h16v11H9l-5 4zM8 9h8M8 12h5",
+  knowledge: "M5 4h10a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3zM8 8h7M8 11h7",
+  integrations: "M5 6h5v5H5zM14 13h5v5h-5zM10 8.5h4a2 2 0 0 1 2 2V13",
+  qa: "M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6zM9 12l2 2 4-4",
+  evaluation: "M5 20V10M12 20V4M19 20v-7",
+};
 
 const processSteps = Object.values(h.process.steps);
 ---
@@ -49,7 +51,10 @@ const processSteps = Object.values(h.process.steps);
   <div class="container hero__inner">
     <div class="hero__content">
       <p class="hero__eyebrow">{h.hero.eyebrow}</p>
-      <h1 id="hero-title">{h.hero.heading}</h1>
+      <h1 id="hero-title">
+        <span class="hero__heading-line hero__heading-first"><span class="hero__heading-ai">{h.hero.headingPrefix}</span>{h.hero.headingFirstRest}</span>
+        <span class="hero__heading-line hero__heading-second">{h.hero.headingSecond}</span>
+      </h1>
       <p class="hero__lead">{h.hero.lead}</p>
       <p class="hero__audience">{h.hero.audience}</p>
       <div class="hero__actions">
@@ -65,6 +70,9 @@ const processSteps = Object.values(h.process.steps);
         <p class="hero__method mono">{h.process.heading}</p>
       </div>
     </div>
+    <div class="hero__finder-frame">
+      <AspFind locale={locale} />
+    </div>
   </div>
 </section>
 
@@ -76,25 +84,21 @@ const processSteps = Object.values(h.process.steps);
       <p class="section-heading__lead">{h.solutions.lead}</p>
       <p class="home-pos">{st.positioning.text}</p>
     </div>
-    <div class="grid-2">
-      {solutionKeys.map((k, i) => {
-        const c = dict.solutions.cards[k];
-        return (
-          <article class="scard">
-            <div class="scard__top">
-              <span class="scard__icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d={icons[i]} /></svg>
-              </span>
-              <span class="scard__num mono" aria-hidden="true">0{i + 1}</span>
-            </div>
-            <h3>{c.title}</h3>
-            <p class="scard__problem">{c.problem}</p>
-            <p>{c.value}</p>
-            <p class="scard__output"><strong>{h.solutions.outputLabel}:</strong> {h.solutions.outputs[i]}</p>
-            <a class="scard__link" href={`${r("solutions")}#${anchors[i]}`}>{h.solutions.link}</a>
-          </article>
-        );
-      })}
+    <div class="grid-4">
+      {dc.items.map((d, i) => (
+        <article class="scard">
+          <div class="scard__top">
+            <span class="scard__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d={icons[d.id]} /></svg>
+            </span>
+            <span class="scard__num mono" aria-hidden="true">0{i + 1}</span>
+          </div>
+          <h3>{ps.categories[d.id]}</h3>
+          <p class="scard__problem">{d.problem}</p>
+          <p class="scard__examples"><strong>{dc.labels.examples}:</strong> {d.projectIds.slice(0, 2).map((id) => { const x = projectById(id)!.text[locale]; return x.name ?? x.title; }).join(", ")}</p>
+          <a class="scard__link" href={`${r("solutions")}#${d.id}`}>{dc.labels.details}<span class="sr-only">: {ps.categories[d.id]}</span></a>
+        </article>
+      ))}
     </div>
     <div class="home-scn">
       <h3>{st.scenarios.chipsLabel}</h3>
@@ -176,25 +180,6 @@ const processSteps = Object.values(h.process.steps);
         <p>{h.audiences.publicSector.text}</p>
         <a href={r("publicSector")}>{h.audiences.link}<span class="sr-only">: {h.audiences.publicSector.title}</span></a>
       </article>
-    </div>
-  </div>
-</section>
-
-<!-- RESULTS -->
-<section class="section sec-results" aria-labelledby="results-title">
-  <div class="container">
-    <div class="section-heading">
-      <h2 id="results-title">{ps.results.heading}</h2>
-      <p class="section-heading__lead">{ps.results.lead}</p>
-    </div>
-    <div class="results-grid">
-      {projectsWithResult.map((p) => (
-        <a class="result-card" href={namedRoute(p.routeKey, locale)}>
-          <span class="result-card__label">{ps.labels.result}</span>
-          <span class="result-card__text">{p.text[locale].result}</span>
-          <span class="result-card__proj">{p.text[locale].name ?? p.text[locale].title}</span>
-        </a>
-      ))}
     </div>
   </div>
 </section>

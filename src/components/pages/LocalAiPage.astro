@@ -1,11 +1,9 @@
 ---
 import type { Locale } from "../../lib/i18n";
-import { t } from "../../lib/translations/index";
 import { namedRoute } from "../../lib/routes";
 import { localAiCopy } from "../../content/pages/local-ai";
 import { capabilities } from "../../content/capabilities";
 import { projectById } from "../../content/projects";
-import { IS_PREVIEW } from "../../config/site";
 import CapabilityStatus from "../CapabilityStatus.astro";
 import Faq from "../Faq.astro";
 import CtaBand from "./CtaBand.astro";
@@ -13,14 +11,12 @@ import InfraSection from "./InfraSection.astro";
 
 interface Props { locale: Locale }
 const { locale } = Astro.props;
-const dict = t(locale);
 const c = localAiCopy[locale];
 const developing = capabilities.filter((x) => x.maturity === "developing");
 const planned = capabilities.filter((x) => x.maturity === "planned");
 ---
 <section class="section" aria-labelledby="la-supported">
   <div class="container">
-    <p class="callout callout--warn">{c.caution}</p>
     <div class="section-heading"><h2 id="la-supported">{c.supported.heading}</h2><p class="section-heading__lead">{c.supported.lead}</p></div>
     <div class="grid-2">
       {c.supported.items.map((it) => {

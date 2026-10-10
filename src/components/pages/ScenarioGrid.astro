@@ -1,13 +1,17 @@
 ---
-/** Possible solution scenarios A–H. Every card is labelled "Demonstration concept" and carries its boundary. */
+/** Solution scenarios. Each card carries an honest status: confirmed / developing when our projects back it (linked), otherwise "Demonstration concept". */
 import type { Locale } from "../../lib/i18n";
 import { strategyCopy } from "../../content/pages/strategy";
 import { scenarios } from "../../content/scenarios";
 import type { AudienceId } from "../../content/pages/audiences";
 import CapabilityStatus from "../CapabilityStatus.astro";
+import { projectById } from "../../content/projects";
+import { namedRoute } from "../../lib/routes";
+import { projectsSectionCopy } from "../../content/pages/projects-section";
 interface Props { locale: Locale; audience?: AudienceId; compact?: boolean }
 const { locale, audience, compact = false } = Astro.props;
 const s = strategyCopy[locale].scenarios;
+const ps = projectsSectionCopy[locale];
 const list = audience ? scenarios.filter((x) => x.audiences.includes(audience)) : scenarios;
 ---
 <div class="scn-grid">
@@ -25,6 +29,9 @@ const list = audience ? scenarios.filter((x) => x.audiences.includes(audience)) 
         <ol class="scn__flow">{c.flow.map((f) => <li>{f}</li>)}</ol>
         {!compact && <p class="scn__example"><strong>{s.exampleLabel}:</strong> {c.example}</p>}
         <p class="scn__boundary"><strong>{s.boundaryLabel}:</strong> {c.boundary}</p>
+        {x.projectIds && x.projectIds.length > 0 && (
+          <p class="scn__projects"><strong>{ps.labels.more}:</strong> {x.projectIds.map((id, i) => { const pr = projectById(id)!; return <>{i > 0 && ", "}<a href={namedRoute(pr.routeKey, locale)}>{pr.text[locale].name ?? pr.text[locale].title}</a></>; })}</p>
+        )}
       </article>
     );
   })}

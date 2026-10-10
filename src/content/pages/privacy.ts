@@ -10,7 +10,7 @@ export interface PrivacyCopy {
 export const privacyCopy: Localized<PrivacyCopy> = {
   en: {
     sections: [
-      { heading: "What this website does", items: ["The site is a set of static pages.", "This version has no contact form. Nothing you type is submitted through the site.", "This version uses no analytics, advertising pixels or session replay, and no third-party fonts.", "The hosting provider may keep technical server logs. What is kept, and for how long, has not yet been documented here."] },
+      { heading: "What this website does", items: ["The site is a set of static pages.", "The contact form sends the submitted name, email, optional phone number and message directly to the configured n8n webhook. The current frontend configuration targets its test URL.", "After a confirmed submission, the form stores a timestamp in your browser's local storage for a 60-second cooldown.", "This version uses no analytics, advertising pixels or session replay, and no third-party fonts.", "The hosting provider may keep technical server logs. What is kept, and for how long, depends on the hosting provider."] },
       { heading: "External destinations", items: ["The Telegram button opens Telegram, an external service. What you send there is handled by Telegram, not by this website.", "Do not send credentials, confidential documents, third-party personal information or student information in an initial message."] },
     ],
     contactHeading: "Operator and contact",
@@ -18,7 +18,7 @@ export const privacyCopy: Localized<PrivacyCopy> = {
   },
   uk: {
     sections: [
-      { heading: "Що робить цей сайт", items: ["Сайт — це набір статичних сторінок.", "У цій версії немає контактної форми. Нічого з того, що ви вводите, не надсилається через сайт.", "У цій версії не використовуються аналітика, рекламні пікселі чи запис сесій, а також сторонні шрифти.", "Хостинг-провайдер може зберігати технічні журнали сервера. Що саме зберігається і як довго, тут поки не задокументовано."] },
+      { heading: "Що робить цей сайт", items: ["Сайт — це набір статичних сторінок.", "Контактна форма надсилає вказані ім’я, email, необов’язковий номер телефону та повідомлення безпосередньо до налаштованого вебхука n8n. Поточна конфігурація frontend використовує тестову URL-адресу.", "Після підтвердженого надсилання форма зберігає часову позначку в локальному сховищі браузера для 60-секундного періоду очікування.", "У цій версії не використовуються аналітика, рекламні пікселі чи запис сесій, а також сторонні шрифти.", "Хостинг-провайдер може зберігати технічні журнали сервера. Що саме зберігається і як довго, залежить від хостинг-провайдера."] },
       { heading: "Зовнішні призначення", items: ["Кнопка Telegram відкриває Telegram, зовнішній сервіс. Те, що ви там надсилаєте, обробляє Telegram, а не цей сайт.", "Не надсилайте в першому повідомленні облікові дані, конфіденційні документи, персональні дані третіх осіб чи дані учнів."] },
     ],
     contactHeading: "Оператор і контакти",
@@ -26,7 +26,7 @@ export const privacyCopy: Localized<PrivacyCopy> = {
   },
   ru: {
     sections: [
-      { heading: "Что делает этот сайт", items: ["Сайт — это набор статических страниц.", "В этой версии нет контактной формы. Ничего из того, что вы вводите, не отправляется через сайт.", "В этой версии не используются аналитика, рекламные пиксели или запись сессий, а также сторонние шрифты.", "Хостинг-провайдер может хранить технические журналы сервера. Что именно хранится и как долго, здесь пока не задокументировано."] },
+      { heading: "Что делает этот сайт", items: ["Сайт — это набор статических страниц.", "Контактная форма отправляет указанные имя, email, необязательный номер телефона и сообщение напрямую в настроенный вебхук n8n. Текущая конфигурация frontend использует тестовый URL.", "После подтверждённой отправки форма сохраняет временную отметку в локальном хранилище браузера для 60-секундного периода ожидания.", "В этой версии не используются аналитика, рекламные пиксели или запись сессий, а также сторонние шрифты.", "Хостинг-провайдер может хранить технические журналы сервера. Что именно хранится и как долго, зависит от хостинг-провайдера."] },
       { heading: "Внешние адресаты", items: ["Кнопка Telegram открывает Telegram, внешний сервис. То, что вы там отправляете, обрабатывает Telegram, а не этот сайт.", "Не отправляйте в первом сообщении учётные данные, конфиденциальные документы, персональные данные третьих лиц или данные учащихся."] },
     ],
     contactHeading: "Оператор и контакты",

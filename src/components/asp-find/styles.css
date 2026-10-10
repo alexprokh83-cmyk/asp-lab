@@ -1,0 +1,257 @@
+/* Standalone preview and embeddable module. All selectors are scoped to the mount. */
+#asp-automation-finder {
+  --asp-finder-bg: transparent; --asp-finder-white: #fff; --asp-finder-text: var(--color-navy-900);
+  --asp-finder-muted: var(--color-text-secondary); --asp-finder-blue: var(--color-action-primary); --asp-finder-border: var(--color-border);
+  color: var(--asp-finder-text); font: inherit; background: transparent; min-height: 0; padding: 0; box-sizing: border-box;
+}
+#asp-automation-finder *, #asp-automation-finder *::before, #asp-automation-finder *::after { box-sizing: border-box; }
+#asp-automation-finder .asp-finder-shell { width: min(100%, 760px); margin: 0 auto; }
+#asp-automation-finder button, #asp-automation-finder textarea { font:inherit; }
+#asp-automation-finder .asp-finder-card { background:var(--asp-finder-white); border:1px solid var(--asp-finder-border); border-radius:12px; padding:clamp(24px, 5vw, 44px); box-shadow:0 8px 24px rgb(15 23 42 / .05); }
+#asp-automation-finder h1, #asp-automation-finder h2, #asp-automation-finder h3, #asp-automation-finder p { margin-top:0; }
+#asp-automation-finder h1 { font-size:clamp(30px,5vw,44px); line-height:1.12; letter-spacing:-.04em; margin-bottom:16px; }
+#asp-automation-finder h2 { font-size:clamp(23px,4vw,30px); line-height:1.2; letter-spacing:-.025em; margin-bottom:10px; }
+#asp-automation-finder h3 { font-size:18px; margin-bottom:8px; }
+#asp-automation-finder .asp-finder-intro, #asp-automation-finder .asp-finder-help { color:var(--asp-finder-muted); }
+#asp-automation-finder .asp-finder-progress { display:flex; justify-content:space-between; color:var(--asp-finder-muted); font-size:14px; margin:0 0 12px; }
+#asp-automation-finder .asp-finder-track { height:6px; background:#eaf0f7; border-radius:99px; overflow:hidden; margin-bottom:30px; }
+#asp-automation-finder .asp-finder-track span { display:block; height:100%; background:var(--asp-finder-blue); border-radius:inherit; transition:width .2s ease; }
+#asp-automation-finder .asp-finder-options { display:grid; gap:10px; margin-top:24px; }
+#asp-automation-finder .asp-finder-option { position:relative; display:flex; align-items:flex-start; gap:12px; border:1px solid var(--asp-finder-border); border-radius:9px; padding:15px 16px; cursor:pointer; transition:border-color .15s, background .15s; }
+#asp-automation-finder .asp-finder-option:hover { border-color:#93b4f7; background:#f8fbff; }
+#asp-automation-finder .asp-finder-option:has(input:checked) { border-color:var(--asp-finder-blue); background:#eff6ff; }
+#asp-automation-finder .asp-finder-option input { accent-color:var(--asp-finder-blue); margin:4px 0 0; flex:none; }
+#asp-automation-finder .asp-finder-option span { display:block; }
+#asp-automation-finder .asp-finder-option strong { display:block; font-weight:600; }
+#asp-automation-finder .asp-finder-option small { color:var(--asp-finder-muted); }
+#asp-automation-finder .asp-finder-actions { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:28px; }
+#asp-automation-finder .asp-finder-button { display:inline-flex; justify-content:center; align-items:center; gap:8px; min-height:46px; padding:11px 20px; border:1px solid var(--asp-finder-border); border-radius:8px; background:white; color:var(--asp-finder-text); font-weight:650; cursor:pointer; text-decoration:none; }
+#asp-automation-finder .asp-finder-button:hover { border-color:#94a3b8; }
+#asp-automation-finder .asp-finder-button-primary { background:var(--asp-finder-blue); border-color:var(--asp-finder-blue); color:white; }
+#asp-automation-finder .asp-finder-button-primary:hover { background:#1d4ed8; border-color:#1d4ed8; }
+#asp-automation-finder .asp-finder-button:focus-visible, #asp-automation-finder .asp-finder-option:focus-within { outline:3px solid #bfdbfe; outline-offset:2px; }
+#asp-automation-finder .asp-finder-error { color:#b91c1c; font-size:14px; margin:12px 0 0; }
+#asp-automation-finder .asp-finder-textarea { width:100%; min-height:120px; resize:vertical; padding:12px; border:1px solid var(--asp-finder-border); border-radius:8px; color:var(--asp-finder-text); }
+#asp-automation-finder .asp-finder-counter { text-align:right; color:var(--asp-finder-muted); font-size:13px; margin-top:4px; }
+#asp-automation-finder .asp-finder-badge { display:inline-block; color:#1d4ed8; background:#eff6ff; padding:4px 9px; border-radius:99px; font-size:13px; font-weight:650; margin:0 0 16px; }
+#asp-automation-finder .asp-finder-result { padding:18px; border:1px solid var(--asp-finder-border); border-radius:9px; margin-top:12px; }
+#asp-automation-finder .asp-finder-result p:last-child { margin-bottom:0; }
+#asp-automation-finder .asp-finder-list { padding-left:20px; color:var(--asp-finder-muted); }
+#asp-automation-finder .asp-finder-spinner { width:26px; height:26px; border:3px solid #dbeafe; border-top-color:var(--asp-finder-blue); border-radius:50%; animation:asp-finder-spin .8s linear infinite; margin-bottom:18px; }
+@keyframes asp-finder-spin { to { transform:rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { #asp-automation-finder *, #asp-automation-finder *::before, #asp-automation-finder *::after { animation-duration:.01ms !important; transition-duration:.01ms !important; scroll-behavior:auto !important; } }
+@media (max-width:520px) { #asp-automation-finder { min-height:100vh; padding:18px 14px; } #asp-automation-finder .asp-finder-actions { flex-direction:column-reverse; align-items:stretch; } #asp-automation-finder .asp-finder-actions .asp-finder-button { width:100%; } }
+
+/* Answer tiles and result cards */
+#asp-automation-finder .asp-finder-shell { width:min(100%, 840px); }
+#asp-automation-finder .asp-finder-options { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:12px; }
+#asp-automation-finder .asp-finder-option {
+  min-height:112px; display:grid; grid-template-columns:42px minmax(0, 1fr) 22px; align-items:start; gap:12px;
+  overflow:hidden; background:#fff; border:1px solid var(--asp-finder-border); border-radius:10px; padding:17px 16px;
+  transform:translateY(0) scale(1); transition:transform .18s ease, border-color .18s ease, background-color .18s ease, box-shadow .18s ease;
+}
+#asp-automation-finder .asp-finder-option:hover { transform:translateY(-2px); border-color:#93b4f7; background:#fbfdff; box-shadow:0 5px 14px rgb(37 99 235 / .08); }
+#asp-automation-finder .asp-finder-option:active { transform:translateY(0) scale(.99); }
+#asp-automation-finder .asp-finder-option:has(input:checked), #asp-automation-finder .asp-finder-option.is-selected { background:#eff6ff; border-color:var(--asp-finder-blue); box-shadow:0 0 0 1px rgb(37 99 235 / .08); }
+#asp-automation-finder .asp-finder-option input {
+  position:absolute; inset:0; z-index:1; width:100%; height:100%; opacity:0; margin:0; cursor:pointer; accent-color:var(--asp-finder-blue);
+}
+#asp-automation-finder .asp-finder-option:focus-within { outline:3px solid #bfdbfe; outline-offset:2px; }
+#asp-automation-finder .asp-finder-option-icon { width:42px; height:42px; display:grid !important; place-items:center; color:var(--asp-finder-blue); background:#eff6ff; border-radius:9px; }
+#asp-automation-finder .asp-finder-icon { width:22px; height:22px; display:block; flex:none; }
+#asp-automation-finder .asp-finder-option-copy { min-width:0; padding-top:1px; }
+#asp-automation-finder .asp-finder-option-copy strong { color:var(--asp-finder-text); line-height:1.35; }
+#asp-automation-finder .asp-finder-option-copy small { display:block; margin-top:5px; color:var(--asp-finder-muted); font-size:13px; line-height:1.4; }
+#asp-automation-finder .asp-finder-option-indicator { width:20px; height:20px; display:grid !important; place-items:center; color:transparent; border:1.5px solid #cbd5e1; border-radius:50%; font-size:12px; font-weight:800; line-height:1; }
+#asp-automation-finder .asp-finder-option:has(input[type="checkbox"]) .asp-finder-option-indicator { border-radius:5px; }
+#asp-automation-finder .asp-finder-option:has(input:checked) .asp-finder-option-indicator, #asp-automation-finder .asp-finder-option.is-selected .asp-finder-option-indicator { color:#fff; background:var(--asp-finder-blue); border-color:var(--asp-finder-blue); }
+#asp-automation-finder .asp-finder-actions { margin-top:30px; }
+#asp-automation-finder .asp-finder-button { min-height:42px; padding:9px 16px; transition:transform .16s ease, background-color .18s ease, border-color .18s ease, box-shadow .18s ease; }
+#asp-automation-finder .asp-finder-button:active { transform:translateY(1px) scale(.99); }
+#asp-automation-finder .asp-finder-button:disabled { opacity:.55; cursor:not-allowed; }
+#asp-automation-finder .asp-finder-button-primary { box-shadow:0 2px 5px rgb(37 99 235 / .18); }
+#asp-automation-finder .asp-finder-field-label { display:block; margin:22px 0 8px; font-weight:650; }
+#asp-automation-finder .asp-finder-textarea { display:block; width:100%; min-height:148px; background:#fff; line-height:1.55; transition:border-color .18s, box-shadow .18s; }
+#asp-automation-finder .asp-finder-textarea:focus { outline:0; border-color:var(--asp-finder-blue); box-shadow:0 0 0 3px #dbeafe; }
+#asp-automation-finder .asp-finder-result { padding:20px; background:#fff; border-radius:10px; }
+#asp-automation-finder .asp-finder-result-featured { background:linear-gradient(135deg,#eff6ff,#fff 75%); border-color:#bfdbfe; }
+#asp-automation-finder .asp-finder-result-heading { display:flex; align-items:center; gap:11px; margin-bottom:9px; }
+#asp-automation-finder .asp-finder-result-heading .asp-finder-icon { width:24px; height:24px; color:var(--asp-finder-blue); }
+#asp-automation-finder .asp-finder-result-heading h2, #asp-automation-finder .asp-finder-result-heading h3 { margin:0; }
+#asp-automation-finder .asp-finder-result-featured p { margin:0; color:var(--asp-finder-muted); }
+#asp-automation-finder .asp-finder-result-secondary p { margin:0 0 0 35px; color:var(--asp-finder-muted); }
+#asp-automation-finder .asp-finder-result .asp-finder-list { margin:8px 0 0; }
+#asp-automation-finder .asp-finder-results .asp-finder-actions { justify-content:flex-end; }
+@media (max-width:640px) {
+  #asp-automation-finder .asp-finder-options { grid-template-columns:1fr; gap:10px; }
+  #asp-automation-finder .asp-finder-option { min-height:94px; }
+}
+@media (max-width:520px) {
+  #asp-automation-finder .asp-finder-actions { flex-direction:row; align-items:center; }
+  #asp-automation-finder .asp-finder-actions .asp-finder-button { width:auto; }
+  #asp-automation-finder .asp-finder-actions .asp-finder-button-primary { margin-left:auto; }
+}
+
+/* Reference-matched start screen */
+#asp-automation-finder .asp-finder-home-shell {
+  width:min(100%, 1020px); padding:clamp(26px, 5vw, 52px); border:1px solid rgb(255 255 255 / .82); border-radius:30px;
+  background:linear-gradient(135deg, #eef0f8 0%, #d8e9f3 54%, #e7f3f5 100%);
+  box-shadow:0 24px 60px rgb(37 67 99 / .18), inset 0 1px 0 rgb(255 255 255 / .8);
+}
+#asp-automation-finder .asp-finder-home-content { padding:0; }
+#asp-automation-finder .asp-finder-home-content h2 { margin-bottom:10px; color:#111827; font-size:clamp(34px, 5vw, 46px); letter-spacing:-.035em; }
+#asp-automation-finder .asp-finder-home-subtitle { margin:0 0 44px; color:#263241; font-size:clamp(19px, 2.6vw, 27px); line-height:1.35; }
+#asp-automation-finder .asp-finder-home-grid { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:18px; }
+#asp-automation-finder .asp-finder-home-tile {
+  position:relative; display:grid; grid-template-columns:1fr 28px; grid-template-rows:52px auto; align-content:start; gap:12px 8px;
+  min-height:204px; padding:27px 27px 24px; overflow:hidden; border:1.5px solid #d7dce5; border-radius:21px;
+  background:#fff; cursor:pointer; transform:translateY(0) scale(1);
+  transition:transform .18s ease, border-color .18s ease, background-color .18s ease, box-shadow .18s ease;
+}
+#asp-automation-finder .asp-finder-home-tile:hover { transform:translateY(-2px); border-color:#91a9ca; box-shadow:0 8px 18px rgb(37 67 99 / .08); }
+#asp-automation-finder .asp-finder-home-tile:active { transform:translateY(0) scale(.99); }
+#asp-automation-finder .asp-finder-home-tile:has(input:checked), #asp-automation-finder .asp-finder-home-tile.is-selected { background:#e9effc; border-color:#627fa9; box-shadow:inset 0 0 0 1px rgb(98 127 169 / .14); }
+#asp-automation-finder .asp-finder-home-tile input { position:absolute; inset:0; z-index:1; width:100%; height:100%; margin:0; opacity:0; cursor:pointer; }
+#asp-automation-finder .asp-finder-home-tile:focus-within { outline:3px solid #bfdbfe; outline-offset:2px; }
+#asp-automation-finder .asp-finder-home-icon { grid-column:1; grid-row:1; display:flex; align-items:center; color:#4b5563; }
+#asp-automation-finder .asp-finder-home-icon .asp-finder-icon { width:36px; height:36px; stroke-width:1.9; }
+#asp-automation-finder .asp-finder-home-copy { grid-column:1 / -1; grid-row:2; display:block; }
+#asp-automation-finder .asp-finder-home-copy strong { display:block; color:#15191f; font-size:clamp(21px, 2.5vw, 27px); font-weight:500; line-height:1.2; }
+#asp-automation-finder .asp-finder-home-copy small { display:block; margin-top:9px; color:#262c35; font-size:clamp(16px, 1.9vw, 21px); line-height:1.35; }
+#asp-automation-finder .asp-finder-home-check { grid-column:2; grid-row:1; align-self:center; justify-self:end; color:transparent; font-size:30px; font-weight:500; line-height:1; }
+#asp-automation-finder .asp-finder-home-tile:has(input:checked) .asp-finder-home-check, #asp-automation-finder .asp-finder-home-tile.is-selected .asp-finder-home-check { color:#26384f; }
+#asp-automation-finder .asp-finder-home-hint { display:flex; align-items:center; gap:10px; margin:26px 0 18px; padding:0; border:0; background:transparent; color:#1f2937; font:inherit; font-size:clamp(17px, 2.3vw, 24px); text-align:left; cursor:pointer; }
+#asp-automation-finder .asp-finder-home-hint:hover, #asp-automation-finder .asp-finder-home-hint.is-selected { color:#1d4ed8; }
+#asp-automation-finder .asp-finder-home-hint span { font-weight:700; }
+#asp-automation-finder .asp-finder-home-error { margin:-8px 0 12px; }
+#asp-automation-finder .asp-finder-home-continue { width:100%; min-height:78px; display:flex; justify-content:center; align-items:center; gap:15px; padding:18px 24px; border:0; border-radius:999px; background:#2059c7; color:#fff; font:inherit; font-size:clamp(21px, 2.7vw, 27px); font-weight:500; cursor:pointer; box-shadow:0 8px 18px rgb(32 89 199 / .17); transition:background-color .18s ease, transform .18s ease, box-shadow .18s ease; }
+#asp-automation-finder .asp-finder-home-continue:hover { background:#174fb9; box-shadow:0 10px 22px rgb(32 89 199 / .22); }
+#asp-automation-finder .asp-finder-home-continue:active { transform:translateY(1px) scale(.995); }
+#asp-automation-finder .asp-finder-home-continue:focus-visible { outline:3px solid #93c5fd; outline-offset:3px; }
+#asp-automation-finder .asp-finder-home-continue svg { width:26px; height:26px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+@media (max-width:640px) {
+  #asp-automation-finder .asp-finder-home-shell { padding:24px 18px; border-radius:22px; }
+  #asp-automation-finder .asp-finder-home-subtitle { margin-bottom:26px; }
+  #asp-automation-finder .asp-finder-home-grid { grid-template-columns:1fr; gap:12px; }
+  #asp-automation-finder .asp-finder-home-tile { min-height:140px; padding:20px; grid-template-rows:42px auto; }
+  #asp-automation-finder .asp-finder-home-icon .asp-finder-icon { width:30px; height:30px; }
+  #asp-automation-finder .asp-finder-home-hint { margin-top:22px; }
+  #asp-automation-finder .asp-finder-home-continue { min-height:62px; }
+}
+@media (prefers-reduced-motion: reduce) { #asp-automation-finder .asp-finder-home-tile, #asp-automation-finder .asp-finder-home-continue { transition:none; } }
+
+/* ASP Lab Hero embedding: compact, translucent card using the host design tokens. */
+#asp-automation-finder { width:100%; min-height:0; padding:0; color:var(--color-text-primary); font-family:var(--font-sans); line-height:1.5; }
+#asp-automation-finder .asp-finder-shell { width:100%; max-width:none; margin:0; }
+#asp-automation-finder .asp-finder-home-shell {
+  width:100%; padding:20px; border:1px solid rgb(255 255 255 / .82); border-radius:20px;
+  background:linear-gradient(135deg, var(--color-blue-50) 0%, var(--color-neutral-50) 54%, var(--color-blue-100) 100%);
+  box-shadow:var(--shadow-card); backdrop-filter:blur(14px);
+}
+#asp-automation-finder .asp-finder-home-content h2 { margin-bottom:8px; color:var(--color-navy-900); font-size:clamp(22px, 2.2vw, 28px); line-height:1.2; letter-spacing:-.025em; }
+#asp-automation-finder .asp-finder-home-subtitle { margin:0 0 14px; color:var(--color-text-secondary); font-size:15px; line-height:1.45; }
+#asp-automation-finder .asp-finder-home-grid { gap:8px; }
+#asp-automation-finder .asp-finder-home-tile { min-height:84px; padding:11px; grid-template-columns:minmax(0, 1fr) 20px; grid-template-rows:26px auto; gap:6px; border-color:var(--color-border); border-radius:12px; background:rgb(255 255 255 / .78); }
+#asp-automation-finder .asp-finder-home-icon { color:var(--color-blue-700); }
+#asp-automation-finder .asp-finder-home-icon .asp-finder-icon { width:24px; height:24px; }
+#asp-automation-finder .asp-finder-home-copy strong { color:var(--color-navy-900); font-size:14px; line-height:1.3; }
+#asp-automation-finder .asp-finder-home-copy small { margin-top:3px; color:var(--color-text-secondary); font-size:12px; line-height:1.35; }
+#asp-automation-finder .asp-finder-home-check { font-size:20px; }
+#asp-automation-finder .asp-finder-home-hint { margin:12px 0; color:var(--color-text-secondary); font-size:13px; line-height:1.4; }
+#asp-automation-finder .asp-finder-home-continue { min-height:46px; padding:10px 16px; border-radius:10px; background:var(--color-action-primary); font-size:16px; box-shadow:none; }
+#asp-automation-finder .asp-finder-home-continue:hover { background:var(--color-action-hover); box-shadow:none; }
+#asp-automation-finder .asp-finder-card {
+  padding:20px; background:linear-gradient(135deg, var(--color-blue-50) 0%, var(--color-neutral-50) 58%, var(--color-blue-50) 100%);
+  box-shadow:var(--shadow-card); backdrop-filter:blur(14px);
+}
+#asp-automation-finder h2 { color:var(--color-navy-900); font-size:clamp(22px, 2.2vw, 28px); line-height:1.25; }
+#asp-automation-finder .asp-finder-result { background:rgb(255 255 255 / .9); }
+
+@media (min-width:1024px) {
+  #asp-automation-finder .asp-finder-shell { display:flex; flex-direction:column; height:auto; min-height:0; }
+  #asp-automation-finder .asp-finder-home-shell { padding:24px; }
+  #asp-automation-finder .asp-finder-home-shell { min-height:0; overflow:hidden; }
+  #asp-automation-finder .asp-finder-home-content { display:flex; flex:1 1 auto; flex-direction:column; min-height:0; }
+  #asp-automation-finder .asp-finder-home-content > h2,
+  #asp-automation-finder .asp-finder-home-content > .asp-finder-home-subtitle { flex:0 0 auto; }
+  #asp-automation-finder .asp-finder-home-content h2 { font-size:clamp(24px, 2.3vw, 30px); }
+  #asp-automation-finder .asp-finder-home-subtitle { margin-bottom:18px; }
+  #asp-automation-finder .asp-finder-home-grid {
+    flex:1 1 auto; min-height:0; overflow-y:auto; overscroll-behavior:contain; scrollbar-gutter:stable; align-content:stretch;
+    grid-auto-rows:minmax(112px, max-content); gap:10px;
+  }
+  #asp-automation-finder .asp-finder-home-tile { min-height:88px; padding:12px; gap:8px; }
+  #asp-automation-finder .asp-finder-home-hint,
+  #asp-automation-finder .asp-finder-home-error,
+  #asp-automation-finder .asp-finder-home-continue { flex:0 0 auto; }
+  #asp-automation-finder .asp-finder-home-hint { margin:14px 0; }
+  #asp-automation-finder .asp-finder-home-continue { min-height:48px; }
+  #asp-automation-finder .asp-finder-card {
+    display:flex; flex:1 1 auto; flex-direction:column; min-height:0; overflow:hidden;
+  }
+  #asp-automation-finder .asp-finder-card > .asp-finder-progress,
+  #asp-automation-finder .asp-finder-card > .asp-finder-track,
+  #asp-automation-finder .asp-finder-card > h2,
+  #asp-automation-finder .asp-finder-card > .asp-finder-badge,
+  #asp-automation-finder .asp-finder-card > .asp-finder-intro,
+  #asp-automation-finder .asp-finder-card > .asp-finder-error,
+  #asp-automation-finder .asp-finder-card > .asp-finder-spinner { flex:0 0 auto; }
+  #asp-automation-finder .asp-finder-card > .asp-finder-field-label,
+  #asp-automation-finder .asp-finder-card > .asp-finder-help,
+  #asp-automation-finder .asp-finder-card > .asp-finder-counter { flex:0 0 auto; }
+  #asp-automation-finder .asp-finder-card > .asp-finder-textarea {
+    flex:1 1 auto; min-height:148px; resize:none; overflow-y:auto;
+  }
+  #asp-automation-finder .asp-finder-options {
+    flex:1 1 auto; min-height:0; overflow-y:auto; overscroll-behavior:contain; scrollbar-gutter:stable; align-content:stretch;
+    grid-auto-rows:minmax(112px, max-content);
+  }
+  #asp-automation-finder .asp-finder-card > .asp-finder-actions { flex:0 0 auto; margin-top:auto; }
+  #asp-automation-finder .asp-finder-results-content { flex:1 1 auto; min-height:0; overflow-y:auto; overscroll-behavior:contain; scrollbar-gutter:stable; }
+}
+
+/* Dynamic Hero card and native, accessible result dialog. */
+#asp-automation-finder { height:auto; }
+#asp-automation-finder .asp-finder-shell { height:auto; }
+#asp-automation-finder .asp-finder-result-ready { min-height:0; }
+#asp-automation-finder .asp-finder-result-ready .asp-finder-actions { justify-content:flex-start; flex-wrap:wrap; }
+#asp-automation-finder .asp-finder-result-dialog {
+  position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); margin:0; padding:0;
+  width:min(90vw, 800px); max-width:800px; max-height:85vh; overflow:hidden;
+  border:1px solid rgb(37 99 235 / .18); border-radius:18px; color:var(--asp-finder-text);
+  background:linear-gradient(135deg, var(--color-blue-50), var(--color-neutral-50) 58%, var(--color-blue-50));
+  box-shadow:0 20px 64px rgb(15 23 42 / .22);
+}
+#asp-automation-finder .asp-finder-result-dialog::backdrop { background:rgb(15 23 42 / .42); backdrop-filter:blur(8px); }
+#asp-automation-finder .asp-finder-dialog-inner { display:flex; flex-direction:column; max-height:85vh; }
+#asp-automation-finder .asp-finder-dialog-header,
+#asp-automation-finder .asp-finder-dialog-footer { display:flex; flex:none; align-items:center; gap:12px; padding:16px 22px; background:rgb(255 255 255 / .76); }
+#asp-automation-finder .asp-finder-dialog-header { justify-content:space-between; border-bottom:1px solid var(--asp-finder-border); }
+#asp-automation-finder .asp-finder-dialog-header h2 { margin:0; font-size:20px; }
+#asp-automation-finder .asp-finder-dialog-close { display:grid; place-items:center; flex:none; width:40px; height:40px; border:1px solid var(--asp-finder-border); border-radius:10px; background:#fff; color:var(--asp-finder-text); font-size:28px; line-height:1; cursor:pointer; }
+#asp-automation-finder .asp-finder-dialog-close:focus-visible { outline:3px solid #bfdbfe; outline-offset:2px; }
+#asp-automation-finder .asp-finder-dialog-body { flex:1 1 auto; min-height:0; overflow-y:auto; overscroll-behavior:contain; scrollbar-gutter:stable; padding:18px 22px; }
+#asp-automation-finder .asp-finder-dialog-body .asp-finder-shell { height:auto; }
+#asp-automation-finder .asp-finder-dialog-body .asp-finder-card { display:block; flex:none; min-height:0; overflow:visible; padding:8px 0; border:0; background:transparent; box-shadow:none; backdrop-filter:none; }
+#asp-automation-finder .asp-finder-dialog-body .asp-finder-results-content { overflow:visible; }
+#asp-automation-finder .asp-finder-dialog-body .asp-finder-results > .asp-finder-actions { justify-content:flex-start; }
+#asp-automation-finder .asp-finder-dialog-footer { justify-content:flex-end; border-top:1px solid var(--asp-finder-border); }
+
+@media (max-width:640px) {
+  #asp-automation-finder .asp-finder-result-dialog { width:calc(100vw - 24px); max-height:85vh; border-radius:14px; }
+  #asp-automation-finder .asp-finder-dialog-header,
+  #asp-automation-finder .asp-finder-dialog-footer { padding:12px 14px; }
+  #asp-automation-finder .asp-finder-dialog-body { padding:12px 14px; }
+}
+
+@media (max-width:640px) {
+  #asp-automation-finder { min-height:0; padding:0; }
+  #asp-automation-finder .asp-finder-home-shell { padding:18px 14px; border-radius:16px; }
+  #asp-automation-finder .asp-finder-home-content h2 { font-size:24px; }
+  #asp-automation-finder .asp-finder-home-subtitle { margin-bottom:14px; font-size:14px; }
+  #asp-automation-finder .asp-finder-home-grid { grid-template-columns:1fr; gap:8px; }
+  #asp-automation-finder .asp-finder-home-tile { min-height:72px; padding:10px; grid-template-rows:24px auto; }
+  #asp-automation-finder .asp-finder-home-hint { margin:12px 0; }
+  #asp-automation-finder .asp-finder-home-continue { min-height:44px; }
+  #asp-automation-finder .asp-finder-card { padding:18px 14px; }
+}

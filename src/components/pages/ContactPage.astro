@@ -1,13 +1,9 @@
 ---
-/**
- * V1 contact page: Telegram-first information page, NOT a form.
- * FUTURE EXTENSION POINT (see docs/future-contact.md): a reviewed, accessible form posting to an n8n webhook
- * would be mounted in the marked slot below once features.contactForm is enabled. Nothing is built here on purpose.
- */
 import type { Locale } from "../../lib/i18n";
 import { t } from "../../lib/translations/index";
 import { namedRoute } from "../../lib/routes";
 import TelegramCTA from "../TelegramCTA.astro";
+import ContactForm from "./ContactForm.astro";
 interface Props { locale: Locale }
 const { locale } = Astro.props;
 const dict = t(locale);
@@ -20,9 +16,9 @@ const dict = t(locale);
     </div>
     <div class="ct-actions">
       <TelegramCTA locale={locale} label={dict.home.finalCta.cta} showContactLink={false} />
+      <ContactForm locale={locale} />
       <p class="callout callout--warn">{dict.contact.warning}</p>
       <p><a href={namedRoute("privacy", locale)}>{dict.footer.links.privacy}</a></p>
-      {/* FUTURE-CONTACT-FORM-SLOT: intentionally empty in V1 */}
     </div>
   </div>
 </section>

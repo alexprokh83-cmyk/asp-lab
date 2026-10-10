@@ -67,6 +67,11 @@ try:
         top = pg.evaluate("document.getElementById('documents').getBoundingClientRect().top"); hh = pg.evaluate("document.querySelector('.site-header').getBoundingClientRect().height")
         check(top >= hh - 1, f"anchor #documents clears sticky header (top={top:.0f}, header={hh:.0f})")
 
+        # 4b. /solutions: every direction block keeps head left and body right (regression: a stray grid item shifted two blocks)
+        pg.goto(BASE + "/solutions")
+        geo = pg.evaluate("[...document.querySelectorAll('article.dir')].map(a=>{const h=a.querySelector('.dir__head').getBoundingClientRect(),b=a.querySelector('.dir__body').getBoundingClientRect();return b.left>h.left+200 && Math.abs(b.top-h.top)<4})")
+        check(len(geo) == 8 and all(geo), f"solutions: 8 direction blocks laid out head-left / body-right ({geo})")
+
         # 5. mobile: language control visible before the menu, focus handling
         m = b.new_page(viewport={"width": 375, "height": 812}); m.goto(BASE + "/")
         check(m.evaluate("(()=>{const e=document.querySelector('.site-header__lang-mobile');return !!e&&e.getBoundingClientRect().width>0})()"), "mobile: language control visible before opening the menu")

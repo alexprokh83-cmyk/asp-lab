@@ -1,6 +1,5 @@
 ---
 import type { Locale } from "../../lib/i18n";
-import { t } from "../../lib/translations/index";
 import { aboutCopy } from "../../content/pages/about";
 import { capabilities } from "../../content/capabilities";
 import CapabilityStatus from "../CapabilityStatus.astro";
@@ -9,7 +8,6 @@ import StrategicGoals from "./StrategicGoals.astro";
 import { strategyCopy } from "../../content/pages/strategy";
 interface Props { locale: Locale }
 const { locale } = Astro.props;
-const dict = t(locale);
 const c = aboutCopy[locale];
 const goals = strategyCopy[locale].goals;
 const groups = (["confirmed", "developing", "planned"] as const).map((m) => ({ m, items: capabilities.filter((x) => x.maturity === m) }));

@@ -1,6 +1,6 @@
 # ASP Lab
 
-Static multilingual site (English default, Ukrainian, Russian). Astro + TypeScript, plain CSS design tokens, minimal vanilla JS. No backend, no analytics, no form.
+Static multilingual site (English default, Ukrainian, Russian). Astro + TypeScript, plain CSS design tokens, minimal vanilla JS. No analytics. Contact submissions use one small same-origin Vercel Function; the rest of the site remains static. The homepage includes the existing ASP Find browser wizard; diagnostic submission still requires a separately deployed secure API proxy (see `docs/asp-find-integration.md`).
 Palette: white + blue + navy. Fonts: IBM Plex Sans/Mono, self-hosted (Latin + Cyrillic, SIL OFL licenses in `public/fonts/`).
 
 ## Setup and commands
@@ -38,10 +38,13 @@ Lab vitals are localhost measurements, not field data.
 
 **Telegram and the domain.** The bot (`https://t.me/ASP_Lab_Bot`) and the GitHub profile are built in as defaults, so the site works without a `.env`. To change them, or at launch, copy `.env.example` to `.env` and set `PUBLIC_TELEGRAM_URL`, `PUBLIC_SITE_URL` and `SITE_MODE=production`. The site only ever needs the public t.me link. **Never put a bot token in this project, in `.env` or in any URL.**
 
-**Future contact form (n8n).** Not implemented in V1. See `docs/future-contact.md` and the marked slot in `src/components/pages/ContactPage.astro`.
+**Contact form (n8n).** `/contact` uses a localized form that posts to the same-origin Vercel Function `/api/asp-contact`; the function reads `ASP_CONTACT_N8N_WEBHOOK_URL` and the server-only `ASP_FINDER_N8N_HEADER_KEY` at runtime, then forwards only the validated contact fields. Set the test URL in Vercel Preview and the production URL in Vercel Production. The n8n Contact workflow must validate the `X-ASP-Finder-Key` header before this can be considered protected; see `docs/future-contact.md`. The live webhook and its auth contract have not been verified from this checkout.
 
 ## Modes
 Preview is the default: `noindex`, `Disallow: /`, empty sitemap, visible TODO markers for unknown values, no production canonical. Production (`SITE_MODE=production` plus a real `PUBLIC_SITE_URL`) emits canonical, reciprocal hreflang with an English x-default, og tags, the sitemap and an indexable robots.txt.
 
 ## Hosting
 Not decided. Verify clean URLs, the slash policy (`/`, `/uk/`, `/ru/` end with `/`, other pages do not) and a real 404 status — see `docs/hosting.md`.
+
+## Working state
+`CHECKPOINT.md` records the last completed stage, what is in progress, the next step, what must not be repeated and open problems. Read it before continuing work; update it after every completed stage.

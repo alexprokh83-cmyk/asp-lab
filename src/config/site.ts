@@ -52,21 +52,25 @@ export const SITE_URL_READY = SITE_URL !== null;
 const DEFAULT_TELEGRAM_URL = "https://t.me/ASP_Lab_Bot";
 export const TELEGRAM_URL: string | null = httpsUrl(read("PUBLIC_TELEGRAM_URL") ?? DEFAULT_TELEGRAM_URL, /^(t\.me|telegram\.me)$/);
 export const TELEGRAM_READY = TELEGRAM_URL !== null;
-/** Temporary bot identity (secondary text). */
-const tgHandle = TELEGRAM_URL ? new URL(TELEGRAM_URL).pathname.replace(/^\/+/, "").split("/")[0] ?? "" : "";
-/** Visible identity of the bot: its name, plus the handle taken from the configured link (so label and destination always match). */
-export const TELEGRAM_LABEL = /^[A-Za-z][A-Za-z0-9_]{3,31}$/.test(tgHandle) ? `ASP Lab Bot · @${tgHandle}` : "ASP Lab Bot";
-
 /** null → the link is not rendered at all. */
 const DEFAULT_GITHUB_URL = "https://github.com/alexprokh-asp";
 export const GITHUB_URL: string | null = httpsUrl(read("PUBLIC_GITHUB_URL") ?? DEFAULT_GITHUB_URL, /^github\.com$/);
+
+/** Public endpoint only; credentials belong in the proxy's server-side secret store. */
+function apiProxyUrl(value: string | null): string | null {
+  if (!value) return null;
+  if (value.startsWith("/") && !value.startsWith("//") && !value.includes("\\")) return value;
+  return httpsUrl(value);
+}
+
+export const ASP_FIND_PROXY_URL: string | null = apiProxyUrl(read("PUBLIC_ASP_FIND_PROXY_URL"));
 
 /** Privacy page facts — all unknown until supplied by the owner. */
 export const OPERATOR_NAME: string | null = read("PUBLIC_OPERATOR_NAME");
 export const PRIVACY_CONTACT: string | null = read("PUBLIC_PRIVACY_CONTACT");
 export const HOSTING_PROVIDER: string | null = read("PUBLIC_HOSTING_PROVIDER");
 
-export const features = { contactForm: false, analytics: false } as const;
+export const features = { contactForm: true, analytics: false } as const;
 
 /** Full canonical URL for a pathname; the bare path while no real domain is configured. */
 export function canonicalUrl(pathname: string): string {

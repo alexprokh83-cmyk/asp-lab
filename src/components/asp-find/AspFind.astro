@@ -1,0 +1,22 @@
+---
+import "./styles.css";
+import type { Locale } from "../../lib/i18n";
+import { namedRoute } from "../../lib/routes";
+import { ASP_FIND_PROXY_URL } from "../../config/site";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+---
+
+<div
+  id="asp-automation-finder"
+  class="hero__finder"
+  data-proxy-url={ASP_FIND_PROXY_URL ?? ""}
+  data-cta-url={namedRoute("contact", locale)}
+  data-locale={locale}
+></div>
+
+<script src="./app.js"></script>

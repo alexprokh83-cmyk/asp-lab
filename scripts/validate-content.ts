@@ -5,6 +5,7 @@
  */
 import { projects, featuredProjects, usedCategories, CATEGORY_IDS } from "../src/content/projects";
 import { projectsSectionCopy } from "../src/content/pages/projects-section";
+import { directionsCopy } from "../src/content/pages/directions";
 import { capabilities } from "../src/content/capabilities";
 import { SLUGS } from "../src/lib/routes";
 import { LOCALES, type Locale } from "../src/lib/i18n";
@@ -81,7 +82,7 @@ import { readFileSync } from "node:fs";
 
 // ---- no test/benchmark figures in public copy (owner decision) ----
 const FORBIDDEN = /\b(1[, ]?038|519|0\.121|0\.977)\b|\b48 (of|passed|із|из)|\b12 (failed|не пройдено)|\b6 (local )?(models|моделей)\b|\b449\b/i;
-for (const [name, obj] of Object.entries({ projects, section: projectsSectionCopy, solutions: solutionsCopy, localAi: localAiCopy, audiences: audiencesCopy })) {
+for (const [name, obj] of Object.entries({ projects, section: projectsSectionCopy, solutions: solutionsCopy, localAi: localAiCopy, audiences: audiencesCopy, directions: directionsCopy })) {
   if (FORBIDDEN.test(JSON.stringify(obj))) err(`${name}: contains a removed test/benchmark figure`);
 }
 
@@ -109,7 +110,7 @@ for (const l of LOCALES) {
 for (const l of LOCALES) for (const [k, v] of flat[l]) if (!k.endsWith(".length") && !filled(v)) err(`translations.${l}: empty string at ${k}`);
 
 // ---- page copy (solutions, local-ai): same shape and lengths in all locales ----
-for (const [name, copy] of [["solutions", solutionsCopy], ["local-ai", localAiCopy], ["projects", projectsSectionCopy], ["audiences", audiencesCopy], ["approach", approachCopy], ["about", aboutCopy], ["privacy", privacyCopy], ["strategy", strategyCopy]] as const) {
+for (const [name, copy] of [["solutions", solutionsCopy], ["local-ai", localAiCopy], ["projects", projectsSectionCopy], ["directions", directionsCopy], ["audiences", audiencesCopy], ["approach", approachCopy], ["about", aboutCopy], ["privacy", privacyCopy], ["strategy", strategyCopy]] as const) {
   const maps = {} as Record<Locale, Map<string, string>>;
   for (const l of LOCALES) { const m = new Map<string, string>(); walk(copy[l], "", m); maps[l] = m; }
   for (const l of LOCALES) {
@@ -129,11 +130,7 @@ for (const l of LOCALES) {
     if (a.projectIds.length !== 2) err(`audiences.${l}.${aid}: needs exactly 2 related projects`);
   }
 }
-if (solutionsCopy.en.directions.map((d) => d.id).join() !== "automation,documents,model-selection,evaluation") err("solutions: anchors must be automation, documents, model-selection, evaluation (in that order)");
-if (solutionsCopy.en.related.ids.some((id) => !projectIds.has(id))) err("solutions: a related project does not exist");
 for (const l of LOCALES) {
-  solutionsCopy[l].directions.forEach((d, i) => d.id !== solutionsCopy.en.directions[i]!.id && err(`solutions.${l}: direction ${i} id differs`));
-  solutionsCopy[l].directions.forEach((d) => !projectIds.has(d.projectId) && err(`solutions.${l}: unknown project ${d.projectId}`));
   localAiCopy[l].chain.stages.forEach((st, i) => st.maturity !== localAiCopy.en.chain.stages[i]!.maturity && err(`local-ai.${l}: stage ${i} maturity differs from en`));
 }
 if (localAiCopy.en.chain.stages.length !== 8) err("local-ai: the AI Model Engineering chain must have 8 stages");
@@ -142,7 +139,10 @@ if (localAiCopy.en.chain.stages.length !== 8) err("local-ai: the AI Model Engine
 if (scenarios.map((x) => x.letter).join("") !== "ABCDEFGH") err("scenarios must be A–H in order");
 if (new Set(scenarios.map((x) => x.id)).size !== scenarios.length) err("scenario ids must be unique");
 for (const sc of scenarios) {
-  if (sc.maturity !== "concept") err(`scenario ${sc.id}: must be a demonstration concept, never a project claim`);
+  if (sc.maturity !== "concept") {
+    if (!sc.projectIds?.length) err(`scenario ${sc.id}: status "${sc.maturity}" requires the projects that back it (projectIds)`);
+    sc.projectIds?.forEach((id) => !projectIds.has(id) && err(`scenario ${sc.id}: unknown project ${id}`));
+  } else if (sc.projectIds?.length) err(`scenario ${sc.id}: a demonstration concept must not cite projects`);
   if (!sc.audiences.length) err(`scenario ${sc.id}: needs at least one audience`);
   for (const l of LOCALES) {
     for (const k of ["title", "text", "example", "boundary"] as const) if (!filled(sc.copy[l][k])) err(`scenario ${sc.id}.${l}.${k} is empty`);
@@ -159,6 +159,28 @@ for (const l of LOCALES) {
 // The laboratory infrastructure is a concept: no hardware, capacity, performance or uptime may be stated.
 const HW = /\b\d+\s?(GB|TB|GiB|VRAM|vCPU|cores?|tokens?|ms|req\/s|%|x)\b|\b(RTX|A100|H100|RAM|uptime\s+of|SLA\s+of)\b/i;
 if (HW.test(JSON.stringify({ strategyCopy, scenarios }).replace(/Hardware specifications, GPU models[^"]*/g, ""))) err("strategy/scenarios copy states a hardware, performance or uptime figure");
+
+
+// ---- Solutions directions: the 8 agreed directions, each backed by real projects, with honest wording ----
+{
+  const ids = directionsCopy.en.items.map((d) => d.id);
+  if (JSON.stringify(ids) !== JSON.stringify(CATEGORY_IDS)) err(`directions: must be exactly ${CATEGORY_IDS.join(", ")} in this order`);
+  for (const l of LOCALES) {
+    const c = directionsCopy[l];
+    if (c.items.map((d) => d.id).join() !== ids.join()) err(`directions.${l}: ids differ from en`);
+    for (const d of c.items) {
+      const at = `directions.${l}.${d.id}`;
+      if (d.scenarios.length < 2 || d.scenarios.length > 4) err(`${at}: needs 2-4 scenarios`);
+      if (d.projectIds.length < 2) err(`${at}: needs at least 2 example projects`);
+      d.projectIds.forEach((id) => !projectIds.has(id) && err(`${at}: unknown project ${id}`));
+      const b = BANNED[l]; const all = JSON.stringify(d);
+      if (b && b.test(all)) err(`${at}: wording that presents our work as unfinished (${all.match(b)![0]})`);
+    }
+    if (c.items.map((d) => d.projectIds.join()).join("|") !== directionsCopy.en.items.map((d) => d.projectIds.join()).join("|")) err(`directions.${l}: project lists differ from en`);
+  }
+  const used = new Set(directionsCopy.en.items.flatMap((d) => d.projectIds));
+  for (const p of projects) if (!used.has(p.id)) err(`project ${p.id} is not an example in any direction`);
+}
 
 // ---- release blockers (missing real content) ----
 // ---- release blockers (missing real content) ----

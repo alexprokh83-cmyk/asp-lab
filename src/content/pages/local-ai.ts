@@ -2,7 +2,7 @@
 import type { Localized, Maturity } from "../types";
 
 export interface LocalAiCopy {
-  eyebrow: string; heading: string; lead: string; caution: string;
+  eyebrow: string; heading: string; lead: string;
   supported: { heading: string; lead: string; supportsLabel: string; notShownLabel: string; items: { projectId: string; title: string; text: string; supports: string; notShown: string }[] };
   when: { heading: string; lead: string; items: string[]; note: string };
   compare: { heading: string; lead: string; columns: string[]; rows: string[][] };
@@ -20,7 +20,6 @@ export const localAiCopy: Localized<LocalAiCopy> = {
     eyebrow: "Local AI",
     heading: "Local and Private AI",
     lead: "Where AI processing happens is a design decision. This page explains the options, what current projects support, and what is still development or R&D.",
-    caution: "Laboratory experiments are not production hosting. Nothing here describes infrastructure that is already operated for customers.",
     supported: { heading: "Local processing in our projects", lead: "Two of our projects work with local processing.", supportsLabel: "What it does", notShownLabel: "Note",
       items: [
         { projectId: "auto-llm-benchmark", title: "Comparison of local models", text: "Auto LLM Benchmark compares local models on your tasks.", supports: "The same tasks are run on local models; answers, speed and quality grades are collected in one table.", notShown: "The compared models run locally; the AI evaluator (OpenAI GPT-4.1) is an external model." },
@@ -45,7 +44,7 @@ export const localAiCopy: Localized<LocalAiCopy> = {
         { term: "Laboratory infrastructure", text: "A separate environment. It is not automatically the organization’s environment." },
       ],
       distinctionsHeading: "What this means in practice",
-      distinctions: ["Local execution alone does not make an entire workflow private.", "Telegram, Google services, external AI APIs and other remote systems remain external components.", "Local transcription does not prove that downstream LLM processing is local.", "Locally benchmarked models do not prove that an evaluator ran locally.", "Local is not inherently cheaper, faster or more accurate.", "Laboratory experimentation does not establish production hosting capability."] },
+      distinctions: ["Local execution alone does not make an entire workflow private.", "Telegram, Google services, external AI APIs and other remote systems remain external components.", "Local transcription does not prove that downstream LLM processing is local.", "Locally benchmarked models do not prove that an evaluator ran locally.", "Local is not inherently cheaper, faster or more accurate.", "Running models as a hosted service for others is a separate task from building local solutions."] },
     guide: { heading: "Choosing an approach", lead: "A first approach to evaluate for each kind of need. Approaches can be combined.",
       columns: ["Need", "First approach to evaluate"],
       rows: [
@@ -65,7 +64,7 @@ export const localAiCopy: Localized<LocalAiCopy> = {
         { name: "Adaptation", scope: "A developing direction.", maturity: "developing" },
         { name: "Fine-tuning", scope: "Planned LoRA / QLoRA R&D.", maturity: "planned" },
         { name: "Evaluation", scope: "Supported by projects. No before/after fine-tuning results are claimed.", maturity: "confirmed" },
-        { name: "Integration", scope: "Prototype experience; boundaries depend on each project.", maturity: "confirmed" },
+        { name: "Integration", scope: "Experience from our projects; boundaries depend on each project.", maturity: "confirmed" },
         { name: "Deployment", scope: "A future operational stage that would need a separate assessment.", maturity: "planned" },
       ] },
     evidence: { heading: "Results from our projects", lead: "What the local-processing projects deliver.",
@@ -80,7 +79,7 @@ export const localAiCopy: Localized<LocalAiCopy> = {
     faq: { heading: "Questions", items: [
       { q: "Is local AI automatically private?", a: "No. Private AI is about access, isolation, storage and data-transfer controls. Local execution is only one possible part of it." },
       { q: "Is local cheaper than cloud?", a: "Not by default. Cost, speed and accuracy have to be measured for your task." },
-      { q: "Does the laboratory host models for customers?", a: "No. Laboratory experiments do not establish production hosting capability." },
+      { q: "Does ASP Lab host models for customers?", a: "Not as a standalone service at the moment. We build solutions that run in your environment or in the cloud — local, cloud or hybrid, depending on requirements." },
       { q: "Is fine-tuning available now?", a: "No. LoRA / QLoRA is planned R&D, and simpler approaches are evaluated first." },
     ] },
   },
@@ -88,7 +87,6 @@ export const localAiCopy: Localized<LocalAiCopy> = {
     eyebrow: "Local AI",
     heading: "Local і Private AI",
     lead: "Де відбувається обробка AI — це проєктне рішення. На цій сторінці описано варіанти, що підтверджують поточні проєкти і що поки що є розробкою чи R&D.",
-    caution: "Лабораторні експерименти — це не промислове розміщення. Нічого з описаного тут не є інфраструктурою, яку вже експлуатують для клієнтів.",
     supported: { heading: "Локальна обробка в наших проєктах", lead: "Два наші проєкти працюють із локальною обробкою.", supportsLabel: "Що робить", notShownLabel: "Примітка",
       items: [
         { projectId: "auto-llm-benchmark", title: "Порівняння локальних моделей", text: "Auto LLM Benchmark порівнює локальні моделі на ваших завданнях.", supports: "Однакові завдання запускаються на локальних моделях; відповіді, швидкість і оцінки якості збираються в одній таблиці.", notShown: "Моделі, що порівнюються, працюють локально; AI-оцінювач (OpenAI GPT-4.1) — зовнішня модель." },
@@ -113,7 +111,7 @@ export const localAiCopy: Localized<LocalAiCopy> = {
         { term: "Лабораторна інфраструктура", text: "Окреме середовище. Воно не обов’язково є середовищем організації." },
       ],
       distinctionsHeading: "Що це означає на практиці",
-      distinctions: ["Саме по собі локальне виконання не робить увесь процес приватним.", "Telegram, сервіси Google, зовнішні AI API та інші віддалені системи залишаються зовнішніми компонентами.", "Локальна транскрипція не доводить, що подальша обробка LLM локальна.", "Локальний бенчмарк моделей не доводить, що оцінювач працював локально.", "Локальне за замовчуванням не дешевше, не швидше і не точніше.", "Лабораторні експерименти не підтверджують здатності до промислового розміщення."] },
+      distinctions: ["Саме по собі локальне виконання не робить увесь процес приватним.", "Telegram, сервіси Google, зовнішні AI API та інші віддалені системи залишаються зовнішніми компонентами.", "Локальна транскрипція не доводить, що подальша обробка LLM локальна.", "Локальний бенчмарк моделей не доводить, що оцінювач працював локально.", "Локальне за замовчуванням не дешевше, не швидше і не точніше.", "Розміщення моделей як сервісу для інших — окреме завдання, відмінне від створення локальних рішень."] },
     guide: { heading: "Вибір підходу", lead: "Перший підхід, який варто оцінити для кожного типу потреби. Підходи можна поєднувати.",
       columns: ["Потреба", "Перший підхід для оцінки"],
       rows: [
@@ -133,7 +131,7 @@ export const localAiCopy: Localized<LocalAiCopy> = {
         { name: "Адаптація", scope: "Напрям, що розвивається.", maturity: "developing" },
         { name: "Fine-tuning", scope: "Запланований R&D за LoRA / QLoRA.", maturity: "planned" },
         { name: "Оцінювання", scope: "Підтверджено проєктами. Результатів «до і після» fine-tuning не заявляється.", maturity: "confirmed" },
-        { name: "Інтеграція", scope: "Досвід прототипів; межі залежать від кожного проєкту.", maturity: "confirmed" },
+        { name: "Інтеграція", scope: "Досвід наших проєктів; межі залежать від кожного проєкту.", maturity: "confirmed" },
         { name: "Розгортання", scope: "Майбутній експлуатаційний етап, що потребує окремої оцінки.", maturity: "planned" },
       ] },
     evidence: { heading: "Результати наших проєктів", lead: "Що дають проєкти з локальною обробкою.",
@@ -148,7 +146,7 @@ export const localAiCopy: Localized<LocalAiCopy> = {
     faq: { heading: "Питання", items: [
       { q: "Чи є local AI автоматично приватним?", a: "Ні. Private AI — це контроль доступу, ізоляції, зберігання та передавання даних. Локальне виконання лише одна з його можливих частин." },
       { q: "Чи локальне дешевше за хмарне?", a: "Не за замовчуванням. Вартість, швидкість і точність потрібно виміряти для вашої задачі." },
-      { q: "Чи розміщує лабораторія моделі для клієнтів?", a: "Ні. Лабораторні експерименти не підтверджують здатності до промислового розміщення." },
+      { q: "Чи розміщує ASP Lab моделі для клієнтів?", a: "Не як окрему послугу на цей момент. Ми створюємо рішення, що працюють у вашому середовищі чи в хмарі — локально, у хмарі або гібридно, залежно від вимог." },
       { q: "Чи доступний fine-tuning зараз?", a: "Ні. LoRA / QLoRA — запланований R&D, а спершу оцінюються простіші підходи." },
     ] },
   },
@@ -156,7 +154,6 @@ export const localAiCopy: Localized<LocalAiCopy> = {
     eyebrow: "Local AI",
     heading: "Local и Private AI",
     lead: "Где происходит обработка AI — это проектное решение. На этой странице описаны варианты, что подтверждают текущие проекты и что пока остаётся разработкой или R&D.",
-    caution: "Лабораторные эксперименты — это не промышленный хостинг. Ничто из описанного здесь не является инфраструктурой, которую уже эксплуатируют для клиентов.",
     supported: { heading: "Локальная обработка в наших проектах", lead: "Два наших проекта работают с локальной обработкой.", supportsLabel: "Что делает", notShownLabel: "Примечание",
       items: [
         { projectId: "auto-llm-benchmark", title: "Сравнение локальных моделей", text: "Auto LLM Benchmark сравнивает локальные модели на ваших задачах.", supports: "Одинаковые задания запускаются на локальных моделях; ответы, скорость и оценки качества собираются в одной таблице.", notShown: "Сравниваемые модели работают локально; AI-оценщик (OpenAI GPT-4.1) — внешняя модель." },
@@ -181,7 +178,7 @@ export const localAiCopy: Localized<LocalAiCopy> = {
         { term: "Лабораторная инфраструктура", text: "Отдельная среда. Она не обязательно является средой организации." },
       ],
       distinctionsHeading: "Что это значит на практике",
-      distinctions: ["Одно лишь локальное выполнение не делает весь процесс приватным.", "Telegram, сервисы Google, внешние AI API и другие удалённые системы остаются внешними компонентами.", "Локальная расшифровка не доказывает, что последующая обработка LLM локальна.", "Локальный бенчмарк моделей не доказывает, что оценщик работал локально.", "Локальное по умолчанию не дешевле, не быстрее и не точнее.", "Лабораторные эксперименты не подтверждают способность к промышленному хостингу."] },
+      distinctions: ["Одно лишь локальное выполнение не делает весь процесс приватным.", "Telegram, сервисы Google, внешние AI API и другие удалённые системы остаются внешними компонентами.", "Локальная расшифровка не доказывает, что последующая обработка LLM локальна.", "Локальный бенчмарк моделей не доказывает, что оценщик работал локально.", "Локальное по умолчанию не дешевле, не быстрее и не точнее.", "Размещение моделей как сервиса для других — отдельная задача, отличная от создания локальных решений."] },
     guide: { heading: "Выбор подхода", lead: "Первый подход, который стоит оценить для каждого типа потребности. Подходы можно сочетать.",
       columns: ["Потребность", "Первый подход для оценки"],
       rows: [
@@ -201,7 +198,7 @@ export const localAiCopy: Localized<LocalAiCopy> = {
         { name: "Адаптация", scope: "Развивающееся направление.", maturity: "developing" },
         { name: "Fine-tuning", scope: "Запланированный R&D по LoRA / QLoRA.", maturity: "planned" },
         { name: "Оценка", scope: "Подтверждено проектами. Результаты «до и после» fine-tuning не заявляются.", maturity: "confirmed" },
-        { name: "Интеграция", scope: "Опыт прототипов; границы зависят от каждого проекта.", maturity: "confirmed" },
+        { name: "Интеграция", scope: "Опыт наших проектов; границы зависят от каждого проекта.", maturity: "confirmed" },
         { name: "Развёртывание", scope: "Будущий эксплуатационный этап, требующий отдельной оценки.", maturity: "planned" },
       ] },
     evidence: { heading: "Результаты наших проектов", lead: "Что дают проекты с локальной обработкой.",
@@ -216,7 +213,7 @@ export const localAiCopy: Localized<LocalAiCopy> = {
     faq: { heading: "Вопросы", items: [
       { q: "Является ли local AI автоматически приватным?", a: "Нет. Private AI — это контроль доступа, изоляции, хранения и передачи данных. Локальное выполнение лишь одна из его возможных частей." },
       { q: "Локальное дешевле облачного?", a: "Не по умолчанию. Стоимость, скорость и точность нужно измерить для вашей задачи." },
-      { q: "Размещает ли лаборатория модели для клиентов?", a: "Нет. Лабораторные эксперименты не подтверждают способность к промышленному хостингу." },
+      { q: "Размещает ли ASP Lab модели для клиентов?", a: "Пока не как отдельная услуга. Мы создаём решения, которые работают в вашей среде или в облаке — локально, в облаке или гибридно, в зависимости от требований." },
       { q: "Доступен ли fine-tuning сейчас?", a: "Нет. LoRA / QLoRA — запланированный R&D, а сначала оцениваются более простые подходы." },
     ] },
   },

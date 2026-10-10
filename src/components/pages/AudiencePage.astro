@@ -1,6 +1,5 @@
 ---
 import type { Locale } from "../../lib/i18n";
-import { t } from "../../lib/translations/index";
 import { audiencesCopy, type AudienceId } from "../../content/pages/audiences";
 import { capabilities } from "../../content/capabilities";
 import { projectById } from "../../content/projects";
@@ -21,7 +20,7 @@ const developing = capabilities.filter((x) => x.id === "rag");
 ---
 <section class="section" aria-labelledby="aud-scen">
   <div class="container">
-    <p class="callout callout--warn">{c.labels.disclosure}</p>
+    <p class="callout callout--info">{c.labels.disclosure}</p>
     <div class="section-heading"><h2 id="aud-scen">{c.labels.scenarios}</h2></div>
     <div class="grid-3">
       {a.scenarios.map((s) => (

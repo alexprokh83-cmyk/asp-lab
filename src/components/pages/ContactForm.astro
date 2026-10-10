@@ -1,0 +1,82 @@
+---
+import type { Locale } from "../../lib/i18n";
+import { t } from "../../lib/translations/index";
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const copy = t(locale).contact.form;
+---
+
+<section class="contact-form-panel" aria-labelledby="contact-form-heading">
+  <h2 id="contact-form-heading">{copy.heading}</h2>
+  <form class="contact-form" data-contact-form data-locale={locale} data-copy={JSON.stringify(copy)} novalidate>
+    <div class="contact-form__field">
+      <label for="contact-name">{copy.name}</label>
+      <input id="contact-name" name="name" type="text" autocomplete="name" required minlength="2" maxlength="100" pattern="[A-Za-zА-Яа-яІіЇїЄєҐґЁё'’ -]{2,100}" aria-invalid="false" aria-describedby="contact-name-error" />
+      <p class="contact-form__error" id="contact-name-error" hidden></p>
+    </div>
+    <div class="contact-form__field">
+      <label for="contact-email">{copy.email}</label>
+      <input id="contact-email" name="email" type="email" autocomplete="email" required maxlength="254" aria-invalid="false" aria-describedby="contact-email-error" />
+      <p class="contact-form__error" id="contact-email-error" hidden></p>
+    </div>
+    <div class="contact-form__field">
+      <label for="contact-phone">{copy.phone}</label>
+      <input id="contact-phone" name="phone" type="tel" autocomplete="tel" pattern="[0-9+() -]*" aria-invalid="false" aria-describedby="contact-phone-error" />
+      <p class="contact-form__error" id="contact-phone-error" hidden></p>
+    </div>
+    <div class="contact-form__field">
+      <label for="contact-message">{copy.message}</label>
+      <textarea id="contact-message" name="message" required minlength="10" maxlength="2000" rows="6" aria-invalid="false" aria-describedby="contact-message-error"></textarea>
+      <p class="contact-form__error" id="contact-message-error" hidden></p>
+    </div>
+    <div class="contact-form__honeypot" aria-hidden="true">
+      <label for="contact-website">{copy.website}</label>
+      <input id="contact-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+    </div>
+    <p class="contact-form__status" data-contact-status role="status" aria-live="polite" hidden></p>
+    <p class="contact-form__cooldown" data-contact-cooldown aria-live="off" hidden></p>
+    <button class="btn btn--primary contact-form__submit" type="submit" data-contact-submit>{copy.submit}</button>
+  </form>
+</section>
+
+<script src="./contact-form.js"></script>
+
+<style>
+  .contact-form-panel {
+    padding: var(--space-6);
+    border: 1px solid var(--color-border);
+    border-radius: var(--card-radius);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-card);
+  }
+  .contact-form-panel h2 { margin-bottom: var(--space-5); color: var(--color-navy-900); }
+  .contact-form { display: grid; gap: var(--space-4); }
+  .contact-form__field { display: grid; gap: 6px; min-width: 0; }
+  .contact-form__field label { color: var(--color-navy-900); font-weight: 500; }
+  .contact-form__field input, .contact-form__field textarea {
+    width: 100%; min-width: 0; padding: 11px 12px; border: 1px solid var(--color-border-strong);
+    border-radius: 8px; background: var(--color-background); color: var(--color-text-primary); font: inherit;
+    transition: border-color .16s ease, box-shadow .16s ease, background-color .16s ease;
+  }
+  .contact-form__field input { min-height: 46px; }
+  .contact-form__field textarea { min-height: 148px; resize: vertical; }
+  .contact-form__field input:focus, .contact-form__field textarea:focus { outline: 0; border-color: var(--color-action-primary); box-shadow: 0 0 0 3px var(--color-action-focus-ring); }
+  .contact-form__field [aria-invalid="true"] { border-color: var(--color-status-fail); }
+  .contact-form__error { margin: 0; color: var(--color-status-fail); font-size: 14px; line-height: 20px; }
+  .contact-form__status, .contact-form__cooldown { margin: 0; padding: 12px 14px; border-radius: 8px; font-size: 15px; line-height: 22px; }
+  .contact-form__status { background: var(--color-blue-50); border: 1px solid var(--color-blue-200); color: var(--color-navy-900); }
+  .contact-form__status.is-error { background: #fff3f2; border-color: #f0c4c1; color: var(--color-status-fail); }
+  .contact-form__cooldown { margin-top: calc(var(--space-3) * -1); color: var(--color-text-secondary); }
+  .contact-form__submit { justify-self: start; min-height: 48px; }
+  .contact-form__honeypot { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+  .contact-form.is-locked .contact-form__field input,
+  .contact-form.is-locked .contact-form__field textarea,
+  .contact-form__field input:disabled,
+  .contact-form__field textarea:disabled { background: var(--color-neutral-100); color: var(--color-text-secondary); cursor: not-allowed; opacity: .72; }
+  .contact-form__submit:disabled { cursor: not-allowed; opacity: .62; }
+  @media (max-width: 640px) {
+    .contact-form-panel { padding: var(--space-5); }
+    .contact-form__submit { width: 100%; }
+  }
+</style>

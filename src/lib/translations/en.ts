@@ -7,7 +7,7 @@ export const enSource = {
     name: "ASP Lab",
     tagline: "Practical AI engineering for organizations",
     description:
-      "We help turn an AI idea into a concrete solution: define the task, choose the right approach, build a prototype, evaluate the result and determine the next step toward deployment.",
+      "We help turn an AI idea into a concrete solution: define the task, choose the right approach, build a working solution, evaluate the result and determine the next step toward deployment.",
   },
 
   nav: {
@@ -42,10 +42,6 @@ export const enSource = {
     groupAudiences: "Audiences",
     groupSite: "Site",
     links: {
-      processAutomation: "Process Automation",
-      documentsAndSpeech: "Documents & Speech",
-      localModels: "Local AI Models",
-      aiEvaluation: "AI Evaluation",
       localAi: "Local / Private AI",
       business: "Business",
       education: "Education",
@@ -76,24 +72,19 @@ export const enSource = {
     hero: {
       eyebrow: "Practical AI engineering",
       heading: "AI for real processes. With measurable results.",
-      lead: "ASP Lab builds and tests prototypes for automation, document processing and local AI. We start with one concrete task, measure the result and determine what is needed for the next stage.",
+      headingPrefix: "AI",
+      headingFirstRest: " for real processes.",
+      headingSecond: "With measurable results.",
+      lead: "ASP Lab develops solutions that automate systems and processes with AI, n8n and API integrations: documents, requests, voice, assistants, integrations and testing. We start with one concrete task and build a working solution around it.",
       audience: "For small and medium-sized businesses, education and public institutions.",
       cta: "Discuss a task",
       ctaSecondary: "Explore projects",
-      principle: "Working principle — not an implemented customer system",
+      principle: "How we work",
       flow: ["Task and data", "AI / automation", "Verification", "Result"],
     },
     solutions: {
       heading: "Start with a process, not a model.",
-      lead: "Four practical directions. Each begins with a task your team already has.",
-      link: "Details in Solutions",
-      outputs: [
-        "A bounded prototype for one workflow.",
-        "A working scenario for one document or audio type.",
-        "A comparison of candidate local models on your scenarios.",
-        "A test report with known limitations.",
-      ],
-      outputLabel: "Prototype output",
+      lead: "Pick the direction closest to your process. Each one is backed by solutions we have built.",
     },    localAi: {
       heading: "Local / Private AI",
       lead: "Processing data locally may be worth considering when data sensitivity, connectivity or cost make external APIs a poor fit. Where processing should happen depends on the task and the data.",
@@ -123,7 +114,7 @@ export const enSource = {
       after: "Moving to a pilot is a separate decision based on the results.",
       link: "Read about the approach",
       steps: {
-        build: { title: "Build", description: "Create a bounded prototype for one task." },
+        build: { title: "Build", description: "Build a working solution for one task." },
         test: { title: "Test", description: "Check normal cases, failures and edge conditions." },
         measure: { title: "Measure", description: "Compare agreed measures against the starting process." },
         automate: { title: "Automate", description: "Integrate a verified scenario within agreed boundaries." },
@@ -140,7 +131,7 @@ export const enSource = {
         { q: "Can we start with one small process?", a: "Yes. The first stage is one bounded task with agreed data and success criteria." },
         { q: "Do we need to choose a model or technology first?", a: "No. Describe the task and what is involved; choosing an approach is part of the work." },
         { q: "Is cloud AI required?", a: "Not necessarily. Where processing happens depends on the task, data and architecture, and is agreed per project." },
-        { q: "Is fine-tuning already available?", a: "No. LoRA / QLoRA is a planned R&D direction, not a launched service. Simpler approaches are evaluated first." },
+        { q: "Is fine-tuning already available?", a: "Partially. LoRA / QLoRA is a planned R&D direction, not a launched service. Simpler approaches are evaluated first." },
         { q: "How are cost and timing determined?", a: "After the scope is clarified. No prices or deadlines are quoted in advance." },
       ],
     },
@@ -179,7 +170,7 @@ export const enSource = {
   },
 
 
-  approach: { heading: "Engineering approach", lead: "How we move from an AI idea to a verifiable prototype." },
+  approach: { heading: "Engineering approach", lead: "How we move from an AI idea to a verifiable result." },
   about: { heading: "About ASP Lab", lead: "A practical AI engineering laboratory for organizations." },
 
   contact: {
@@ -190,6 +181,7 @@ export const enSource = {
     checklistHeading: "Helpful to include in your message:",
     checklistItems: ["What happens now (the current process or problem)", "Which inputs are involved (documents, audio, data, etc.)", "Desired output or outcome", "Systems involved", "Known data or hosting constraints"],
     warning: "Do not send credentials, confidential documents, third-party personal information, or student data in an initial message.",
+    form: { heading: "Send us a message", name: "Name", email: "Email", phone: "Phone (optional)", message: "Message", nameError: "Enter a valid name. Use letters, spaces, hyphens or apostrophes.", emailError: "Enter a valid email address.", phoneError: "Enter a valid phone number.", messageError: "Enter a message between 10 and 2000 characters.", submit: "Send message", loading: "Sending…", success: "Thank you! Your message has been sent. We’ll get back to you soon.", cooldown: "You can send another message in {seconds} seconds.", sendError: "We couldn’t send your message. Please try again.", website: "Leave this field empty" },
   },
 
   privacy: { heading: "Privacy information", lead: "Factual information about how this website handles data.", requiresReview: "This page requires owner review before production publication.", fields: { operator: "Site operator", contact: "Privacy contact", hosting: "Hosting provider" } },

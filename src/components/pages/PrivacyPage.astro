@@ -1,11 +1,9 @@
 ---
 import type { Locale } from "../../lib/i18n";
-import { t } from "../../lib/translations/index";
 import { privacyCopy } from "../../content/pages/privacy";
 import { OPERATOR_NAME, PRIVACY_CONTACT, HOSTING_PROVIDER } from "../../config/site";
 interface Props { locale: Locale }
 const { locale } = Astro.props;
-const dict = t(locale);
 const c = privacyCopy[locale];
 // Shown only when the owner has supplied the value; nothing is rendered for unknown ones.
 const facts = ([[c.pending[0]!, OPERATOR_NAME], [c.pending[2]!, PRIVACY_CONTACT], [c.pending[3]!, HOSTING_PROVIDER]] as [string, string | null][]).filter((f): f is [string, string] => !!f[1]);

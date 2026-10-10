@@ -22,6 +22,9 @@ const f = dict.footer;
 const l = f.links;
 const r = (key: Parameters<typeof namedRoute>[0]) => namedRoute(key, locale);
 const year = new Date().getFullYear();
+import { usedCategories } from "../content/projects";
+import { projectsSectionCopy } from "../content/pages/projects-section";
+const ps = projectsSectionCopy[locale];
 ---
 
 <footer class="site-footer">
@@ -31,10 +34,10 @@ const year = new Date().getFullYear();
       <!-- Group 1: Brand -->
       <div class="site-footer__brand">
         <a href={r("home")} class="site-footer__logo-link" aria-label={dict.nav.home}>
-          <Logo height={72} />
+          <Logo height={72} variant="stacked" plate />
         </a>
-        <p class="site-footer__fullname">ASP Lab — {f.fullName}</p>
-      <p class="site-footer__tagline">{f.tagline}</p>
+        <p class="site-footer__fullname"><strong>ASP Lab</strong> — {f.fullName}</p>
+        <p class="site-footer__tagline">{f.tagline}</p>
         <p class="site-footer__method">{f.method}</p>
       </div>
 
@@ -42,10 +45,7 @@ const year = new Date().getFullYear();
       <div>
         <h3 class="site-footer__group-heading">{f.groupSolutions}</h3>
         <ul class="site-footer__list" role="list">
-          <li><a href={`${r("solutions")}#process-automation`} class="site-footer__link">{l.processAutomation}</a></li>
-          <li><a href={`${r("solutions")}#documents-speech`}   class="site-footer__link">{l.documentsAndSpeech}</a></li>
-          <li><a href={`${r("solutions")}#local-models`}       class="site-footer__link">{l.localModels}</a></li>
-          <li><a href={`${r("solutions")}#ai-evaluation`}      class="site-footer__link">{l.aiEvaluation}</a></li>
+          {usedCategories.map((id) => <li><a href={`${r("solutions")}#${id}`} class="site-footer__link">{ps.categories[id]}</a></li>)}
         </ul>
         <h3 class="site-footer__group-heading" style="margin-top: var(--space-6);">{f.groupLocalAi}</h3>
         <ul class="site-footer__list" role="list">

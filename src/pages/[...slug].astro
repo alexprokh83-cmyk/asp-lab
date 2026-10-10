@@ -20,7 +20,7 @@ import { allStaticRoutes, SLUGS, namedRoute, type SlugKey } from "../lib/routes"
 import { t } from "../lib/translations/index";
 import { projectByRouteKey } from "../content/projects";
 import { projectsSectionCopy } from "../content/pages/projects-section";
-import { solutionsCopy } from "../content/pages/solutions";
+import { directionsCopy } from "../content/pages/directions";
 import { localAiCopy } from "../content/pages/local-ai";
 
 export function getStaticPaths() {
@@ -44,7 +44,7 @@ const labParent = { label: ps.heading, href: namedRoute("lab", locale) };
     <ProjectPage locale={locale} project={project} />
   </InnerPage>
 ) : key === "solutions" ? (
-  <InnerPage locale={locale} slug={slug} heading={solutionsCopy[locale].heading} lead={solutionsCopy[locale].lead} bare>
+  <InnerPage locale={locale} slug={slug} heading={directionsCopy[locale].heading} lead={directionsCopy[locale].lead} bare>
     <SolutionsPage locale={locale} />
   </InnerPage>
 ) : key === "localAi" ? (

@@ -18,7 +18,7 @@ export interface AudiencesCopy {
 
 export const audiencesCopy: Localized<AudiencesCopy> = {
   en: {
-    labels: { disclosure: "Possible applications, not descriptions of completed customer deployments.", scenarios: "Scenario groups", measure: "What we would measure", measureNote: "Suggested measures for a prototype. These are not achieved results.", pilot: "First-pilot requirements", constraints: "Constraints", current: "Applicable current capabilities", currentNote: "Confirmed by laboratory projects. This does not mean deployed for customers.", developing: "Developing directions", developingNote: "Directions under development, not available services.", projects: "Relevant engineering projects", deliverables: "First-stage deliverables" },
+    labels: { disclosure: "Possible areas of application in these organizations.", scenarios: "Scenario groups", measure: "What we would measure", measureNote: "Suggested measures for the first stage.", pilot: "First-pilot requirements", constraints: "Constraints", current: "Applicable current capabilities", currentNote: "Confirmed by our projects.", developing: "Developing directions", developingNote: "Directions under development.", projects: "Relevant engineering projects", deliverables: "First-stage deliverables" },
     deliverables: ["Solution diagram", "A bounded working scenario", "Test examples", "A report with known limitations", "A recommendation to continue, revise or stop"],
     pages: {
       business: {
@@ -40,7 +40,7 @@ export const audiencesCopy: Localized<AudiencesCopy> = {
           { title: "Internal knowledge assistance", text: "A developing RAG direction: answering staff questions from the institution’s own documents. It is not an available service.", examples: ["Staff questions answered from internal documents", "Sources shown so answers can be checked", "Developing direction, not a service"] },
         ],
         measures: ["Time to a reviewed draft", "Number of manual corrections", "Completeness against a reference sample", "Staff acceptance of drafts"],
-        pilot: ["Materials that are permitted to be processed", "Anonymized or synthetic prototype data where possible", "Staff who review every output", "A defined, limited set of documents or recordings"],
+        pilot: ["Materials that are permitted to be processed", "Anonymized or synthetic data for the first stage where possible", "Staff who review every output", "A defined, limited set of documents or recordings"],
         constraints: ["Staff review is required.", "No claims of automated student assessment.", "No collection of information about children through this website.", "Do not send student data in an initial message."],
         capabilityIds: ["document-processing", "local-transcription", "ai-evaluation"],
         projectIds: ["local-transcription", "youtube-to-text"],
@@ -60,7 +60,7 @@ export const audiencesCopy: Localized<AudiencesCopy> = {
     },
   },
   uk: {
-    labels: { disclosure: "Можливі застосування, а не описи завершених впроваджень для клієнтів.", scenarios: "Групи сценаріїв", measure: "Що ми вимірювали б", measureNote: "Запропоновані показники для прототипу. Це не досягнуті результати.", pilot: "Вимоги до першого пілоту", constraints: "Обмеження", current: "Застосовні поточні можливості", currentNote: "Підтверджені лабораторними проєктами. Це не означає впровадження для клієнтів.", developing: "Напрями, що розвиваються", developingNote: "Напрями в розробці, а не доступні послуги.", projects: "Відповідні інженерні проєкти", deliverables: "Результати першого етапу" },
+    labels: { disclosure: "Можливі сфери застосування в цих організаціях.", scenarios: "Групи сценаріїв", measure: "Що ми вимірювали б", measureNote: "Запропоновані показники для першого етапу.", pilot: "Вимоги до першого пілоту", constraints: "Обмеження", current: "Застосовні поточні можливості", currentNote: "Підтверджено нашими проєктами.", developing: "Напрями, що розвиваються", developingNote: "Напрями в розробці.", projects: "Відповідні інженерні проєкти", deliverables: "Результати першого етапу" },
     deliverables: ["Схема рішення", "Обмежений робочий сценарій", "Приклади тестів", "Звіт із відомими обмеженнями", "Рекомендація: продовжити, переглянути чи зупинитися"],
     pages: {
       business: {
@@ -82,7 +82,7 @@ export const audiencesCopy: Localized<AudiencesCopy> = {
           { title: "Допомога з внутрішніми знаннями", text: "Напрям RAG, що розвивається: відповіді на запитання персоналу з власних документів установи. Це не доступна послуга.", examples: ["Відповіді на запитання персоналу з внутрішніх документів", "Джерела показуються, щоб відповіді можна було перевірити", "Напрям розвитку, а не послуга"] },
         ],
         measures: ["Час до перевіреної чернетки", "Кількість ручних виправлень", "Повнота відносно еталонної вибірки", "Прийняття чернеток персоналом"],
-        pilot: ["Матеріали, які дозволено обробляти", "За можливості знеособлені або синтетичні дані для прототипу", "Персонал, що перевіряє кожен результат", "Визначений обмежений набір документів чи записів"],
+        pilot: ["Матеріали, які дозволено обробляти", "За можливості знеособлені або синтетичні дані для першого етапу", "Персонал, що перевіряє кожен результат", "Визначений обмежений набір документів чи записів"],
         constraints: ["Перевірка персоналом обов’язкова.", "Жодних тверджень про автоматизоване оцінювання учнів.", "Жодного збору інформації про дітей через цей сайт.", "Не надсилайте дані учнів у першому повідомленні."],
         capabilityIds: ["document-processing", "local-transcription", "ai-evaluation"],
         projectIds: ["local-transcription", "youtube-to-text"],
@@ -102,7 +102,7 @@ export const audiencesCopy: Localized<AudiencesCopy> = {
     },
   },
   ru: {
-    labels: { disclosure: "Возможные применения, а не описания завершённых внедрений для клиентов.", scenarios: "Группы сценариев", measure: "Что мы бы измеряли", measureNote: "Предлагаемые показатели для прототипа. Это не достигнутые результаты.", pilot: "Требования к первому пилоту", constraints: "Ограничения", current: "Применимые текущие возможности", currentNote: "Подтверждены лабораторными проектами. Это не означает внедрения для клиентов.", developing: "Развивающиеся направления", developingNote: "Направления в разработке, а не доступные услуги.", projects: "Соответствующие инженерные проекты", deliverables: "Результаты первого этапа" },
+    labels: { disclosure: "Возможные сферы применения в этих организациях.", scenarios: "Группы сценариев", measure: "Что мы бы измеряли", measureNote: "Предлагаемые показатели для первого этапа.", pilot: "Требования к первому пилоту", constraints: "Ограничения", current: "Применимые текущие возможности", currentNote: "Подтверждено нашими проектами.", developing: "Развивающиеся направления", developingNote: "Направления в разработке.", projects: "Соответствующие инженерные проекты", deliverables: "Результаты первого этапа" },
     deliverables: ["Схема решения", "Ограниченный рабочий сценарий", "Примеры тестов", "Отчёт с известными ограничениями", "Рекомендация: продолжить, пересмотреть или остановиться"],
     pages: {
       business: {
@@ -124,7 +124,7 @@ export const audiencesCopy: Localized<AudiencesCopy> = {
           { title: "Помощь с внутренними знаниями", text: "Развивающееся направление RAG: ответы на вопросы персонала по собственным документам учреждения. Это не доступная услуга.", examples: ["Ответы на вопросы персонала по внутренним документам", "Источники показываются, чтобы ответы можно было проверить", "Направление развития, а не услуга"] },
         ],
         measures: ["Время до проверенного черновика", "Количество ручных исправлений", "Полнота относительно эталонной выборки", "Принятие черновиков персоналом"],
-        pilot: ["Материалы, которые разрешено обрабатывать", "По возможности обезличенные или синтетические данные для прототипа", "Персонал, проверяющий каждый результат", "Определённый ограниченный набор документов или записей"],
+        pilot: ["Материалы, которые разрешено обрабатывать", "По возможности обезличенные или синтетические данные для первого этапа", "Персонал, проверяющий каждый результат", "Определённый ограниченный набор документов или записей"],
         constraints: ["Проверка персоналом обязательна.", "Никаких утверждений об автоматизированной оценке учащихся.", "Никакого сбора информации о детях через этот сайт.", "Не отправляйте данные учащихся в первом сообщении."],
         capabilityIds: ["document-processing", "local-transcription", "ai-evaluation"],
         projectIds: ["local-transcription", "youtube-to-text"],
