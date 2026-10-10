@@ -9,16 +9,48 @@ const { locale } = Astro.props;
 const dict = t(locale);
 ---
 <section class="section" aria-labelledby="ct-main">
-  <div class="container sec-about__grid">
-    <div>
-      <h2 id="ct-main">{dict.contact.checklistHeading}</h2>
-      <ol class="plain plain--num">{dict.contact.checklistItems.map((i) => <li>{i}</li>)}</ol>
-    </div>
-    <div class="ct-actions">
+  <div class="container">
+    <div class="contact-page__telegram">
       <TelegramCTA locale={locale} label={dict.home.finalCta.cta} showContactLink={false} />
+    </div>
+    <div class="contact-page__grid">
+      <div class="contact-page__checklist">
+        <h2 id="ct-main">{dict.contact.checklistHeading}</h2>
+        <ol class="plain plain--num">{dict.contact.checklistItems.map((i) => <li>{i}</li>)}</ol>
+      </div>
       <ContactForm locale={locale} />
+    </div>
+    <div class="contact-page__notes">
       <p class="callout callout--warn">{dict.contact.warning}</p>
       <p><a href={namedRoute("privacy", locale)}>{dict.footer.links.privacy}</a></p>
     </div>
   </div>
 </section>
+
+<style>
+  .contact-page__telegram { margin-bottom: 32px; }
+  .contact-page__grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 32px;
+    align-items: start;
+  }
+  .contact-page__checklist {
+    padding: var(--space-6);
+    border: 1px solid var(--color-border);
+    border-radius: var(--card-radius);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-card);
+  }
+  .contact-page__checklist h2 {
+    margin: 0 0 var(--space-5);
+    color: var(--color-navy-900);
+  }
+  .contact-page__notes { display: grid; gap: var(--space-4); margin-top: var(--space-6); }
+  .contact-page__notes .callout { max-width: none; margin: 0; }
+
+  @media (max-width: 767px) {
+    .contact-page__grid { grid-template-columns: 1fr; gap: var(--space-5); }
+    .contact-page__checklist { padding: var(--space-5); }
+  }
+</style>
