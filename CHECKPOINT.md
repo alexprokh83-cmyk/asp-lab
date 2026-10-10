@@ -287,3 +287,22 @@ ASP Find в Hero — frontend интеграция (2026-10-10)
 Дата обновления
 
 2026-10-06 10:45 UTC
+
+ASP Finder: rich text in AI recommendation (2026-10-10) — IMPLEMENTED LOCALLY
+
+- In `src/components/asp-find/app.js`, `results()` escaped `custom_summary` with `escapeHtml()` and placed it inside a `<p>`. That rendered formatting tags literally and would have created invalid nested block markup if escaping were simply removed.
+- Added a local allowlist sanitizer for `p`, `strong`, `b`, `em`, `i`, `br`, `ul`, `ol`, and `li`. It reconstructs those tags without attributes; drops script/style/embedded active subtrees; unwraps other tags (including links) to text. Plain text remains text; newlines become `<br>`. No normalization of backslash-escaped angle brackets was added because no captured response showed that form.
+- The source integration contract documents `custom_summary` as optional localized free-form text and shows it empty in the example. No live n8n payload was captured or requested, so runtime formatting bytes and any literal backslash escaping remain unverified.
+- `src/components/asp-find/styles.css` adds only scoped spacing/color rules for formatted summary paragraphs and lists. API shape, request/error handling, locales, proxy, workflow and other components were not changed.
+
+Checks
+
+- `node --check src/components/asp-find/app.js` — passed.
+- `npm run build` — passed, 73 pages. Initial sandbox run hit a filesystem `realpath` EPERM; the retry with approved workspace access passed.
+- `npm test` — passed, 72 pages.
+- `npm run test:asp-find-proxy` — passed, 5/5.
+- Browser mock-response checks — passed: multiple paragraphs, strong/emphasis, unordered list, newline-to-`<br>`, plain text, and native result dialog. A payload with script, event attribute, image and `javascript:` link rendered with no script/image/link attributes and did not execute the XSS sentinel.
+
+Next step
+
+- After deployment, verify the actual `custom_summary` from a controlled n8n response in the deployed Finder. No commit, push, deployment, or live workflow request was made.

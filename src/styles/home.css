@@ -27,7 +27,7 @@
 .hero__inner { position: relative; z-index: 1; padding-block: var(--space-12) var(--space-6); }
 .hero { display: flex; flex-direction: column; }
 .hero__inner { order: 1; }
-.hero__eyebrow { font-size: 15px; line-height: 22px; font-weight: 500; color: var(--color-blue-700); margin-bottom: var(--space-3); }
+.hero__eyebrow { display: inline-block; padding: 4px 12px; border-radius: 999px; background: var(--color-blue-50); font-size: 15px; line-height: 22px; font-weight: 500; color: var(--color-blue-600); margin-bottom: var(--space-3); }
 .hero h1 { color: var(--color-neutral-900); margin-bottom: var(--space-6); letter-spacing: -0.015em; }
 .hero__heading-line { display: block; }
 .hero__heading-first { color: var(--color-neutral-900); }
@@ -37,6 +37,9 @@
 .hero__audience { margin-top: var(--space-4); color: var(--color-text-secondary); font-size: 16px; line-height: 24px; }
 .hero__actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-8); }
 .hero__tg { margin-top: var(--space-6); }
+.hero__tg .btn--outline { background: transparent; color: var(--color-blue-600); border-color: var(--color-blue-600); font-weight: 500; }
+.hero__tg .btn--outline:hover { background: var(--color-blue-50); color: var(--color-blue-700); border-color: var(--color-blue-700); }
+.hero__tg .tg__icon { width: 20px; height: 20px; flex: none; }
 .hero__flow { margin-top: var(--space-8); }
 .hero__flow-label { font-size: 14px; line-height: 20px; color: var(--color-text-secondary); margin-bottom: var(--space-3); }
 .hero__method { margin-top: var(--space-3); font-size: 14px; line-height: 20px; color: var(--color-blue-800); }

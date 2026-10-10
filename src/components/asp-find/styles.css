@@ -79,6 +79,11 @@
 #asp-automation-finder .asp-finder-result-heading .asp-finder-icon { width:24px; height:24px; color:var(--asp-finder-blue); }
 #asp-automation-finder .asp-finder-result-heading h2, #asp-automation-finder .asp-finder-result-heading h3 { margin:0; }
 #asp-automation-finder .asp-finder-result-featured p { margin:0; color:var(--asp-finder-muted); }
+#asp-automation-finder .asp-finder-result-summary { color:var(--asp-finder-muted); }
+#asp-automation-finder .asp-finder-result-summary > :first-child { margin-top:0; }
+#asp-automation-finder .asp-finder-result-summary > :last-child { margin-bottom:0; }
+#asp-automation-finder .asp-finder-result-summary ul,
+#asp-automation-finder .asp-finder-result-summary ol { margin:8px 0; padding-left:20px; }
 #asp-automation-finder .asp-finder-result-secondary p { margin:0 0 0 35px; color:var(--asp-finder-muted); }
 #asp-automation-finder .asp-finder-result .asp-finder-list { margin:8px 0 0; }
 #asp-automation-finder .asp-finder-results .asp-finder-actions { justify-content:flex-end; }

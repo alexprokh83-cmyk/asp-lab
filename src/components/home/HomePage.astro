@@ -61,13 +61,12 @@ const processSteps = Object.values(h.process.steps);
         <a href={r("contact")} class="btn btn--primary">{h.hero.cta}</a>
         <a href={r("lab")} class="btn btn--secondary">{h.hero.ctaSecondary}</a>
       </div>
-      <div class="hero__tg"><TelegramCTA locale={locale} label={h.finalCta.cta} showContactLink={false} /></div>
+      <div class="hero__tg"><TelegramCTA locale={locale} label="Telegram AI Bot" tone="outline" showIcon showContactLink={false} /></div>
       <div class="hero__flow">
         <p class="hero__flow-label">{h.hero.principle}</p>
         <ol class="flow" aria-label={h.hero.principle}>
           {h.hero.flow.map((step) => <li>{step}</li>)}
         </ol>
-        <p class="hero__method mono">{h.process.heading}</p>
       </div>
     </div>
     <div class="hero__finder-frame">

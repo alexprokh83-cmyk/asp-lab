@@ -113,6 +113,25 @@
   const optionIcon = id => `<svg class="asp-finder-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${iconPaths[optionIconNames[id] || id] || iconPaths.help}</svg>`;
   const state = { locale: ['en','uk','ru'].includes(mount.dataset.locale) ? mount.dataset.locale : 'en', screen:'welcome', index:0, answers:{ pain:'', data:[], systems:[], api:'', volume:'', privacy:'', maturity:'', description:'' }, error:'', requestError:'', result:null, modalOpen:false };
   const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  function sanitizeRichText(value) {
+    const allowedTags = new Set(['p','strong','b','em','i','br','ul','ol','li']);
+    const blockedTags = new Set(['script','style','iframe','object','embed','svg','math','template','noscript','form','input','button','video','audio','source','track','link','meta','base']);
+    const parsed = new DOMParser().parseFromString(String(value ?? ''), 'text/html');
+    function serialize(node) {
+      if (node.nodeType === 3) {
+        const text = node.nodeValue || '';
+        if (!text.trim() && /[\r\n]/.test(text)) return '';
+        return escapeHtml(text).replace(/\r\n?|\n/g, '<br>');
+      }
+      if (node.nodeType !== 1) return '';
+      const tag = node.tagName.toLowerCase();
+      if (blockedTags.has(tag)) return '';
+      const children = Array.from(node.childNodes, serialize).join('');
+      if (tag === 'br') return '<br>';
+      return allowedTags.has(tag) ? `<${tag}>${children}</${tag}>` : children;
+    }
+    return Array.from(parsed.body.childNodes, serialize).join('');
+  }
   const t = key => copy[state.locale][key] || copy.en[key] || key;
   function steps() { const list=['pain','data','systems']; if(state.answers.systems.includes('sys_custom')) list.push('api'); list.push('volume','privacy','maturity'); if(state.answers.privacy!=='priv_strict') list.push('description'); return list; }
   function shell(content, shellClass='') { return `<div class="asp-finder-shell ${shellClass}">${content}</div>`; }
@@ -177,13 +196,14 @@
     const r=state.result, arch=r.recommended_architectures;
     const primary=arch[0] || 'arch_business_audit';
     const headingKey=r.summary_key==='summary_audit'?'diagnostic_audit':r.summary_key==='summary_documents'?'diagnostic_documents':r.summary_key==='summary_sync'?'diagnostic_sync':r.summary_key==='summary_requests'?'diagnostic_requests':primary==='arch_business_audit'?'diagnostic_audit':primary==='arch_ocr_pipeline'?'diagnostic_documents':primary==='arch_n8n_sync'?'diagnostic_sync':primary==='arch_bot_router'?'diagnostic_requests':'diagnostic_general';
-    const summary = escapeHtml(r.custom_summary || t(r.summary_key));
+    const customSummary = typeof r.custom_summary === 'string' ? r.custom_summary.trim() : '';
+    const summary = customSummary ? sanitizeRichText(customSummary) : `<p>${escapeHtml(t(r.summary_key))}</p>`;
     const additional=arch.slice(1).map(id=>`<article class="asp-finder-result asp-finder-result-secondary"><div class="asp-finder-result-heading">${optionIcon(optionIconNames[id]||'help')}<h3>${escapeHtml(t(id+'_name'))}</h3></div><p>${escapeHtml(t(id+'_desc'))}</p></article>`).join('');
     const list=(heading,values,icon)=>values?.length?`<article class="asp-finder-result"><div class="asp-finder-result-heading">${optionIcon(icon)}<h3>${escapeHtml(t(heading))}</h3></div><ul class="asp-finder-list">${values.map(value=>`<li>${escapeHtml(t(value) || value)}</li>`).join('')}</ul></article>`:'';
     const cta=mount.dataset.ctaUrl.trim();
     const ctaKey=r.next_step_cta?`cta_${r.next_step_cta}`:'cta';
     const ctaLabel=copy[state.locale][ctaKey]||t('cta');
-    return shell(`<section class="asp-finder-card asp-finder-results"><span class="asp-finder-badge">${escapeHtml(t('recommendations'))}</span><h2>${escapeHtml(t(headingKey))}</h2><p class="asp-finder-intro">${escapeHtml(t('resultIntro'))}</p><div class="asp-finder-results-content"><article class="asp-finder-result asp-finder-result-featured"><div class="asp-finder-result-heading">${optionIcon(optionIconNames[primary]||'help')}<h3>${escapeHtml(t(primary+'_name'))}</h3></div><p>${escapeHtml(t(primary+'_desc'))}</p></article>${additional}<article class="asp-finder-result"><div class="asp-finder-result-heading">${optionIcon('file')}<h3>${escapeHtml(t('explanation'))}</h3></div><p>${summary}</p></article>${list('review',r.human_review_points,'people')}${list('rejected',r.rejected_approaches,'help')}<article class="asp-finder-result"><div class="asp-finder-result-heading">${optionIcon('calendar')}<h3>${escapeHtml(t('nextSteps'))}</h3></div><ul class="asp-finder-list"><li>${escapeHtml(t('step_map'))}</li><li>${escapeHtml(t('step_pilot'))}</li><li>${escapeHtml(t('step_access'))}</li></ul>${state.answers.privacy==='priv_strict'?`<p class="asp-finder-help">${escapeHtml(t('privacyNote'))}</p>`:''}</article></div>${cta?`<div class="asp-finder-actions"><a class="asp-finder-button asp-finder-button-primary" href="${escapeHtml(cta)}">${escapeHtml(ctaLabel)}</a></div>`:''}</section>`);
+    return shell(`<section class="asp-finder-card asp-finder-results"><span class="asp-finder-badge">${escapeHtml(t('recommendations'))}</span><h2>${escapeHtml(t(headingKey))}</h2><p class="asp-finder-intro">${escapeHtml(t('resultIntro'))}</p><div class="asp-finder-results-content"><article class="asp-finder-result asp-finder-result-featured"><div class="asp-finder-result-heading">${optionIcon(optionIconNames[primary]||'help')}<h3>${escapeHtml(t(primary+'_name'))}</h3></div><p>${escapeHtml(t(primary+'_desc'))}</p></article>${additional}<article class="asp-finder-result"><div class="asp-finder-result-heading">${optionIcon('file')}<h3>${escapeHtml(t('explanation'))}</h3></div><div class="asp-finder-result-summary">${summary}</div></article>${list('review',r.human_review_points,'people')}${list('rejected',r.rejected_approaches,'help')}<article class="asp-finder-result"><div class="asp-finder-result-heading">${optionIcon('calendar')}<h3>${escapeHtml(t('nextSteps'))}</h3></div><ul class="asp-finder-list"><li>${escapeHtml(t('step_map'))}</li><li>${escapeHtml(t('step_pilot'))}</li><li>${escapeHtml(t('step_access'))}</li></ul>${state.answers.privacy==='priv_strict'?`<p class="asp-finder-help">${escapeHtml(t('privacyNote'))}</p>`:''}</article></div>${cta?`<div class="asp-finder-actions"><a class="asp-finder-button asp-finder-button-primary" href="${escapeHtml(cta)}">${escapeHtml(ctaLabel)}</a></div>`:''}</section>`);
   }
   function resultReady() {
     return shell(`<section class="asp-finder-card asp-finder-result-ready" role="status"><span class="asp-finder-badge">✓</span><h2>${escapeHtml(t('resultTitle'))}</h2><p class="asp-finder-intro">${escapeHtml(t('resultReady'))}</p><div class="asp-finder-actions"><button class="asp-finder-button asp-finder-button-primary" data-action="show-result">${escapeHtml(t('openResult'))}</button><button class="asp-finder-button" data-action="restart">${escapeHtml(t('restart'))}</button></div></section>`);
