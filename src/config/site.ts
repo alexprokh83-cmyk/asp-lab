@@ -63,7 +63,9 @@ function apiProxyUrl(value: string | null): string | null {
   return httpsUrl(value);
 }
 
-export const ASP_FIND_PROXY_URL: string | null = apiProxyUrl(read("PUBLIC_ASP_FIND_PROXY_URL"));
+/** Finder always has a same-origin API route; the public env var only overrides it. */
+export const ASP_FIND_PROXY_URL: string =
+  apiProxyUrl(read("PUBLIC_ASP_FIND_PROXY_URL")) ?? "/api/asp-automation-finder";
 
 /** Privacy page facts — all unknown until supplied by the owner. */
 export const OPERATOR_NAME: string | null = read("PUBLIC_OPERATOR_NAME");

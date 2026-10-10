@@ -1,5 +1,28 @@
 CHECKPOINT
 
+ASP Finder: кнопка Get recommendation не отправляла запрос (2026-10-10) — ИСПРАВЛЕНО ЛОКАЛЬНО
+
+Диагностика и причина
+
+- На странице `/` `src/components/asp-find/AspFind.astro` рендерит `#asp-automation-finder`; в браузере `src/components/asp-find/app.js` загрузился (GET 200) и инициализировал начальный экран. Ошибок инициализации в Console не было.
+- До исправления фактический DOM имел `data-proxy-url=""`. В `submit()` `app.js` строка с `const proxy=mount.dataset.proxyUrl.trim()` получала пустую строку, а следующая проверка `if(!proxy) throw ...` завершала обработчик до `fetch()`. Это воспроизведено в браузере: клик вывел сетевую ошибку, в Network не появилось `/api` запроса. Все шаги Finder проходились, кнопка Get recommendation была активна; валидация не блокировала отправку.
+- Причина пустого атрибута: `ASP_FIND_PROXY_URL` в `src/config/site.ts` был `null`, если `PUBLIC_ASP_FIND_PROXY_URL` не был задан при сборке. Переменная секретного server runtime `ASP_FINDER_N8N_WEBHOOK_URL` не может заменить этот публичный путь: браузеру нужен только адрес same-origin прокси.
+
+Изменение
+
+- `src/config/site.ts`: при отсутствии либо недопустимом значении публичного override используется фиксированный same-origin путь `/api/asp-automation-finder`. Допустимый `PUBLIC_ASP_FIND_PROXY_URL` всё ещё может переопределить endpoint. Контактный маршрут, Finder API, n8n и обработка ответа не менялись.
+
+Проверки
+
+- Повторный browser-run: обычными кликами пройден welcome и все вопросы до Get recommendation. Network показал `POST http://localhost:4321/api/asp-automation-finder` с JSON Finder payload. Локальный Astro dev ответил 404, поскольку он не исполняет корневые Vercel Functions; это подтверждает клиентскую отправку, но не live backend.
+- `npm run build` без `PUBLIC_ASP_FIND_PROXY_URL` — успешно, 73 страницы; в собранном `dist/index.html` `data-proxy-url="/api/asp-automation-finder"` присутствует.
+- `npm test` — успешно, 72 страницы; `node --check src/components/asp-find/app.js` — успешно.
+- Секрет или URL n8n в браузерную конфигурацию не добавлялись. Диагностический JS не оставлялся.
+
+Следующий шаг
+
+- После обычного Vercel deployment проверить в Preview, что POST `/api/asp-automation-finder` исполняется как Vercel Function и доходит до настроенного Finder webhook; затем проверить n8n. Deployment в рамках этой задачи не выполнялся.
+
 ASP Finder: same-origin Vercel proxy (2026-10-10) — IMPLEMENTED LOCALLY; DEPLOYMENT NOT VERIFIED
 
 Проверка исходников и архитектуры
