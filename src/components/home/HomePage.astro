@@ -39,6 +39,26 @@ const icons: Record<string, string> = {
 };
 
 const processSteps = Object.values(h.process.steps);
+const solutionsCarouselLabels = {
+  ru: { previous: "Предыдущие услуги", next: "Следующие услуги" },
+  uk: { previous: "Попередні послуги", next: "Наступні послуги" },
+  en: { previous: "Previous services", next: "Next services" },
+}[locale];
+const projectCarouselLabels = {
+  ru: { pagination: "Навигация по проектам", slide: "Перейти к проекту", previous: "Предыдущий проект", next: "Следующий проект" },
+  uk: { pagination: "Навігація проєктами", slide: "Перейти до проєкту", previous: "Попередній проєкт", next: "Наступний проєкт" },
+  en: { pagination: "Project pagination", slide: "Go to project", previous: "Previous project", next: "Next project" },
+}[locale];
+const scenarioImagesById: Record<string, string> = {
+  "knowledge-assistant": "/images/scenarios/01_Internal_AI_Knowledge_Assistant_новый размер.jpg",
+  "request-routing": "/images/scenarios/02_Electronic_Reception_and_Smart_Request_Routing_новый размер.jpg",
+  "document-routing": "/images/scenarios/03_Smart_Routing_of_Incoming_Documents_новый размер.jpg",
+  "document-drafting": "/images/scenarios/04_AI_Document_Drafting_and_Preparation_новый размер.jpg",
+  "meeting-processing": "/images/scenarios/05_AI_Meeting_Processing_and_Transcription_новый размер.jpg",
+  "task-tracking": "/images/scenarios/06_AI_Task_and_Action_Item_Tracking_новый размер.jpg",
+  "correspondence-analysis": "/images/scenarios/07_AI_Analysis_of_Organizational_Correspondence_новый размер.jpg",
+  "consistency-review": "/images/scenarios/08_AI_Document_Consistency_and_Compliance_Check_новый размер.jpg",
+};
 ---
 <HomeHero locale={locale} />
 
@@ -50,31 +70,155 @@ const processSteps = Object.values(h.process.steps);
       <p class="section-heading__lead">{h.solutions.lead}</p>
       <p class="home-pos">{st.positioning.text}</p>
     </div>
-    <div class="grid-4">
-      {dc.items.map((d) => (
-        <article class="scard">
-          <div class="scard__top">
-            <span class="scard__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d={icons[d.id]} /></svg>
-            </span>
-          </div>
-          <h3>{ps.categories[d.id]}</h3>
-          <p class="scard__problem">{d.problem}</p>
-          <p class="scard__examples"><strong>{dc.labels.examples}:</strong> {d.projectIds.slice(0, 2).map((id) => { const x = projectById(id)!.text[locale]; return x.name ?? x.title; }).join(", ")}</p>
-          <a class="scard__link" href={`${r("solutions")}#${d.id}`}>{dc.labels.details}<span class="sr-only">: {ps.categories[d.id]}</span></a>
-        </article>
-      ))}
+    <div class="solutions-carousel" data-solutions-carousel>
+      <div class="solutions-carousel__layout">
+        <button class="solutions-carousel__button" type="button" data-carousel-prev aria-label={solutionsCarouselLabels.previous}>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6" /></svg>
+        </button>
+        <div class="solutions-carousel__track" data-carousel-track role="region" aria-label={h.solutions.heading} tabindex="0">
+          {dc.items.map((d, index) => (
+            <article class="scard" role="group" aria-roledescription="slide" aria-label={`${index + 1} / ${dc.items.length}`}>
+              <div class="scard__top">
+                <span class="scard__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d={icons[d.id]} /></svg>
+                </span>
+              </div>
+              <h3>{ps.categories[d.id]}</h3>
+              <p class="scard__problem">{d.problem}</p>
+              <p class="scard__examples"><strong>{dc.labels.examples}:</strong> {d.projectIds.slice(0, 2).map((id) => { const x = projectById(id)!.text[locale]; return x.name ?? x.title; }).join(", ")}</p>
+              <a class="scard__overlay-link" href={`${r("solutions")}#${d.id}`} aria-label={`${dc.labels.details}: ${ps.categories[d.id]}`}></a>
+            </article>
+          ))}
+        </div>
+        <button class="solutions-carousel__button" type="button" data-carousel-next aria-label={solutionsCarouselLabels.next}>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6" /></svg>
+        </button>
+      </div>
     </div>
     <div class="home-scn">
-      <h3>{st.scenarios.chipsLabel}</h3>
-      <ul class="home-scn__chips">
-        {scenarios.map((x) => <li><a href={`${r("solutions")}#scenario-${x.id}`}>{x.copy[locale].title}</a></li>)}
-      </ul>
-      <p class="epanel__limit">{st.scenarios.disclosure}</p>
-      <p><a href={`${r("solutions")}#scenarios`}>{st.scenarios.linkAll}</a></p>
+      <h3 class="home-scn__heading">{st.scenarios.chipsLabel}</h3>
+      <div class="scenario-tabs" data-scenario-tabs>
+        <div class="scenario-tabs__list" role="tablist" aria-label={st.scenarios.chipsLabel} aria-orientation="vertical">
+          {scenarios.map((x, index) => (
+            <button
+              class:list={["scenario-tabs__tab", index === 0 && "is-active"]}
+              id={`scenario-tab-${x.id}`}
+              type="button"
+              role="tab"
+              aria-selected={index === 0 ? "true" : "false"}
+              aria-controls={`scenario-panel-${x.id}`}
+              tabindex={index === 0 ? 0 : -1}
+              data-scenario-tab
+            >
+              {x.copy[locale].title}
+            </button>
+          ))}
+        </div>
+        <div class="scenario-tabs__panels">
+          {scenarios.map((x, index) => (
+            <section
+              class="scenario-tabs__panel"
+              id={`scenario-panel-${x.id}`}
+              role="tabpanel"
+              aria-labelledby={`scenario-tab-${x.id}`}
+              tabindex="0"
+              data-scenario-panel
+              hidden={index !== 0}
+            >
+              <div class="scenario-tabs__visual">
+                <img
+                  src={encodeURI(scenarioImagesById[x.id]!)}
+                  alt={x.copy[locale].title}
+                  loading={index < 2 ? "eager" : "lazy"}
+                  decoding="async"
+                />
+              </div>
+              <p class="scenario-tabs__example-label">{st.scenarios.exampleLabel}</p>
+              <p class="scenario-tabs__example">{x.copy[locale].example}</p>
+              <a class="scenario-tabs__link" href={`${r("solutions")}#scenario-${x.id}`}>{dc.labels.details} <span aria-hidden="true">→</span></a>
+            </section>
+          ))}
+        </div>
+      </div>
+      <p class="home-scn__all"><a class="btn btn--soft-blue" href={`${r("solutions")}#scenarios`}>{st.scenarios.linkAll}</a></p>
     </div>
   </div>
 </section>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-solutions-carousel]").forEach((carousel) => {
+    const track = carousel.querySelector<HTMLElement>("[data-carousel-track]");
+    const previous = carousel.querySelector<HTMLButtonElement>("[data-carousel-prev]");
+    const next = carousel.querySelector<HTMLButtonElement>("[data-carousel-next]");
+    if (!track || !previous || !next) return;
+
+    const updateButtons = () => {
+      previous.disabled = track.scrollLeft <= 1;
+      next.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 1;
+    };
+    const scrollByCard = (direction: -1 | 1) => {
+      const card = track.querySelector<HTMLElement>(".scard");
+      if (!card) return;
+      const gap = Number.parseFloat(getComputedStyle(track).columnGap) || 0;
+      track.scrollBy({
+        left: direction * (card.getBoundingClientRect().width + gap),
+        behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+      });
+    };
+
+    previous.addEventListener("click", () => scrollByCard(-1));
+    next.addEventListener("click", () => scrollByCard(1));
+    track.addEventListener("scroll", updateButtons, { passive: true });
+    window.addEventListener("resize", updateButtons);
+    updateButtons();
+  });
+</script>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-scenario-tabs]").forEach((tabs) => {
+    const buttons = [...tabs.querySelectorAll<HTMLButtonElement>("[data-scenario-tab]")];
+    const panels = [...tabs.querySelectorAll<HTMLElement>("[data-scenario-panel]")];
+    const tablist = tabs.querySelector<HTMLElement>("[role=tablist]");
+    if (buttons.length === 0 || buttons.length !== panels.length || !tablist) return;
+    const mobileLayout = matchMedia("(max-width: 767px)");
+    const updateOrientation = () => tablist.setAttribute("aria-orientation", mobileLayout.matches ? "horizontal" : "vertical");
+    updateOrientation();
+    mobileLayout.addEventListener("change", updateOrientation);
+
+    const activate = (index: number, focus = false) => {
+      buttons.forEach((button, buttonIndex) => {
+        const active = buttonIndex === index;
+        button.setAttribute("aria-selected", String(active));
+        button.tabIndex = active ? 0 : -1;
+        button.classList.toggle("is-active", active);
+      });
+      panels.forEach((panel, panelIndex) => {
+        const active = panelIndex === index;
+        panel.hidden = !active;
+        panel.classList.remove("is-visible");
+        if (active) requestAnimationFrame(() => panel.classList.add("is-visible"));
+      });
+      if (focus) buttons[index]?.focus();
+    };
+
+    buttons.forEach((button, index) => {
+      button.addEventListener("click", () => activate(index));
+      button.addEventListener("keydown", (event) => {
+        let nextIndex = index;
+        const forwardKey = mobileLayout.matches ? "ArrowRight" : "ArrowDown";
+        const backwardKey = mobileLayout.matches ? "ArrowLeft" : "ArrowUp";
+        if (event.key === forwardKey) nextIndex = (index + 1) % buttons.length;
+        else if (event.key === backwardKey) nextIndex = (index - 1 + buttons.length) % buttons.length;
+        else if (event.key === "Home") nextIndex = 0;
+        else if (event.key === "End") nextIndex = buttons.length - 1;
+        else return;
+        event.preventDefault();
+        activate(nextIndex, true);
+      });
+    });
+    activate(0);
+  });
+</script>
 
 <!-- PROJECTS -->
 <section class="section sec-projects" aria-labelledby="projects-title">
@@ -83,12 +227,81 @@ const processSteps = Object.values(h.process.steps);
       <h2 id="projects-title">{ps.home.heading}</h2>
       <p class="section-heading__lead">{ps.home.lead}</p>
     </div>
-    <div class="grid-3">
-      {featuredProjects.map((p) => <ProjectCard locale={locale} project={p} />)}
+    <div class="project-carousel" data-project-carousel>
+      <div class="project-carousel__layout">
+        <button class="project-carousel__arrow project-carousel__arrow--previous" type="button" data-project-prev aria-label={projectCarouselLabels.previous}>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6" /></svg>
+        </button>
+        <div class="project-carousel__track" data-project-track role="region" aria-label={ps.home.heading} tabindex="0">
+          {featuredProjects.map((p, index) => (
+            <div class:list={["project-carousel__slide", index === 1 && "is-active"]} data-project-slide role="group" aria-roledescription="slide" aria-label={`${index + 1} / ${featuredProjects.length}`}>
+              <ProjectCard locale={locale} project={p} featured />
+            </div>
+          ))}
+        </div>
+        <button class="project-carousel__arrow project-carousel__arrow--next" type="button" data-project-next aria-label={projectCarouselLabels.next}>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6" /></svg>
+        </button>
+      </div>
+      <div class="project-carousel__pagination" data-project-pagination role="group" aria-label={projectCarouselLabels.pagination}>
+        {featuredProjects.map((_, index) => (
+          <button class="project-carousel__dot" type="button" data-project-dot aria-label={`${projectCarouselLabels.slide} ${index + 1}`} aria-pressed={index === 1 ? "true" : "false"}></button>
+        ))}
+      </div>
     </div>
-    <p class="sec-projects__all"><a class="btn btn--secondary" href={r("lab")}>{ps.labels.allProjects}</a></p>
+    <p class="sec-projects__all"><a class="btn btn--soft-blue" href={r("lab")}>{ps.labels.allProjects}</a></p>
   </div>
 </section>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-project-carousel]").forEach((carousel) => {
+    const track = carousel.querySelector<HTMLElement>("[data-project-track]");
+    const slides = [...carousel.querySelectorAll<HTMLElement>("[data-project-slide]")];
+    const dots = [...carousel.querySelectorAll<HTMLButtonElement>("[data-project-dot]")];
+    const previous = carousel.querySelector<HTMLButtonElement>("[data-project-prev]");
+    const next = carousel.querySelector<HTMLButtonElement>("[data-project-next]");
+    if (!track || slides.length === 0 || slides.length !== dots.length) return;
+
+    let activeIndex = -1;
+    const updateActiveSlide = () => {
+      const trackCenter = track.getBoundingClientRect().left + track.clientWidth / 2;
+      let closestIndex = 0;
+      let closestDistance = Number.POSITIVE_INFINITY;
+      slides.forEach((slide, index) => {
+        const bounds = slide.getBoundingClientRect();
+        const distance = Math.abs(bounds.left + bounds.width / 2 - trackCenter);
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestIndex = index;
+        }
+      });
+      if (closestIndex === activeIndex) return;
+      activeIndex = closestIndex;
+      slides.forEach((slide, index) => slide.classList.toggle("is-active", index === activeIndex));
+      dots.forEach((dot, index) => dot.setAttribute("aria-pressed", String(index === activeIndex)));
+      if (previous) previous.disabled = activeIndex === 0;
+      if (next) next.disabled = activeIndex === slides.length - 1;
+    };
+
+    const centerSlide = (index: number, behavior?: ScrollBehavior) => {
+      const slide = slides[index];
+      if (!slide) return;
+      const trackBounds = track.getBoundingClientRect();
+      const slideBounds = slide.getBoundingClientRect();
+      const slideCenter = slideBounds.left + slideBounds.width / 2;
+      const left = track.scrollLeft + slideCenter - (trackBounds.left + track.clientWidth / 2);
+      track.scrollTo({ left, behavior: behavior ?? (matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth") });
+    };
+
+    dots.forEach((dot, index) => dot.addEventListener("click", () => centerSlide(index)));
+    previous?.addEventListener("click", () => centerSlide(Math.max(0, activeIndex - 1)));
+    next?.addEventListener("click", () => centerSlide(Math.min(slides.length - 1, activeIndex + 1)));
+    track.addEventListener("scroll", updateActiveSlide, { passive: true });
+    window.addEventListener("resize", updateActiveSlide);
+    centerSlide(Math.min(1, slides.length - 1), "auto");
+    updateActiveSlide();
+  });
+</script>
 
 <!-- LOCAL / PRIVATE AI -->
 <section class="section sec-local dark-section" aria-labelledby="local-title">
@@ -104,7 +317,6 @@ const processSteps = Object.values(h.process.steps);
       </p>
     </div>
     <div class="sec-local__panel">
-      <p class="panel-label">{h.localAi.diagramLabel}</p>
       <ol class="flow flow--dark" aria-label={h.localAi.diagramLabel}>
         {h.localAi.flow.map((step) => <li>{step}</li>)}
       </ol>
@@ -130,20 +342,29 @@ const processSteps = Object.values(h.process.steps);
       <p class="section-heading__lead">{h.audiences.lead}</p>
     </div>
     <div class="aud-grid">
-      <article class="acard acard--primary">
+      <article class="acard">
+        <span class="acard__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12h18M10 12v2h4v-2"/></svg>
+        </span>
         <h3>{h.audiences.business.title}</h3>
         <p>{h.audiences.business.text}</p>
-        <a href={r("business")}>{h.audiences.link}<span class="sr-only">: {h.audiences.business.title}</span></a>
+        <a class="acard__overlay-link" href={r("business")} aria-label={`${h.audiences.link}: ${h.audiences.business.title}`}></a>
       </article>
       <article class="acard">
+        <span class="acard__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m2 9 10-5 10 5-10 5L2 9Z"/><path d="M6 11v5c3.5 3 8.5 3 12 0v-5M22 9v6"/></svg>
+        </span>
         <h3>{h.audiences.education.title}</h3>
         <p>{h.audiences.education.text}</p>
-        <a href={r("education")}>{h.audiences.link}<span class="sr-only">: {h.audiences.education.title}</span></a>
+        <a class="acard__overlay-link" href={r("education")} aria-label={`${h.audiences.link}: ${h.audiences.education.title}`}></a>
       </article>
       <article class="acard">
+        <span class="acard__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-4h6v4M8 10h.01M12 10h.01M16 10h.01M8 13h.01M12 13h.01M16 13h.01"/></svg>
+        </span>
         <h3>{h.audiences.publicSector.title}</h3>
         <p>{h.audiences.publicSector.text}</p>
-        <a href={r("publicSector")}>{h.audiences.link}<span class="sr-only">: {h.audiences.publicSector.title}</span></a>
+        <a class="acard__overlay-link" href={r("publicSector")} aria-label={`${h.audiences.link}: ${h.audiences.publicSector.title}`}></a>
       </article>
     </div>
   </div>
@@ -198,8 +419,8 @@ const processSteps = Object.values(h.process.steps);
     <h2 id="cta-title">{h.finalCta.heading}</h2>
     <p class="sec-cta__lead">{h.finalCta.lead}</p>
     <div class="sec-cta__actions">
-      <TelegramCTA locale={locale} label={h.finalCta.cta} tone="inverse" />
-      <a class="sec-cta__secondary" href={r("contact")}>{h.finalCta.secondary}</a>
+      <a class="btn btn--inverse" href={r("contact")}>{h.finalCta.briefCta}</a>
+      <TelegramCTA locale={locale} label={h.finalCta.botCta} tone="outline" showIcon />
     </div>
     <p class="sec-cta__warning">{h.finalCta.warning}</p>
   </div>

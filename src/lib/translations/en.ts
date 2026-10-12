@@ -142,9 +142,9 @@ export const enSource = {
     finalCta: {
       heading: "Start with one process.",
       lead: "Describe what is currently done manually, what data is involved and what result you would like to achieve. You do not need a technical specification or a chosen model to begin.",
-      cta: "Discuss a task in Telegram",
-      secondary: "What to include in your message",
-      warning: "Do not send confidential documents, credentials or third-party personal information in an initial message.",
+      briefCta: "Fill in the brief",
+      botCta: "AI bot consultation",
+      warning: "Please do not share trade secrets, source code, or sensitive personal data before an NDA (non-disclosure agreement) is signed.",
     },
   },
 

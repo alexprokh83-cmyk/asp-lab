@@ -13,8 +13,8 @@ const f = t(locale).home.finalCta;
     <h2 id={id}>{f.heading}</h2>
     <p class="sec-cta__lead">{f.lead}</p>
     <div class="sec-cta__actions">
-      <TelegramCTA locale={locale} label={f.cta} tone="inverse" />
-      <a class="sec-cta__secondary" href={namedRoute("contact", locale)}>{f.secondary}</a>
+      <a class="btn btn--inverse" href={namedRoute("contact", locale)}>{f.briefCta}</a>
+      <TelegramCTA locale={locale} label={f.botCta} tone="outline" showIcon />
     </div>
     <p class="sec-cta__warning">{f.warning}</p>
   </div>
